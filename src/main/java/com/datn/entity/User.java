@@ -5,14 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Table
 @Entity
@@ -22,9 +18,11 @@ import javax.persistence.Table;
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 @Accessors(chain = true)
+@Where(clause = "active != 0")//ignore các phần tử có acitve = false
 public class User extends BaseInfoEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String userName;
     private String password;
