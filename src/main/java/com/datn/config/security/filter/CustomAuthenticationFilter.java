@@ -2,10 +2,10 @@ package com.datn.config.security.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.datn.repository.UserRepository;
+import com.datn.utils.common.BeanUtils;
+import com.datn.utils.constants.WsConst;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ws.masterserver.utils.base.WsRepository;
-import com.ws.masterserver.utils.common.BeanUtils;
-import com.ws.masterserver.utils.constants.WsConst;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,8 +42,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         final var user = (User) authResult.getPrincipal();
-        final var repository = BeanUtils.getBean(WsRepository.class);
-        final var userEntity = repository.userRepository.findByEmailAndActive(user.getUsername(), Boolean.TRUE);
+        final var repository = BeanUtils.getBean(UserRepository.class);
+        final var userEntity = repository.findByEmailAndActive(user.getUsername(), true);
         final var algorithm = Algorithm.HMAC256(WsConst.Values.JWT_SECRET.getBytes());
         final var accessToken = JWT.create()
                 .withSubject(userEntity.getEmail())

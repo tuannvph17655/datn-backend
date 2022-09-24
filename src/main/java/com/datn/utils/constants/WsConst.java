@@ -155,7 +155,7 @@ public class WsConst {
          */
         public static final String ADMIN_ID = "fb6e037a-9f6b-49e0-826e-d1d1539413f6";
         public static final String ADMIN_EMAIL = "admin@gmail.com";
-        public static final String ADMIN_FIRST_NAME = "Woman";
+        public static final String ADMIN_FIRST_NAME = "Admin";
         public static final String ADMIN_LAST_NAME = "Shop";
         public static final String ADMIN_PASSWORD = "admin123";
 

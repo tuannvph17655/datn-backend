@@ -3,13 +3,19 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/datn}
     username: ${SPRING_DATASOURCE_USERNAME:root}
     password: ${SPRING_DATASOURCE_PASSWORD:}
-    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     properties:
       hibernate:
-        dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:org.hibernate.dialect.MySQLDialect}
+        dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:org.hibernate.dialect.MySQL8Dialect}
         format_sql: ${SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT-SQL:true}
+        driverClassName: com.mysql.cj.jdbc.Driver
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
+  main:
+    allow-bean-definition-overriding: true
+logging:
+  level:
+    org:
+      hibernate: ERROR
