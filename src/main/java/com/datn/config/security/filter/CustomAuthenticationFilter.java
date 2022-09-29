@@ -50,13 +50,12 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withExpiresAt(new Date(System.currentTimeMillis() + WsConst.Values.ACCESS_TOKEN_EXPIRED))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim(WsConst.UserFields.ROLE_VAR, user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()).get(0))
-                .withClaim(WsConst.UserFields.NAME_VAR, (Optional.of(userEntity.getFirstName()).orElse("") + " " + Optional.of(userEntity.getLastName()).orElse("")).trim())
                 .withClaim(WsConst.UserFields.EMAIL_VAR, userEntity.getEmail())
                 .withClaim(WsConst.UserFields.ID_VAR, userEntity.getId())
                 .sign(algorithm);
 
         final var refreshToken = JWT.create()
-                .withSubject(userEntity.getId())
+                .withSubject(Long.toString(userEntity.getId()))
                 .withExpiresAt(new Date(System.currentTimeMillis() + WsConst.Values.REFRESH_TOKEN_EXPIRED))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
