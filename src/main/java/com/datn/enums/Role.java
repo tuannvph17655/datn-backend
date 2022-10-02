@@ -1,4 +1,4 @@
-package com.datn.entity;
+package com.datn.enums;
 
 public enum Role {
     ADMIN,
