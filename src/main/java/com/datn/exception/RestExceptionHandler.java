@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class RestExceptionHandler {
     @ExceptionHandler({BindException.class})
-    public ResponseEntity<ResponseObject> handleBindException(BindException exception, ContentCachingRequestWrapper request) {
+    public ResponseEntity<ResponseObject> handleBindException(BindException exception) {
         Map<String, String> errorMap = exception.getBindingResult()
                 .getFieldErrors().stream()
                 .collect(
@@ -34,26 +34,25 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ResponseObject> handleServiceException(ServiceException exception, ContentCachingRequestWrapper request) {
-        exception.printStackTrace();
         return ResponseObject.build(exception.getStatus(), exception.getCode(), exception.getMessage(), null);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ResponseObject> handleAllException(Exception exception, ContentCachingRequestWrapper request) {
-        if (exception instanceof ServiceException) {
-            return handleServiceException((ServiceException) exception, request);
-        }
-        Throwable cause = ExceptionUtils.getRootCause(exception);
-        if (cause instanceof ServiceException) {
-            return handleServiceException((ServiceException) cause, request);
-        }
-
-        exception.printStackTrace();
-        String message = Optional
-                .ofNullable(ExceptionUtils.getRootCause(exception))
-                .map(Throwable::getMessage)
-                .orElse(ExceptionUtils.getRootCauseMessage(exception));
-
-        return ResponseObject.failed(HttpStatus.INTERNAL_SERVER_ERROR.toString(), message);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ResponseObject> handleAllException(Exception exception, ContentCachingRequestWrapper request) {
+//        if (exception instanceof ServiceException) {
+//            return handleServiceException((ServiceException) exception, request);
+//        }
+//        Throwable cause = ExceptionUtils.getRootCause(exception);
+//        if (cause instanceof ServiceException) {
+//            return handleServiceException((ServiceException) cause, request);
+//        }
+//
+//        exception.printStackTrace();
+//        String message = Optional
+//                .ofNullable(ExceptionUtils.getRootCause(exception))
+//                .map(Throwable::getMessage)
+//                .orElse(ExceptionUtils.getRootCauseMessage(exception));
+//
+//        return ResponseObject.failed(HttpStatus.INTERNAL_SERVER_ERROR.toString(), message);
+//    }
 }
