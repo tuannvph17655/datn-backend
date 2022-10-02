@@ -1,5 +1,6 @@
 package com.datn.service;
 
+import com.datn.dtos.request.UserRequest;
 import com.datn.dtos.response.UserResponse;
 import com.datn.entity.User;
 import com.datn.repository.UserRepository;
@@ -25,5 +26,11 @@ public class UserService {
         List<UserResponse> userResponses = users.stream().map(UserResponse::from).collect(Collectors.toList());
         Page<UserResponse> pages = new PageImpl<UserResponse>(userResponses, pageable, userResponses.size());
         return pages;
+    }
+
+    public User createUser(UserRequest userRequest) {
+        User user = User.copy(userRequest);
+        user.setActive(true);
+        return userRepository.save(user);
     }
 }

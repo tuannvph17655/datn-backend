@@ -1,6 +1,7 @@
 package com.datn.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -15,7 +16,7 @@ import java.util.Date;
 
 @AllArgsConstructor
 @Data
-@SuperBuilder(toBuilder = true)
+@SuperBuilder
 @MappedSuperclass
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)

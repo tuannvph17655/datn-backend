@@ -50,6 +50,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withExpiresAt(new Date(System.currentTimeMillis() + WsConst.Values.ACCESS_TOKEN_EXPIRED))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim(WsConst.UserFields.ROLE_VAR, user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()).get(0))
+                .withClaim(WsConst.UserFields.NAME_VAR, (Optional.of(userEntity.getUserName()).orElse("")).trim())
                 .withClaim(WsConst.UserFields.EMAIL_VAR, userEntity.getEmail())
                 .withClaim(WsConst.UserFields.ID_VAR, userEntity.getId())
                 .sign(algorithm);
