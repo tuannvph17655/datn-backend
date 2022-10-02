@@ -1,7 +1,7 @@
 package com.datn.dtos.request;
 
 import com.datn.annotation.MustBeEnum;
-import com.datn.entity.Role;
+import com.datn.enums.Role;
 import lombok.*;
 
 import javax.validation.constraints.Email;
