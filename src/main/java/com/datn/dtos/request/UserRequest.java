@@ -2,7 +2,12 @@ package com.datn.dtos.request;
 
 import com.datn.annotation.MustBeEnum;
 import com.datn.enums.Role;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
