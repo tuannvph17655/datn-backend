@@ -23,7 +23,6 @@ public class CategoryResponse {
                 .name(category.getName())
                 .active(category.isActive())
                 .build();
-        CopyUtils.copy(category,categoryResponse);
         return categoryResponse;
     }
 }
