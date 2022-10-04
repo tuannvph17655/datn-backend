@@ -11,18 +11,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "carts")
 public class Cart extends BaseEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Basic
-    @Column(name = "product_id", nullable = false)
-    private Long productId;
-    @Basic
-    @Column(name = "user_id", nullable = false)
+    private Long productOptionId;
     private Long userId;
-    @Basic
-    @Column(name = "quantity", nullable = false)
     private int quantity;
 
 }
