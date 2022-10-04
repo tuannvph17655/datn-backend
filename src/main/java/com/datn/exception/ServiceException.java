@@ -17,4 +17,23 @@ public class ServiceException extends RuntimeException {
     private HttpStatus status;
     private Object[] args;
 
+    public ServiceException(HttpStatus status, String msg, String statusCode) {
+        super(msg);
+        this.status = status;
+        this.code = statusCode;
+    }
+
+    public ServiceException(HttpStatus status, String msg) {
+        super(msg);
+        this.status = status;
+    }
+
+    public ServiceException(HttpStatus status, String msg, String statusCode, Object[] args) {
+        super(msg);
+        this.status = status;
+        this.code = statusCode;
+        this.args = args;
+    }
+
+
 }
