@@ -1,5 +1,9 @@
 package com.datn.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "categories")
 public class Category extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
