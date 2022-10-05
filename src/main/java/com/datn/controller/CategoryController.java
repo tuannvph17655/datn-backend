@@ -1,7 +1,6 @@
 package com.datn.controller;
 
 import com.datn.dtos.request.CategoryRequest;
-import com.datn.dtos.response.CategoryResponse;
 import com.datn.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -18,12 +16,17 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/find-all")
-    public ResponseEntity<?> findAllCategory(
+    @GetMapping("/find-category")
+    public ResponseEntity<?> findCategory(
             @RequestParam(name = "page" ,defaultValue = "0") int page,
             @RequestParam(name = "size" ,defaultValue = "10") int size
     ) {
-        return new ResponseEntity<>(categoryService.findAllCategory(page,size), HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.findCategory(page,size), HttpStatus.OK);
+    }
+
+    @GetMapping("/find-all")
+    public  ResponseEntity<?> findAll() {
+        return new ResponseEntity<>(categoryService.findAllCategory(), HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -44,8 +47,4 @@ public class CategoryController {
     ) {
         return new ResponseEntity<>(categoryService.deleteCategory(id), HttpStatus.OK);
     }
-
-
-
-
 }
