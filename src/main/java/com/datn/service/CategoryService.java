@@ -24,11 +24,18 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public Page<CategoryResponse> findAllCategory(int page, int size) {
+    public Page<CategoryResponse> findCategory(int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
         Page<Category> categories = categoryRepository.findAll(pageable);
         List<CategoryResponse> categoryResponses = categories.stream().map(CategoryResponse::from).collect(Collectors.toList());
         return new PageImpl<>(categoryResponses,pageable,categories.getTotalElements());
+    }
+
+    public List<CategoryResponse> findAllCategory() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(CategoryResponse::from)
+                .collect(Collectors.toList());
     }
 
     public Category createCategory(CategoryRequest categoryRequests) {
