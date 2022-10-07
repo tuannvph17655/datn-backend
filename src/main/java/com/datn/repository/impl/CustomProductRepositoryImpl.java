@@ -1,6 +1,6 @@
 package com.datn.repository.impl;
 
-import com.datn.repository.CustomProductRepository;
+import com.datn.repository.custom.CustomProductRepository;
 import lombok.AllArgsConstructor;
 
 import javax.persistence.EntityManager;

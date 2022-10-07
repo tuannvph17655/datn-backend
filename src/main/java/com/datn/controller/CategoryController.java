@@ -1,6 +1,7 @@
 package com.datn.controller;
 
 import com.datn.dtos.request.CategoryRequest;
+import com.datn.dtos.response.CategoryResponse;
 import com.datn.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ public class CategoryController {
     public ResponseEntity<?> findCategory(
             @RequestParam(name = "page" ,defaultValue = "0") int page,
             @RequestParam(name = "size" ,defaultValue = "10") int size
+//            @RequestParam(name = "name" ,required = false) String name,
+//            @RequestParam(name = "active",required = false) boolean active
     ) {
         return new ResponseEntity<>(categoryService.findCategory(page,size), HttpStatus.OK);
     }
@@ -31,7 +34,8 @@ public class CategoryController {
 
     @PostMapping("/create")
     public ResponseEntity<?> creatCategory(@Valid @RequestBody CategoryRequest categoryRequest) {
-        return new ResponseEntity<>(categoryService.createCategory(categoryRequest),HttpStatus.OK);
+        categoryService.createCategory(categoryRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/find-by-id/{id}")
@@ -45,6 +49,17 @@ public class CategoryController {
     public ResponseEntity<?> deleteCategory(
             @PathVariable(name = "id") Long id
     ) {
-        return new ResponseEntity<>(categoryService.deleteCategory(id), HttpStatus.OK);
+        categoryService.deleteCategory(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateCategory(
+            @PathVariable(name = "id") Long id,
+            @Valid @RequestBody CategoryRequest categoryRequest
+            ) {
+        categoryService.updateCategory(id,categoryRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
