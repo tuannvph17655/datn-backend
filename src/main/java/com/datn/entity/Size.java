@@ -8,7 +8,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.datn.dtos.request.SizeRequest;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
 @Table(name = "sizes")
 public class Size extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +37,11 @@ public class Size extends BaseEntity {
     @Column(name = "active", nullable = false)
     private boolean active;
 
+    public static Size from(SizeRequest sizeRequest){
+        return Size.builder()
+                .name(sizeRequest.getName())
+                .code(sizeRequest.getCode())
+                .active(true)
+                .build();
+    }
 }
