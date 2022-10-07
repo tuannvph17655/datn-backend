@@ -1,4 +1,4 @@
-package com.datn.repository;
+package com.datn.repository.custom;
 
 public interface CustomProductRepository {
 }

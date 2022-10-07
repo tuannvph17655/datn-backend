@@ -28,7 +28,7 @@ public class CategoryService {
         Pageable pageable = PageRequest.of(page,size);
         Page<Category> categories = categoryRepository.findAll(pageable);
         List<CategoryResponse> categoryResponses = categories.stream().map(CategoryResponse::from).collect(Collectors.toList());
-        return new PageImpl<>(categoryResponses,pageable,categories.getTotalElements());
+        return new PageImpl<>(categoryResponses,pageable, categoryResponses.size());
     }
 
     public List<CategoryResponse> findAllCategory() {
@@ -38,9 +38,9 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public Category createCategory(CategoryRequest categoryRequests) {
+    public void createCategory(CategoryRequest categoryRequests) {
         Category category = Category.from(categoryRequests);
-            return categoryRepository.save(category);
+        categoryRepository.save(category);
     }
 
     public CategoryResponse findCategoryById(Long id) {
@@ -49,13 +49,18 @@ public class CategoryService {
         return CategoryResponse.from(category);
     }
 
-    public CategoryResponse deleteCategory(Long id) {
+    public void deleteCategory(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(
                 ()->new ServiceException(HttpStatus.BAD_REQUEST, CATEGORY_NOT_FOUND)
         );
         category.setActive(false);
         categoryRepository.save(category);
-        return CategoryResponse.from(category);
+    }
+
+    public void updateCategory(Long id, CategoryRequest categoryRequest) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(()-> new ServiceException(HttpStatus.BAD_REQUEST,CATEGORY_NOT_FOUND)).from(categoryRequest);
+        categoryRepository.save(category);
     }
 
 
