@@ -1,5 +1,11 @@
 package com.datn.entity;
 
+import com.datn.dtos.request.ColorRequest;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +15,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
 @Table(name = "colors")
 public class Color extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +34,14 @@ public class Color extends BaseEntity {
     @Basic
     @Column(name = "active", nullable = false)
     private boolean active;
+
+    public static Color from(ColorRequest colorRequest){
+        return Color.builder()
+                .name(colorRequest.getName())
+                .active(true)
+                .build();
+
+    }
+
 
 }
