@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.datn.message.ResponseMessageText.CATEGORY_NOT_FOUND;
+import static com.datn.message.ResponseMessageText.COLOR_NOT_FOUND;
 
 @Service
 @AllArgsConstructor
@@ -49,17 +50,12 @@ public class ColorService {
                 () -> new ServiceException(HttpStatus.BAD_REQUEST,CATEGORY_NOT_FOUND));
         return ColorResponse.from(color);
     }
-
-//    public void updateCategory(Long id, CategoryRequest categoryRequest) {
-//        Category category = categoryRepository.findById(id)
-//                .orElseThrow(()-> new ServiceException(HttpStatus.BAD_REQUEST,CATEGORY_NOT_FOUND)).from(categoryRequest);
-//        categoryRepository.save(category);
-//    }
-
-//    public void updateColor(Long id, ColorRequest colorRequest){
-//        Color color = colorRepository.findById(id)
-//                .orElseThrow(()-> new ServiceException(HttpStatus.BAD_REQUEST,C)
-//    }
+    
+    public void updateColor(Long id, ColorRequest colorRequest){
+        Color color = colorRepository.findById(id)
+                .orElseThrow(()-> new ServiceException(HttpStatus.BAD_REQUEST,COLOR_NOT_FOUND)).from(colorRequest);
+        colorRepository.save(color);
+    }
 
     //delete
     public ColorResponse deleteColor(Long id) {

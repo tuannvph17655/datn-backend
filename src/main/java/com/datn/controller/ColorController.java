@@ -41,11 +41,11 @@ public class ColorController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateCategory(
+    public ResponseEntity<?> updateColor(
             @PathVariable(name = "id") Long id,
             @Valid @RequestBody ColorRequest colorRequest
     ) {
-        colorService.updateCategory(id,categoryRequest);
+        colorService.updateColor(id,colorRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

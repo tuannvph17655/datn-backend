@@ -2,4 +2,6 @@ package com.datn.message;
 
 public class ResponseMessageText {
     public static final String CATEGORY_NOT_FOUND = "Không tìm thấy danh mục ";
+
+    public static final String COLOR_NOT_FOUND = "Không tìm thấy Color";
 }
