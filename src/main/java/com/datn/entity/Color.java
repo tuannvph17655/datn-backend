@@ -1,6 +1,14 @@
 package com.datn.entity;
 
 import com.datn.dtos.request.ColorRequest;
+import com.datn.dtos.request.UserRequest;
+import com.datn.enums.Role;
+import com.datn.utils.common.CopyUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import com.datn.dtos.request.ColorRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

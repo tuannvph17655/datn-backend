@@ -1,6 +1,8 @@
 package com.datn.controller;
 
 import com.datn.dtos.request.ColorRequest;
+import com.datn.dtos.response.ColorResponse;
+import com.datn.entity.Color;
 import com.datn.service.ColorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor

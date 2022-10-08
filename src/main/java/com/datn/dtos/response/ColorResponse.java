@@ -22,6 +22,7 @@ public class ColorResponse {
                 .id(color.getId())
                 .name(color.getName())
                 .hex(color.getHex())
+                .active(color.isActive())
                 .build();
         return colorResponse;
     }
