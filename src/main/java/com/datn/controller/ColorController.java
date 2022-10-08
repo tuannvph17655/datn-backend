@@ -40,6 +40,15 @@ public class ColorController {
         return new ResponseEntity<>(colorService.findColorById(id),HttpStatus.OK);
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateCategory(
+            @PathVariable(name = "id") Long id,
+            @Valid @RequestBody ColorRequest colorRequest
+    ) {
+        colorService.updateCategory(id,categoryRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PutMapping("/delete/{id}")
     public ResponseEntity<?> deleteColor(
             @PathVariable(name = "id") Long id

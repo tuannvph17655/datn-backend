@@ -50,6 +50,17 @@ public class ColorService {
         return ColorResponse.from(color);
     }
 
+//    public void updateCategory(Long id, CategoryRequest categoryRequest) {
+//        Category category = categoryRepository.findById(id)
+//                .orElseThrow(()-> new ServiceException(HttpStatus.BAD_REQUEST,CATEGORY_NOT_FOUND)).from(categoryRequest);
+//        categoryRepository.save(category);
+//    }
+
+//    public void updateColor(Long id, ColorRequest colorRequest){
+//        Color color = colorRepository.findById(id)
+//                .orElseThrow(()-> new ServiceException(HttpStatus.BAD_REQUEST,C)
+//    }
+
     //delete
     public ColorResponse deleteColor(Long id) {
         Color color = colorRepository.findById(id).orElseThrow(
