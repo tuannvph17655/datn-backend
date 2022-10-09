@@ -1,9 +1,9 @@
 package com.datn.utils.validator;
 
 import com.datn.utils.common.StringUtils;
-import com.datn.utils.constants.WsCode;
-import com.datn.utils.constants.WsConst;
-import com.datn.utils.constants.WsException;
+import com.datn.utils.constants.PuddyCode;
+import com.datn.utils.constants.PuddyConst;
+import com.datn.utils.constants.PuddyException;
 
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -16,35 +16,35 @@ public class ValidateUtils {
 
     public static void validBlank(String fieldName, String value) {
         if (StringUtils.isNullOrEmpty(value)) {
-            throw new WsException(WsCode.REQUIRED_FIELD, String.format(WsCode.REQUIRED_FIELD.getMessage(), fieldName));
+            throw new PuddyException(PuddyCode.REQUIRED_FIELD, String.format(PuddyCode.REQUIRED_FIELD.getMessage(), fieldName));
         }
     }
 
     public static void isValidLength(String fieldName, String value) {
         value.trim();
         if (value.length() <= 0 || value.length() >= 255) {
-            throw new WsException(WsCode.INVALID_LENGTH, String.format(WsCode.INVALID_LENGTH.getMessage(), fieldName));
+            throw new PuddyException(PuddyCode.INVALID_LENGTH, String.format(PuddyCode.INVALID_LENGTH.getMessage(), fieldName));
         }
     }
 
     public static void isValidMinLength(String fieldName, String value, int minLength) {
         value.trim();
         if (value.length() <= minLength || value.length() >= 255) {
-            throw new WsException(WsCode.INVALID_LENGTH, String.format(WsCode.INVALID_LENGTH.getMessage(), fieldName));
+            throw new PuddyException(PuddyCode.INVALID_LENGTH, String.format(PuddyCode.INVALID_LENGTH.getMessage(), fieldName));
         }
     }
 
     public static void isValidMaxLength(String fieldName, String value, int maxLength) {
         value.trim();
         if (value.length() <= 0 || value.length() >= maxLength) {
-            throw new WsException(WsCode.INVALID_LENGTH, String.format(WsCode.INVALID_LENGTH.getMessage(), fieldName));
+            throw new PuddyException(PuddyCode.INVALID_LENGTH, String.format(PuddyCode.INVALID_LENGTH.getMessage(), fieldName));
         }
     }
 
     public static void isValidRangeLength(String fieldName, String value, int minLength, int maxLength) {
         value.trim();
         if (value.length() <= minLength || value.length() >= maxLength) {
-            throw new WsException(WsCode.INVALID_LENGTH, String.format(WsCode.INVALID_LENGTH.getMessage(), fieldName));
+            throw new PuddyException(PuddyCode.INVALID_LENGTH, String.format(PuddyCode.INVALID_LENGTH.getMessage(), fieldName));
         }
     }
 
@@ -64,21 +64,21 @@ public class ValidateUtils {
         if (StringUtils.isNullOrEmpty(email)) {
             return false;
         }
-        return ValidateUtils.isCheck(email, WsConst.Regex.EMAIL);
+        return ValidateUtils.isCheck(email, PuddyConst.Regex.EMAIL);
     }
 
     public static boolean isValidFullName(final String fullName) {
         if (StringUtils.isNullOrEmpty(fullName)) {
             return false;
         }
-        return ValidateUtils.isCheck(fullName, WsConst.Regex.FULL_NAME);
+        return ValidateUtils.isCheck(fullName, PuddyConst.Regex.FULL_NAME);
     }
 
     public static boolean isValidPhoneNumber(final String phoneNumber) {
         if (StringUtils.isNullOrEmpty(phoneNumber)) {
             return false;
         }
-        return ValidateUtils.isCheck(phoneNumber, WsConst.Regex.PHONE);
+        return ValidateUtils.isCheck(phoneNumber, PuddyConst.Regex.PHONE);
     }
 
     public static boolean isCheck(String value, String regex) {
@@ -95,9 +95,9 @@ public class ValidateUtils {
      * Tuổi khách hàng phải từ 16 - 120
      */
     public static boolean isValidCustomerAge(Long dob) {
-        var calendar = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of(WsConst.Values.TIME_ZONE)));
+        var calendar = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of(PuddyConst.Values.TIME_ZONE)));
         calendar.setTimeInMillis(dob);
         var year = calendar.get(Calendar.YEAR);
-        return year >= WsConst.Values.CUSTOMER_AGE_MIN && year <= WsConst.Values.CUSTOMER_AGE_MAX;
+        return year >= PuddyConst.Values.CUSTOMER_AGE_MIN && year <= PuddyConst.Values.CUSTOMER_AGE_MAX;
     }
 }

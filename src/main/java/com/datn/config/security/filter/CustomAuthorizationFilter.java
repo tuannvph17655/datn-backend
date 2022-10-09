@@ -2,9 +2,8 @@ package com.datn.config.security.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.datn.utils.common.JsonUtils;
-import com.datn.utils.constants.WsCode;
-import com.datn.utils.constants.WsConst;
+import com.datn.utils.constants.PuddyCode;
+import com.datn.utils.constants.PuddyConst;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -20,11 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
@@ -35,10 +30,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } else {
             var authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-            if (authorizationHeader != null && authorizationHeader.startsWith(WsConst.Values.BEARER_SPACE)) {
+            if (authorizationHeader != null && authorizationHeader.startsWith(PuddyConst.Values.BEARER_SPACE)) {
                 try {
-                    final var token = authorizationHeader.substring(WsConst.Values.BEARER_SPACE.length());
-                    final var algorithm = Algorithm.HMAC256(WsConst.Values.JWT_SECRET.getBytes());
+                    final var token = authorizationHeader.substring(PuddyConst.Values.BEARER_SPACE.length());
+                    final var algorithm = Algorithm.HMAC256(PuddyConst.Values.JWT_SECRET.getBytes());
                     final var jwtVerifier = JWT.require(algorithm).build();
                     final var decodedJWT = jwtVerifier.verify(token);
 
@@ -51,13 +46,13 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {
-                    log.error("doFilterInternal() error: {}", JsonUtils.toJson(e));
+                    log.error("doFilterInternal() error: {}", e.getMessage());
                     response.setHeader("error", e.getMessage());
                     response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     HashMap<String, Object> errors = new HashMap<>();
                     errors.put("statusCode", HttpStatus.INTERNAL_SERVER_ERROR.value());
-                    errors.put("message", WsCode.INTERNAL_SERVER.getMessage());
+                    errors.put("message", PuddyCode.INTERNAL_SERVER.getMessage());
                     errors.put("timeStamp", new Date());
                     errors.put("path", request.getServletPath());
                     new ObjectMapper().writeValue(response.getOutputStream(), errors);

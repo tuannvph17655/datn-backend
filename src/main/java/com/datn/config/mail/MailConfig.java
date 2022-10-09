@@ -11,8 +11,8 @@ import java.util.Properties;
 public class MailConfig {
     private String HOST = "smtp.gmail.com";
     private Integer PORT = 587;
-    private String USERNAME = "";
-    private String PASSWORD = "";
+    private String USERNAME = "hungnnit98";
+    private String PASSWORD = "eqqxkhxkkmnsogeq";
 
     private static final String PROTOCOL_KEY = "mail.transport.protocol";
     private static final String PROTOCOL_VALUE = "smtp";
