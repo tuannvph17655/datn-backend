@@ -1,8 +1,8 @@
 package com.datn.utils.constants.enums;
 
 import com.datn.utils.common.StringUtils;
-import com.datn.utils.constants.WsCode;
-import com.datn.utils.constants.WsException;
+import com.datn.utils.constants.PuddyCode;
+import com.datn.utils.constants.PuddyException;
 
 public enum StatusEnum {
     /**
@@ -34,7 +34,7 @@ public enum StatusEnum {
                 return item;
             }
         }
-        throw new WsException(WsCode.STATUS_INVALID);
+        throw new PuddyException(PuddyCode.STATUS_INVALID);
     }
 
     public String getName() {

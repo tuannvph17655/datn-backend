@@ -2,9 +2,9 @@ package com.datn.config.security.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.datn.repository.UserRepository;
+import com.datn.utils.base.PuddyRepository;
 import com.datn.utils.common.BeanUtils;
-import com.datn.utils.constants.WsConst;
+import com.datn.utils.constants.PuddyConst;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -32,8 +32,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        var email = request.getParameter(WsConst.UserFields.EMAIL_VAR);
-        var password = request.getParameter(WsConst.UserFields.PASSWORD);
+        var email = request.getParameter(PuddyConst.UserFields.EMAIL_VAR);
+        var password = request.getParameter(PuddyConst.UserFields.PASSWORD);
         var authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
         return authenticationManager.authenticate(authenticationToken);
@@ -42,29 +42,29 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         final var user = (User) authResult.getPrincipal();
-        final var repository = BeanUtils.getBean(UserRepository.class);
-        final var userEntity = repository.findByEmailAndActive(user.getUsername(), true);
-        final var algorithm = Algorithm.HMAC256(WsConst.Values.JWT_SECRET.getBytes());
+        final var repository = BeanUtils.getBean(PuddyRepository.class);
+        final var userEntity = repository.userRepository.findByEmailAndActive(user.getUsername(), Boolean.TRUE);
+        final var algorithm = Algorithm.HMAC256(PuddyConst.Values.JWT_SECRET.getBytes());
         final var accessToken = JWT.create()
                 .withSubject(userEntity.getEmail())
-                .withExpiresAt(new Date(System.currentTimeMillis() + WsConst.Values.ACCESS_TOKEN_EXPIRED))
+                .withExpiresAt(new Date(System.currentTimeMillis() + PuddyConst.Values.ACCESS_TOKEN_EXPIRED))
                 .withIssuer(request.getRequestURL().toString())
-                .withClaim(WsConst.UserFields.ROLE_VAR, user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()).get(0))
-                .withClaim(WsConst.UserFields.NAME_VAR, (Optional.of(userEntity.getUserName()).orElse("")).trim())
-                .withClaim(WsConst.UserFields.EMAIL_VAR, userEntity.getEmail())
-                .withClaim(WsConst.UserFields.ID_VAR, userEntity.getId())
+                .withClaim(PuddyConst.UserFields.ROLE_VAR, user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()).get(0))
+                .withClaim(PuddyConst.UserFields.NAME_VAR, (Optional.of(userEntity.getFirstName()).orElse("") + " " + Optional.of(userEntity.getLastName()).orElse("")).trim())
+                .withClaim(PuddyConst.UserFields.EMAIL_VAR, userEntity.getEmail())
+                .withClaim(PuddyConst.UserFields.ID_VAR, userEntity.getId())
                 .sign(algorithm);
 
         final var refreshToken = JWT.create()
-                .withSubject(Long.toString(userEntity.getId()))
-                .withExpiresAt(new Date(System.currentTimeMillis() + WsConst.Values.REFRESH_TOKEN_EXPIRED))
+                .withSubject(userEntity.getId())
+                .withExpiresAt(new Date(System.currentTimeMillis() + PuddyConst.Values.REFRESH_TOKEN_EXPIRED))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         var responses = new HashMap<String, Object>();
-        responses.put(WsConst.Nouns.ACCESS_TOKEN_FIELD, accessToken);
-        responses.put(WsConst.Nouns.REFRESH_TOKEN_FIELD, refreshToken);
+        responses.put(PuddyConst.Nouns.ACCESS_TOKEN_FIELD, accessToken);
+        responses.put(PuddyConst.Nouns.REFRESH_TOKEN_FIELD, refreshToken);
 
         new ObjectMapper().writeValue(response.getOutputStream(), responses);
     }
