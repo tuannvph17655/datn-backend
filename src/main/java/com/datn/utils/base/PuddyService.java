@@ -1,5 +1,6 @@
 package com.datn.utils.base;
 
+import com.datn.service.CategoryService;
 import com.datn.service.CustomerDetailService;
 import com.datn.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PuddyService {
 //    public final AddressService addressService;
-//    public final CategoryService categoryService;
+    public final CategoryService categoryService;
 //    public final ColorService colorService;
 //    public final LocationService locationService;
 //    public final MaterialService materialService;
