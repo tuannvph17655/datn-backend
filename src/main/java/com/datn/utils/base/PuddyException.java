@@ -22,5 +22,4 @@ public class PuddyException extends ResponseStatusException {
     }
 
 
-
 }

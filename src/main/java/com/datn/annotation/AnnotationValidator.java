@@ -10,8 +10,9 @@ import javax.validation.constraints.NotNull;
 import java.lang.annotation.Annotation;
 import java.util.function.Supplier;
 
-public abstract class AnnotationValidator<T extends Annotation,V> implements ConstraintValidator<T,V> {
+public abstract class AnnotationValidator<T extends Annotation, V> implements ConstraintValidator<T, V> {
     protected T annotation;
+
     @Override
     public void initialize(T constraintAnnotation) {
         this.annotation = constraintAnnotation;
@@ -40,15 +41,15 @@ public abstract class AnnotationValidator<T extends Annotation,V> implements Con
 
         private Supplier<String> messageProvider;
 
-        public boolean isInvalid(){
+        public boolean isInvalid() {
             return !valid;
         }
 
-        public static AnnotationValidationResult succeed(){
+        public static AnnotationValidationResult succeed() {
             return builder().valid(true).build();
         }
 
-        public static AnnotationValidationResult failed(Supplier<String> messageProvider){
+        public static AnnotationValidationResult failed(Supplier<String> messageProvider) {
             return builder().valid(false).messageProvider(messageProvider).build();
         }
     }

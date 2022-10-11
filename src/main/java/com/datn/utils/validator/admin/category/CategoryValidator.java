@@ -5,7 +5,8 @@ import com.datn.utils.constants.PuddyConst;
 import com.datn.utils.validator.ValidateUtils;
 
 public class CategoryValidator {
-    private CategoryValidator() {}
+    private CategoryValidator() {
+    }
 
     public static void validCreate(CategoryDto dto) {
         ValidateUtils.validBlank(PuddyConst.CategoryFields.NAME_VAL, dto.getName());

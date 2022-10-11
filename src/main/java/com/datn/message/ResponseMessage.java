@@ -11,9 +11,9 @@ public enum ResponseMessage {
     INTERNAL_SERVER_ERROR("", ""),
     SOMETHING_WRONG("", ""),
     NOT_FOUND("", ""),
-    FAILED("Lỗi",""),
+    FAILED("Lỗi", ""),
 
-    DATA_CANNOT_BE_NULL( "DATA_CANNOT_BE_NULL", "Data error %s can't not be null");
+    DATA_CANNOT_BE_NULL("DATA_CANNOT_BE_NULL", "Data error %s can't not be null");
 
     private final String code;
     private final String message;

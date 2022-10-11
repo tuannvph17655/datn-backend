@@ -19,7 +19,7 @@ public class PageableUtils {
             "lastName",
             "email"
     );
-    
+
     public static Pageable getPageable(PageReq req) {
         getPageReq(req);
         var direction = req.getSortDirection().equals("desc") ? Sort.Direction.DESC : Sort.Direction.DESC;

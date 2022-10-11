@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 
 import static com.datn.utils.common.EnumUtils.getEnumNames;
 
-public class MustBeEnumValidator extends AnnotationValidator<MustBeEnum , String>{
+public class MustBeEnumValidator extends AnnotationValidator<MustBeEnum, String> {
     @Override
     public AnnotationValidationResult validate(@Nullable String value, @NotNull MustBeEnum annotation) {
         final boolean ignoreCase = annotation.ignoreCase();

@@ -10,8 +10,12 @@ import com.datn.utils.base.rest.ResData;
 
 public interface CategoryService {
     PageData<CategoryRes> search(CurrentUser currentUser, CategoryReq req) throws PuddyException;
+
     ResData<String> create(CurrentUser currentUser, CategoryDto dto);
+
     ResData<String> delete(CurrentUser currentUser, CategoryDto dto);
+
     ResData<String> update(CurrentUser currentUser, CategoryDto dto);
+
     ResData<CategoryRes> detail(CurrentUser currentUser, CategoryDto dto);
 }
