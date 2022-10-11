@@ -1,7 +1,6 @@
 package com.datn.service.impl;
 
 import com.datn.dto.customer.user.register.RegisterDto;
-import com.datn.entity.ResetTokenEntity;
 import com.datn.entity.UserEntity;
 import com.datn.service.CustomerDetailService;
 import com.datn.utils.base.PuddyRepository;
@@ -17,11 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -61,61 +55,5 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
         log.info("register() user after save: {}", JsonUtils.toJson(user));
 
         return ResData.ok(user.getId());
-    }
-
-    @Override
-    @Transactional
-    public Object sendMail4ForgotPass(String email) {
-//        log.info("sendMail4ForgotPass() start with payload: {}", email);
-//        if (StringUtils.isNullOrEmpty(email)) {
-//            throw new PuddyException(PuddyCode.EMAIL_NOT_BLANK);
-//        }
-//        var customer = repository.userRepository.findByEmailIgnoreCaseAndActiveAndRole(email.trim(), Boolean.TRUE, RoleEnum.ROLE_CUSTOMER);
-//        log.info("sendMail4ForgotPass() find customer: {}", JsonUtils.toJson(customer));
-//        if (null == customer) {
-//            throw new PuddyException(PuddyCode.ERROR_NOT_FOUND);
-//        }
-//        if (repository.resetTokenRepository.check5TimesInDay(customer.getId())) {
-//            throw new PuddyException(PuddyCode.MAX_SEND_OTP);
-//        }
-//        var resetToken = ResetTokenEntity.builder()
-//                .id(UidUtils.generateUid())
-//                .token(UidUtils.generateToken(6))
-//                .userId(customer.getId())
-//                .createdDate(new Date())
-//                .build();
-//        log.info("sendMail4ForgotPass() resetToken before save: {}", JsonUtils.toJson(resetToken));
-//        repository.resetTokenRepository.save(resetToken);
-//        log.info("sendMail4ForgotPass() resetToken after save: {}", JsonUtils.toJson(resetToken));
-//
-//        var model = buildModel(customer, resetToken);
-//
-//        try {
-//            var template = configuration.getTemplate(RESET_PASSWORD_TEMPLATE_NAME);
-//            var rsmd = ResetPasswordMailDto.builder()
-//                    .from(String.format(FROM, email))
-//                    .to(customer.getEmail())
-//                    .text(FreeMarkerTemplateUtils.processTemplateIntoString(template, model))
-//                    .subject(SUBJECT)
-//                    .build();
-//            log.info("sendMail4ForgotPass() build rsmd: {}", JsonUtils.toJson(rsmd));
-//            mailService.sendWForgotPassword(rsmd).get();
-//            return ResData.ok(resetToken.getId());
-//        } catch (Exception e) {
-//            log.error("sendMail4ForgotPass() error: {}", e.getMessage());
-//            throw new PuddyException(PuddyCode.INTERNAL_SERVER);
-//        }
-        return null;
-    }
-
-    private static Map buildModel(UserEntity customer, ResetTokenEntity resetToken) {
-        Map<String, Object> model = new HashMap<>();
-        model.put("time", DateUtils.toStr(new Date(), DateUtils.F_DDMMYYYYHHMM));
-        model.put("name", customer.getFirstName() + " " + customer.getLastName());
-        model.put("email", customer.getEmail());
-        model.put("link", String.format(DOMAIN_CLIENT, resetToken.getToken()));
-        model.put("minusToExpired", MINUS_TO_EXPIRED);
-        log.info("sendMail4ForgotPass() build model: {}", JsonUtils.toJson(model));
-        return model;
     }
 }
