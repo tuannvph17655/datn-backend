@@ -19,7 +19,7 @@ public class DatnApplication {
         SpringApplication.run(DatnApplication.class, args);
         PasswordEncoder passwordEncoder = BeanUtils.getBean(BCryptPasswordEncoder.class);
         System.out.println("success");
-        log.info("admin123 encode: {}",passwordEncoder.encode("admin123"));
+        log.info("admin123 encode: {}", passwordEncoder.encode("admin123"));
     }
 
 }

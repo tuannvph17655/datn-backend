@@ -21,7 +21,8 @@ public class ValidatorUtils {
     private ValidatorUtils() {
         super();
     }
-//
+
+    //
     private static final String NOT_BLANK = "Không được để trống ";
     private static final String INVALID = " không hợp lệ";
     private static final String MUST_LENGTH_LESS = " phải ít hơn ";
@@ -39,7 +40,7 @@ public class ValidatorUtils {
     public static void validNullOrEmpty(String fieldName, List<String> values) {
         if (values == null || values.isEmpty()) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, NOT_BLANK + fieldName);
+                    (PuddyCode.BAD_REQUEST, NOT_BLANK + fieldName);
         }
         for (var value : values) {
             validNullOrEmpty(fieldName, value);
@@ -49,7 +50,7 @@ public class ValidatorUtils {
     public static void validNullOrEmptyList(String fieldName, List<Object> values) {
         if (values == null || values.isEmpty()) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, NOT_BLANK + fieldName);
+                    (PuddyCode.BAD_REQUEST, NOT_BLANK + fieldName);
         }
     }
 
@@ -71,6 +72,7 @@ public class ValidatorUtils {
         }
     }
 //
+
     /**
      * valid do dai
      * type = true => valid max length
@@ -90,11 +92,11 @@ public class ValidatorUtils {
     public static void validLength(String fieldName, String value, int minLength, int maxLength) {
         if (value.length() < minLength) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + MUST_LENGTH_MORE + minLength + CHARACTER);
+                    (PuddyCode.BAD_REQUEST, fieldName + MUST_LENGTH_MORE + minLength + CHARACTER);
         }
         if (value.length() > maxLength) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + MUST_LENGTH_LESS + maxLength + CHARACTER);
+                    (PuddyCode.BAD_REQUEST, fieldName + MUST_LENGTH_LESS + maxLength + CHARACTER);
         }
     }
 
@@ -105,11 +107,11 @@ public class ValidatorUtils {
         for (var value : values) {
             if (value.length() < minLength) {
                 throw new PuddyException
-                (PuddyCode.BAD_REQUEST, fieldName + MUST_LENGTH_MORE + minLength + CHARACTER);
+                        (PuddyCode.BAD_REQUEST, fieldName + MUST_LENGTH_MORE + minLength + CHARACTER);
             }
             if (value.length() > maxLength) {
                 throw new PuddyException
-                (PuddyCode.BAD_REQUEST, fieldName + MUST_LENGTH_LESS + maxLength + CHARACTER);
+                        (PuddyCode.BAD_REQUEST, fieldName + MUST_LENGTH_LESS + maxLength + CHARACTER);
             }
         }
     }
@@ -117,7 +119,7 @@ public class ValidatorUtils {
     public static void validOnlyNumber(String fieldName, String value) {
         if (!StringUtils.isOnlyNumber(value)) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + INVALID);
+                    (PuddyCode.BAD_REQUEST, fieldName + INVALID);
         }
     }
 
@@ -125,37 +127,37 @@ public class ValidatorUtils {
         try {
             if (value.startsWith("0") || value.contains(" ")) {
                 throw new PuddyException
-                (PuddyCode.BAD_REQUEST, fieldName + INVALID);
+                        (PuddyCode.BAD_REQUEST, fieldName + INVALID);
             }
             var price = Long.valueOf(value);
             if (price < 0) {
                 throw new PuddyException
-                (PuddyCode.BAD_REQUEST, fieldName + INVALID);
+                        (PuddyCode.BAD_REQUEST, fieldName + INVALID);
             }
         } catch (NumberFormatException e) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + INVALID);
+                    (PuddyCode.BAD_REQUEST, fieldName + INVALID);
         }
     }
 
     public static void validOnlyCharacter(String fieldName, String value) {
         if (!StringUtils.isOnlyCharacter(value)) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + INVALID);
+                    (PuddyCode.BAD_REQUEST, fieldName + INVALID);
         }
     }
 
     public static void validEmail(String fieldName, String value) {
         if (!StringUtils.isValidEmail(value)) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + INVALID);
+                    (PuddyCode.BAD_REQUEST, fieldName + INVALID);
         }
     }
 
     public static void validPhone(String fieldName, String value) {
         if (!StringUtils.isCheck(value, StringUtils.PHONE_NUMBER_REGEX)) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + INVALID);
+                    (PuddyCode.BAD_REQUEST, fieldName + INVALID);
         }
     }
 
@@ -164,40 +166,40 @@ public class ValidatorUtils {
         var role = RoleEnum.valueOf(value);
         if (role == null) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + INVALID);
+                    (PuddyCode.BAD_REQUEST, fieldName + INVALID);
         }
     }
 
     public static void validBooleanType(String fieldName, Boolean value) {
         if (value == null) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + INVALID);
+                    (PuddyCode.BAD_REQUEST, fieldName + INVALID);
         }
     }
 
     public static void validAgeBetween(String fieldName, Date value, Integer minAge, Integer maxAge) {
         if (value == null) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, NOT_BLANK + fieldName.toLowerCase());
+                    (PuddyCode.BAD_REQUEST, NOT_BLANK + fieldName.toLowerCase());
         }
         var now = LocalDate.now();
         var dob = value.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         if (dob.compareTo(now) > 0) {
             throw new PuddyException
-            (PuddyCode.DOB_NOT_MORE_NOW);
+                    (PuddyCode.DOB_NOT_MORE_NOW);
         }
         if (null != minAge) {
             now = now.minusYears(minAge);
             if (dob.compareTo(now) > 0) {
                 throw new PuddyException
-                (PuddyCode.AGE_MUST_MORE, PuddyCode.AGE_MUST_MORE.getMessage() + " " + minAge);
+                        (PuddyCode.AGE_MUST_MORE, PuddyCode.AGE_MUST_MORE.getMessage() + " " + minAge);
             }
         }
         if (null != maxAge) {
             now = now.minusYears(maxAge);
             if (dob.compareTo(now) < 0) {
                 throw new PuddyException
-                (PuddyCode.AGE_MUST_LESS, PuddyCode.AGE_MUST_LESS.getMessage() + " " + minAge);
+                        (PuddyCode.AGE_MUST_LESS, PuddyCode.AGE_MUST_LESS.getMessage() + " " + minAge);
             }
         }
     }
@@ -205,7 +207,7 @@ public class ValidatorUtils {
     public static void validNewPassNotSameOldPass(String password, String newPassword) {
         if (newPassword.equals(password)) {
             throw new PuddyException
-            (PuddyCode.NEW_PASS_NOT_SAME_OLD);
+                    (PuddyCode.NEW_PASS_NOT_SAME_OLD);
         }
     }
 
@@ -213,7 +215,7 @@ public class ValidatorUtils {
         Long percent = Long.valueOf(value);
         if (percent < minValue || percent > maxValue) {
             throw new PuddyException
-            (PuddyCode.PERCENT_MUST_BETWEEN_0_AND_100);
+                    (PuddyCode.PERCENT_MUST_BETWEEN_0_AND_100);
         }
     }
 
@@ -221,7 +223,7 @@ public class ValidatorUtils {
         Long percent = Long.valueOf(value);
         if (percent < minValue) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + MUST_MORE + minValue);
+                    (PuddyCode.BAD_REQUEST, fieldName + MUST_MORE + minValue);
         }
     }
 
@@ -231,10 +233,11 @@ public class ValidatorUtils {
             LocalDate localDate = LocalDate.parse(value, sdf);
         } catch (Exception e) {
             throw new PuddyException
-            (PuddyCode.DATE_FORMAT_INVALID);
+                    (PuddyCode.DATE_FORMAT_INVALID);
         }
     }
-//
+
+    //
     public static void validTimeFormat(String fieldName, String value) {
 
     }
@@ -245,14 +248,15 @@ public class ValidatorUtils {
     public static void validNotContainSpace(String fieldName, String value) {
         if (value.contains(" ")) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + " " + PuddyCode.NOT_CONTAIN_SPACE.getMessage().toLowerCase(Locale.ROOT));
+                    (PuddyCode.BAD_REQUEST, fieldName + " " + PuddyCode.NOT_CONTAIN_SPACE.getMessage().toLowerCase(Locale.ROOT));
         }
     }
-//
+
+    //
     public static void validNotMoreNow(String fieldName, String value) {
         if (DateUtils.toDate(value, DateUtils.F_DDMMYYYY).after(new Date())) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + " " + PuddyMessage.NOT_MORE_NOW.toLowerCase());
+                    (PuddyCode.BAD_REQUEST, fieldName + " " + PuddyMessage.NOT_MORE_NOW.toLowerCase());
         }
     }
 
@@ -262,7 +266,7 @@ public class ValidatorUtils {
             validAgeBetween(fieldName, dateValue, minAge, maxAge);
         } catch (Exception e) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + INVALID);
+                    (PuddyCode.BAD_REQUEST, fieldName + INVALID);
         }
     }
 
@@ -272,7 +276,7 @@ public class ValidatorUtils {
             return sdf.parse(value);
         } catch (Exception e) {
             throw new PuddyException
-            (PuddyCode.BAD_REQUEST, fieldName + INVALID);
+                    (PuddyCode.BAD_REQUEST, fieldName + INVALID);
         }
     }
 
@@ -281,7 +285,7 @@ public class ValidatorUtils {
         var end = validDateTimeFormat(DiscountFields.END_TIME, endDate);
         if (start.after(end)) {
             throw new PuddyException
-            (PuddyCode.END_TIME_MUST_MORE_START_TIME);
+                    (PuddyCode.END_TIME_MUST_MORE_START_TIME);
         }
     }
 }

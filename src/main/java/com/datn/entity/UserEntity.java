@@ -12,7 +12,15 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Entity
@@ -26,7 +34,7 @@ import java.util.Date;
 public class UserEntity {
     /**
      * type: uuid
-     * */
+     */
     @Id
     private String id;
 
@@ -40,7 +48,7 @@ public class UserEntity {
     @Column(name = "last_name")
     private String lastName;
 
-//    @Temporal(TemporalType.DATE)
+    //    @Temporal(TemporalType.DATE)
     private Date dob;
 
     private Boolean gender;

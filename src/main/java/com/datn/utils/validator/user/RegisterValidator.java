@@ -19,7 +19,8 @@ import java.util.Locale;
  */
 public class RegisterValidator {
 
-    private RegisterValidator() {}
+    private RegisterValidator() {
+    }
 
     public static void validateRegisterDto(RegisterDto body) {
         if (StringUtils.isNullOrEmpty(body.getEmail())) {

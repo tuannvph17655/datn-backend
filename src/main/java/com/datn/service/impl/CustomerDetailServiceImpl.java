@@ -4,11 +4,12 @@ import com.datn.dto.customer.user.register.RegisterDto;
 import com.datn.entity.ResetTokenEntity;
 import com.datn.entity.UserEntity;
 import com.datn.service.CustomerDetailService;
-import com.datn.utils.base.PuddyException;
 import com.datn.utils.base.PuddyRepository;
 import com.datn.utils.base.rest.ResData;
-import com.datn.utils.common.*;
-import com.datn.utils.constants.PuddyCode;
+import com.datn.utils.common.BeanUtils;
+import com.datn.utils.common.DateUtils;
+import com.datn.utils.common.JsonUtils;
+import com.datn.utils.common.UidUtils;
 import com.datn.utils.constants.enums.RoleEnum;
 import com.datn.utils.validator.user.RegisterValidator;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.transaction.Transactional;
 import java.util.Date;
@@ -30,7 +30,7 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
 
     private final PuddyRepository repository;
 
-//    @Value("${SPRING_MAIL_USERNAME}")
+    //    @Value("${SPRING_MAIL_USERNAME}")
     private String email;
 
     private static final String DOMAIN_CLIENT = "http://localhost:4200/reset-password/%s";
@@ -38,6 +38,7 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
     private static final String RESET_PASSWORD_TEMPLATE_NAME = "reset_password.ftl";
     private static final String FROM = "Puddy<%s>";
     private static final String SUBJECT = "QUÊN MẬT KHẨU";
+
     @Override
     public Object register(RegisterDto dto) {
         RegisterValidator.validDtoData(dto);
