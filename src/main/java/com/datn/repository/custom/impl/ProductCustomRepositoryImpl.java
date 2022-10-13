@@ -132,7 +132,6 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
                 "                p1.des,\n" +
                 "                m1.name as m1_name,\n" +
                 "                ct1.name as ct1_name,\n" +
-                "                t1.name as t1_name\n," +
                 "                p1.created_date\n" +
                 "from product p1\n" +
                 "         left join (\n" +
@@ -146,8 +145,6 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
                 "        m1.id = p1.material_id\n" +
                 "         left join category ct1 on\n" +
                 "        ct1.id = p1.category_id\n" +
-                "         left join type t1 on\n" +
-                "        t1.id = ct1.type_id\n" +
                 "         left join product_option po2 on\n" +
                 "        po2.product_id = p1.id\n" +
                 "where 1 = 1\n";
@@ -196,11 +193,10 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
                         .des(JpaUtils.getString(obj[4]))
                         .materialName(JpaUtils.getString(obj[5]))
                         .categoryName(JpaUtils.getString(obj[6]))
-                        .typeName(JpaUtils.getString(obj[7]))
                         .colors(repository.colorRepository.findDistinctByProductId(productId))
                         .sizes(repository.sizeRepository.findDistinctByProductId(productId))
                         .images(repository.productOptionRepository.findImageByProductId(productId))
-                        .createdDate(JpaUtils.getDate(obj[8]))
+                        .createdDate(JpaUtils.getDate(obj[7]))
                         .build();
             }).collect(Collectors.toList());
 
