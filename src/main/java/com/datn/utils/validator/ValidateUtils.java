@@ -8,6 +8,7 @@ import com.datn.utils.constants.PuddyException;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ValidateUtils {
@@ -82,8 +83,8 @@ public class ValidateUtils {
     }
 
     public static boolean isCheck(String value, String regex) {
-        var pattern = Pattern.compile(regex);
-        var matcher = pattern.matcher(value);
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(value);
         return matcher.matches();
     }
 
@@ -95,9 +96,9 @@ public class ValidateUtils {
      * Tuổi khách hàng phải từ 16 - 120
      */
     public static boolean isValidCustomerAge(Long dob) {
-        var calendar = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of(PuddyConst.Values.TIME_ZONE)));
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of(PuddyConst.Values.TIME_ZONE)));
         calendar.setTimeInMillis(dob);
-        var year = calendar.get(Calendar.YEAR);
+        int year = calendar.get(Calendar.YEAR);
         return year >= PuddyConst.Values.CUSTOMER_AGE_MIN && year <= PuddyConst.Values.CUSTOMER_AGE_MAX;
     }
 }

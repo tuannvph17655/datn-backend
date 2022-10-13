@@ -1,5 +1,6 @@
 package com.datn.service.impl;
 
+import com.datn.dto.customer.user.UserDto;
 import com.datn.service.UserService;
 import com.datn.utils.base.PuddyRepository;
 import com.datn.utils.constants.PuddyConst;
@@ -12,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Locale;
 
 @Service
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String value) throws UsernameNotFoundException {
-        var userDto = repository.userRepository.findUserDtoByEmail(value, Boolean.TRUE);
+        UserDto userDto = repository.userRepository.findUserDtoByEmail(value, Boolean.TRUE);
         if (userDto == null) {
             throw new UsernameNotFoundException(String.format(PuddyConst.Messages.NOT_FOUND, PuddyConst.Nouns.USER_VI.toLowerCase(Locale.ROOT)));
         }
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return User.builder()
                 .username(userDto.getEmail())
                 .password(userDto.getPassword())
-                .authorities(List.of(new SimpleGrantedAuthority(userDto.getRole().name())))
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority(userDto.getRole().name())))
                 .build();
     }
 }

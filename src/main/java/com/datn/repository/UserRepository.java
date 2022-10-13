@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
 
     boolean existsByEmailIgnoreCaseAndIdNot(String email, String id);
 
-    @Query("select new com.datn.utils.base.rest. CurrentUser(\n" +
+    @Query("select new com.datn.utils.base.rest.CurrentUser(\n" +
             "u.id,\n" +
             "trim(concat(coalesce(u.firstName, ''), ' ', coalesce(u.lastName, ''))),\n" +
             "u.role,\n" +

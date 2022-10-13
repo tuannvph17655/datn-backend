@@ -18,7 +18,7 @@ public class AdminUserValidator {
         log.info("AdminUserValidator validCreate start");
         validCreateOrUpdate(dto);
         validOnlyCreate(dto);
-        var repository = BeanUtils.getBean(PuddyRepository.class);
+        PuddyRepository repository = BeanUtils.getBean(PuddyRepository.class);
         validEmailMustBeUnique(repository, dto.getEmail().trim());
         validPhoneMustBeUnique(repository, dto.getPhone().trim());
     }
@@ -50,7 +50,7 @@ public class AdminUserValidator {
      */
     public static void validUpdate(UserDto dto) {
         log.info("AdminUserValidator validUpdate start");
-        var repository = BeanUtils.getBean(PuddyRepository.class);
+        PuddyRepository repository = BeanUtils.getBean(PuddyRepository.class);
         validExists(repository, dto.getId());
         validCreateOrUpdate(dto);
         validPhoneMustBeUnique(repository, dto.getPhone(), dto.getId());

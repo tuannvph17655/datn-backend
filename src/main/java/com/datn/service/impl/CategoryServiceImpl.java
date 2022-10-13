@@ -4,6 +4,8 @@ import com.datn.dto.admin.category.CategoryDto;
 import com.datn.dto.admin.category.CategoryReq;
 import com.datn.dto.admin.category.CategoryRes;
 import com.datn.entity.CategoryEntity;
+import com.datn.entity.ProductEntity;
+import com.datn.entity.ProductOptionEntity;
 import com.datn.service.CategoryService;
 import com.datn.utils.base.PuddyException;
 import com.datn.utils.base.PuddyRepository;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -73,7 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (Boolean.TRUE.equals(repository.categoryRepository.existsByNameIgnoreCaseAndActive(dto.getName().trim(), Boolean.TRUE))) {
             throw new PuddyException(PuddyCode.CATEGORY_EXISTS_NAME);
         }
-        var category = CategoryEntity.builder()
+        CategoryEntity category = CategoryEntity.builder()
                 .id(UidUtils.generateUid())
                 .name(dto.getName().trim())
                 .des(dto.getDes().trim())
@@ -91,15 +94,15 @@ public class CategoryServiceImpl implements CategoryService {
         if (Boolean.FALSE.equals(repository.categoryRepository.existsById(dto.getId()))) {
             throw new PuddyException(PuddyCode.CATEGORY_NOT_FOUND);
         }
-        var category = repository.categoryRepository.findByIdAndActive(dto.getId(), Boolean.TRUE);
+        CategoryEntity category = repository.categoryRepository.findByIdAndActive(dto.getId(), Boolean.TRUE);
         category.setActive(Boolean.FALSE);
         repository.categoryRepository.save(category);
-        var products = repository.productRepository.findByCategoryIdAndActive(category.getId(), Boolean.TRUE);
+        List<ProductEntity> products = repository.productRepository.findByCategoryIdAndActive(category.getId(), Boolean.TRUE);
         if (Boolean.FALSE.equals(products.isEmpty())) {
             products.forEach(product -> {
                 product.setActive(Boolean.FALSE);
                 repository.productRepository.save(product);
-                var productOptions = repository.productOptionRepository.findByProductIdAndActive(product.getId(), Boolean.TRUE);
+                List<ProductOptionEntity> productOptions = repository.productOptionRepository.findByProductIdAndActive(product.getId(), Boolean.TRUE);
                 if (!productOptions.isEmpty()) {
                     productOptions.forEach(po -> {
                         po.setActive(Boolean.FALSE);
@@ -116,7 +119,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public ResData<CategoryRes> detail(CurrentUser currentUser, CategoryDto dto) {
         AuthValidator.checkAdmin(currentUser);
-        var category = repository.categoryRepository.findByIdAndActive(dto.getId(), true);
+        CategoryEntity category = repository.categoryRepository.findByIdAndActive(dto.getId(), true);
         if (null == category) {
             throw new PuddyException(PuddyCode.ERROR_NOT_FOUND);
         }

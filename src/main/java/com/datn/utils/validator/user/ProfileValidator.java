@@ -1,6 +1,7 @@
 package com.datn.utils.validator.user;
 
 import com.datn.dto.customer.user.ProfileDto;
+import com.datn.entity.UserEntity;
 import com.datn.utils.base.PuddyException;
 import com.datn.utils.base.PuddyRepository;
 import com.datn.utils.common.BeanUtils;
@@ -21,7 +22,7 @@ public class ProfileValidator {
 
     public static void validDto(ProfileDto dto) {
         log.info("start validDto with dto: {}", JsonUtils.toJson(dto));
-        var repository = BeanUtils.getBean(PuddyRepository.class);
+        PuddyRepository repository = BeanUtils.getBean(PuddyRepository.class);
         ValidatorUtils.validNullOrEmpty(UserFields.FIRST_NAME, dto.getFirstName());
         ValidatorUtils.validLength(UserFields.FIRST_NAME, dto.getFirstName(), 100, true);
         ValidatorUtils.validOnlyCharacter(UserFields.FIRST_NAME, dto.getFirstName());
@@ -45,7 +46,7 @@ public class ProfileValidator {
     }
 
     private static void validOldPassword(PuddyRepository repository, ProfileDto dto) {
-        var user = repository.userRepository.findByIdAndActive(dto.getId(), true);
+        UserEntity user = repository.userRepository.findByIdAndActive(dto.getId(), true);
         if (null == user) {
             throw new PuddyException(PuddyCode.INTERNAL_SERVER);
         }

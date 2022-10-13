@@ -42,7 +42,7 @@ public class ValidatorUtils {
             throw new PuddyException
                     (PuddyCode.BAD_REQUEST, NOT_BLANK + fieldName);
         }
-        for (var value : values) {
+        for (String value : values) {
             validNullOrEmpty(fieldName, value);
         }
     }
@@ -64,7 +64,7 @@ public class ValidatorUtils {
         if (values.isEmpty()) {
             return;
         }
-        for (var value : values) {
+        for (String value : values) {
             if (!StringUtils.isOnlyCharacterAndNumber(value)) {
                 fieldName = fieldName.charAt(0) + fieldName.substring(1);
                 throw new PuddyException(PuddyCode.BAD_REQUEST, fieldName + INVALID);
@@ -104,7 +104,7 @@ public class ValidatorUtils {
         if (values == null || values.isEmpty()) {
             return;
         }
-        for (var value : values) {
+        for (String value : values) {
             if (value.length() < minLength) {
                 throw new PuddyException
                         (PuddyCode.BAD_REQUEST, fieldName + MUST_LENGTH_MORE + minLength + CHARACTER);
@@ -129,7 +129,7 @@ public class ValidatorUtils {
                 throw new PuddyException
                         (PuddyCode.BAD_REQUEST, fieldName + INVALID);
             }
-            var price = Long.valueOf(value);
+            Long price = Long.valueOf(value);
             if (price < 0) {
                 throw new PuddyException
                         (PuddyCode.BAD_REQUEST, fieldName + INVALID);
@@ -163,7 +163,7 @@ public class ValidatorUtils {
 
     public static void validRole(String fieldName, String value) {
         validNullOrEmpty(fieldName, value);
-        var role = RoleEnum.valueOf(value);
+        RoleEnum role = RoleEnum.valueOf(value);
         if (role == null) {
             throw new PuddyException
                     (PuddyCode.BAD_REQUEST, fieldName + INVALID);
@@ -182,8 +182,8 @@ public class ValidatorUtils {
             throw new PuddyException
                     (PuddyCode.BAD_REQUEST, NOT_BLANK + fieldName.toLowerCase());
         }
-        var now = LocalDate.now();
-        var dob = value.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate now = LocalDate.now();
+        LocalDate dob = value.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         if (dob.compareTo(now) > 0) {
             throw new PuddyException
                     (PuddyCode.DOB_NOT_MORE_NOW);
@@ -229,7 +229,7 @@ public class ValidatorUtils {
 
     public static void validDateFormat(String fieldName, String value) {
         try {
-            var sdf = DateTimeFormatter.ofPattern(DateUtils.F_DDMMYYYY);
+            DateTimeFormatter sdf = DateTimeFormatter.ofPattern(DateUtils.F_DDMMYYYY);
             LocalDate localDate = LocalDate.parse(value, sdf);
         } catch (Exception e) {
             throw new PuddyException
@@ -272,7 +272,7 @@ public class ValidatorUtils {
 
     public static Date validDateTimeFormat(String fieldName, String value) {
         try {
-            var sdf = new SimpleDateFormat(DateUtils.F_DDMMYYYYHHMM);
+            SimpleDateFormat sdf = new SimpleDateFormat(DateUtils.F_DDMMYYYYHHMM);
             return sdf.parse(value);
         } catch (Exception e) {
             throw new PuddyException
@@ -281,8 +281,8 @@ public class ValidatorUtils {
     }
 
     public static void validEndDateNotMoreStartDate(String startDate, String endDate) {
-        var start = validDateTimeFormat(DiscountFields.START_TIME, startDate);
-        var end = validDateTimeFormat(DiscountFields.END_TIME, endDate);
+        Date start = validDateTimeFormat(DiscountFields.START_TIME, startDate);
+        Date end = validDateTimeFormat(DiscountFields.END_TIME, endDate);
         if (start.after(end)) {
             throw new PuddyException
                     (PuddyCode.END_TIME_MUST_MORE_START_TIME);

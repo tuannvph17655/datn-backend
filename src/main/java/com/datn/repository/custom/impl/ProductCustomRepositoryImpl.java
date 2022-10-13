@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,8 +35,8 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
 
     @Override
     public PageData<ProductResponse> search(ProductReq req) {
-        var prefix = "select\n";
-        var select =
+        String prefix = "select\n";
+        String select =
                 "new com.ws.masterserver.dto.customer.product.ProductResponse(\n" +
                         "p.id as productId,\n" +
                         "p.name as productName,\n" +
@@ -49,13 +50,13 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
                         "p.createdDate as productCreatedDate,\n" +
                         "p.createdBy as productCreatedBy,\n" +
                         "trim(concat(coalesce(u.firstName, ''), ' ', coalesce(u.lastName, ''))) as createdName)\n";
-        var from = "from ProductEntity p\n";
-        var joins = "left join CategoryEntity c on p.categoryId = c.id\n" +
+        String from = "from ProductEntity p\n";
+        String joins = "left join CategoryEntity c on p.categoryId = c.id\n" +
                 "left join MaterialEntity m on p.materialId = m.id\n" +
 //                "left join TypeEntity t on p.typeId = t.id\n" +
                 "left join UserEntity u on p.createdBy = u.id\n" +
                 "left join ProductOptionEntity po on p.id = po.productId\n";
-        var where = "where 1 = 1\n" +
+        String where = "where 1 = 1\n" +
                 "and c.active = 1\n" +
                 "and p.active = 1\n" +
                 "and po.price in (select min(price) from ProductOptionEntity where po.productId = p.id)\n" +
@@ -71,7 +72,7 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
             where += "and po.price BETWEEN " + req.getMinPrice().trim() + " AND " + req.getMaxPrice().trim() + "\n";
         }
 
-        var order = "order by ";
+        String order = "order by ";
         switch (req.getPageReq().getSortField()) {
             case "name":
                 order += "p.name";
@@ -88,12 +89,12 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
         order += " " + req.getPageReq().getSortDirection() + "\n";
 
         //Result jpa
-        var jpql = prefix + select + from + joins + where + order;
+        String jpql = prefix + select + from + joins + where + order;
 
         log.info("JPQL: {}", jpql);
 
-        var query = entityManager.createQuery(jpql);
-        var totalElements = 0L;
+        Query query = entityManager.createQuery(jpql);
+        long totalElements = 0L;
         if (Boolean.FALSE.equals(query.getResultList().isEmpty())) totalElements = query.getResultList().size();
 
 
@@ -112,10 +113,9 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
             product.setPrice(priceFormat);
         });
 
-        var productMoneyFormatedList = (List) productList;
         return PageData
                 .setResult(
-                        productMoneyFormatedList,
+                        (List) productList,
                         req.getPageReq().getPage(),
                         req.getPageReq().getPageSize(),
                         totalElements,
@@ -124,8 +124,8 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
 
     @Override
     public Object searchV2(com.datn.dto.customer.product.search.ProductReq req) {
-        var repository = BeanUtils.getBean(PuddyRepository.class);
-        var sql = "select distinct p1.id,\n" +
+        PuddyRepository repository = BeanUtils.getBean(PuddyRepository.class);
+        String sql = "select distinct p1.id,\n" +
                 "                p1.name as p1_name,\n" +
                 "                po1.po_sub1_min_price,\n" +
                 "                po1.po_sub1_max_price,\n" +
@@ -151,8 +151,8 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
 
 
         if (!StringUtils.isNullOrEmpty(req.getTextSearch())) {
-            var textSearch = req.getTextSearch().trim().toUpperCase(Locale.ROOT);
-            var like = "concat('%', unaccent('" + textSearch + "'), '%')";
+            String textSearch = req.getTextSearch().trim().toUpperCase(Locale.ROOT);
+            String like = "concat('%', unaccent('" + textSearch + "'), '%')";
             sql += "and (unaccent(upper(p1.name)) like " + like + "\n" +
                     "or unaccent(upper(ct1.name)) like " + like + "\n" +
                     "or unaccent(upper(m1.name)) like " + like + ")\n";
@@ -174,9 +174,9 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
 
         log.info("ProductCustomRepositoryImpl searchV2 sql: {}", sql);
 
-        var query = entityManager.createNativeQuery(sql);
+        Query query = entityManager.createNativeQuery(sql);
 
-        var totalElements = Long.valueOf(query.getResultList().size());
+        Long totalElements = Long.valueOf(query.getResultList().size());
 
         List<Object[]> objects = query.getResultList();
         List<ProductDto> productDtos;
@@ -184,7 +184,7 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
 
         if (!objects.isEmpty()) {
             productDtos = objects.stream().map(obj -> {
-                var productId = JpaUtils.getString(obj[0]);
+                String productId = JpaUtils.getString(obj[0]);
                 return ProductDto.builder()
                         .id(productId)
                         .name(JpaUtils.getString(obj[1]))
@@ -216,21 +216,21 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
             if (StringUtils.isNullOrEmpty(req.getPageReq().getSortDirection()) || "desc".equals(req.getPageReq().getSortDirection())) {
                 Collections.reverse(productDtos);
             }
-            var page = req.getPageReq().getPage();
+            Integer page = req.getPageReq().getPage();
             if (page == null || page < 0) {
                 page = 0;
             }
 
-            var pageSize = req.getPageReq().getPageSize();
+            Integer pageSize = req.getPageReq().getPageSize();
             if (pageSize == null || pageSize < 1) {
                 pageSize = 10;
             }
 
-            var start = page * pageSize;
+            int start = page * pageSize;
             if (start > totalElements) {
                 start = totalElements.intValue();
             }
-            var end = start + pageSize;
+            int end = start + pageSize;
             if (end > totalElements) {
                 end = totalElements.intValue();
             }
@@ -242,9 +242,9 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
     }
 
     private String getOrderFilter(PageReq pageReq) {
-        var sortDirection = " " + (pageReq.getSortDirection() == null ? "desc" : "asc");
-        var sortField = "";
-        var result = "order by ";
+        String sortDirection = " " + (pageReq.getSortDirection() == null ? "desc" : "asc");
+        String sortField = "";
+        String result = "order by ";
         switch (pageReq.getSortField()) {
             case "name":
                 sortField = "p1.name";

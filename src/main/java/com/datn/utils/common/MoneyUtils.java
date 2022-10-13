@@ -20,7 +20,7 @@ public class MoneyUtils {
         if (value == null) {
             return "";
         }
-        var result = "";
+        String result = "";
         try {
             DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Locale.ENGLISH);
             decimalFormat.applyPattern("###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###,###");

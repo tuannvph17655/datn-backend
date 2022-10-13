@@ -38,7 +38,7 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
         RegisterValidator.validDtoData(dto);
         RegisterValidator.validDtoConstrains(dto, repository);
         PasswordEncoder passwordEncoder = BeanUtils.getBean(BCryptPasswordEncoder.class);
-        var user = UserEntity.builder()
+        UserEntity user = UserEntity.builder()
                 .id(UidUtils.generateUid())
                 .role(RoleEnum.ROLE_CUSTOMER)
                 .active(true)
