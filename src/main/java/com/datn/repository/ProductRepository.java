@@ -16,7 +16,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, String> 
             "from product p \n" +
             "join category c on p.category_id = c.id \n" +
             "join product_option po on p.id = po.product_id \n" +
-            "where p.category_id = ?1", nativeQuery = true)
+            "where p.category_id = :categoryId",nativeQuery = true)
     List<ProductRelatedRes> getProductRelated(String categoryId);
 
     @Query("select p from ProductEntity p where p.active = true order by p.name")
