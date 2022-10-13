@@ -1,5 +1,6 @@
 package com.datn.utils.base;
 
+import com.datn.service.CartService;
 import com.datn.service.CategoryService;
 import com.datn.service.ColorService;
 import com.datn.service.CustomerDetailService;
@@ -27,7 +28,7 @@ public class PuddyService {
     public final ProductService productService;
     //    public final ResetTokenService resetTokenService;
     public final UserService userService;
-    //    public final CartService cartService;
+    public final CartService cartService;
     public final SizeService sizeService;
     //    public final SuggestService suggestService;
 //    public final DashboardService dashboardService;
