@@ -2,6 +2,7 @@ package com.datn.config.security.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.datn.entity.UserEntity;
 import com.datn.utils.base.PuddyRepository;
 import com.datn.utils.common.BeanUtils;
 import com.datn.utils.constants.PuddyConst;
@@ -32,20 +33,20 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        var email = request.getParameter(PuddyConst.UserFields.EMAIL_VAR);
-        var password = request.getParameter(PuddyConst.UserFields.PASSWORD);
-        var authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+        String email = request.getParameter(PuddyConst.UserFields.EMAIL_VAR);
+        String password = request.getParameter(PuddyConst.UserFields.PASSWORD);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
         return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        final var user = (User) authResult.getPrincipal();
-        final var repository = BeanUtils.getBean(PuddyRepository.class);
-        final var userEntity = repository.userRepository.findByEmailAndActive(user.getUsername(), Boolean.TRUE);
-        final var algorithm = Algorithm.HMAC256(PuddyConst.Values.JWT_SECRET.getBytes());
-        final var accessToken = JWT.create()
+        final User user = (User) authResult.getPrincipal();
+        final PuddyRepository repository = BeanUtils.getBean(PuddyRepository.class);
+        final UserEntity userEntity = repository.userRepository.findByEmailAndActive(user.getUsername(), Boolean.TRUE);
+        final Algorithm algorithm = Algorithm.HMAC256(PuddyConst.Values.JWT_SECRET.getBytes());
+        final String accessToken = JWT.create()
                 .withSubject(userEntity.getEmail())
                 .withExpiresAt(new Date(System.currentTimeMillis() + PuddyConst.Values.ACCESS_TOKEN_EXPIRED))
                 .withIssuer(request.getRequestURL().toString())
@@ -55,14 +56,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withClaim(PuddyConst.UserFields.ID_VAR, userEntity.getId())
                 .sign(algorithm);
 
-        final var refreshToken = JWT.create()
+        final String refreshToken = JWT.create()
                 .withSubject(userEntity.getId())
                 .withExpiresAt(new Date(System.currentTimeMillis() + PuddyConst.Values.REFRESH_TOKEN_EXPIRED))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        var responses = new HashMap<String, Object>();
+        HashMap<String, Object> responses = new HashMap<>();
         responses.put(PuddyConst.Nouns.ACCESS_TOKEN_FIELD, accessToken);
         responses.put(PuddyConst.Nouns.REFRESH_TOKEN_FIELD, refreshToken);
 

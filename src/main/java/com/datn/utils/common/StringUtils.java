@@ -1,6 +1,7 @@
 package com.datn.utils.common;
 
 import java.text.Normalizer;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtils {
@@ -22,7 +23,7 @@ public class StringUtils {
     }
 
     public static boolean isNullOrEmpty(String value) {
-        return value == null || value.isBlank();
+        return value == null || value.isEmpty();
     }
 
     /*Chuyen doi ten tieng Viet co dau sang khong co dau*/
@@ -53,8 +54,8 @@ public class StringUtils {
     }
 
     public static boolean isCheck(String value, String regex) {
-        var pattern = Pattern.compile(regex);
-        var matcher = pattern.matcher(value);
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(value);
         return matcher.matches();
     }
 

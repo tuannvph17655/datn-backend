@@ -58,21 +58,21 @@ public class DateUtils {
     }
 
     public static Date addDays(Date date, int days) {
-        var calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.DATE, days);
         return calendar.getTime();
     }
 
     public static Date addHours(Date date, int hours) {
-        var calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.HOUR_OF_DAY, hours);
         return calendar.getTime();
     }
 
     public static Date addMinute(Date date, int minute) {
-        var calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.MINUTE, minute);
         return calendar.getTime();
@@ -80,7 +80,7 @@ public class DateUtils {
 
     public static Date toDate(String date, String format) {
         try {
-            var sdf = new SimpleDateFormat(format);
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
             return sdf.parse(date);
         } catch (Exception e) {
             log.error("toDate error: {}", e.getMessage());
@@ -90,7 +90,7 @@ public class DateUtils {
 
     public static Date toDate(String date, String format, Date defaultVal) {
         try {
-            var sdf = new SimpleDateFormat(format);
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
             return sdf.parse(date);
         } catch (Exception e) {
             return defaultVal;
@@ -99,7 +99,7 @@ public class DateUtils {
 
     public static Date formatDate(Date defaultVal, String format) {
         try {
-            var sdf = new SimpleDateFormat(format);
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
             String strDate = sdf.format(defaultVal);
             return sdf.parse(strDate);
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class DateUtils {
     }
 
     public static String format(Date date) {
-        var formatter = new SimpleDateFormat(F_DDMMYYYY);
+        SimpleDateFormat formatter = new SimpleDateFormat(F_DDMMYYYY);
         return formatter.format(date);
     }
 
@@ -130,7 +130,7 @@ public class DateUtils {
     }
 
     public static Date fromMothYear(String date, String format) {
-        final var yearMonth = YearMonth.parse(date, DateTimeFormatter.ofPattern(format));
+        final YearMonth yearMonth = YearMonth.parse(date, DateTimeFormatter.ofPattern(format));
         return Date.from(yearMonth.atDay(1)
                 .atStartOfDay(ZoneId.systemDefault())
                 .toInstant());
@@ -200,14 +200,14 @@ public class DateUtils {
     }
 
     public static Long dateToLong(final String dateString, final String dateFormat) throws ParseException {
-        var sdf = new SimpleDateFormat(dateFormat);
-        var date = sdf.parse(dateString);
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        Date date = sdf.parse(dateString);
         return date.getTime();
     }
 
     public static String longToDate(final long lo, final String dateFormat) {
-        var date = new Date(lo);
-        var sdf = new SimpleDateFormat(dateFormat);
+        Date date = new Date(lo);
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         return sdf.format(date);
     }
 
@@ -215,11 +215,11 @@ public class DateUtils {
         if (StringUtils.isNullOrEmpty(dateStr)) {
             return false;
         }
-        var sdf = new SimpleDateFormat(format);
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         sdf.setLenient(false);
 
         try {
-            var date = sdf.parse(dateStr);
+            Date date = sdf.parse(dateStr);
             if (!sdf.format(date).equals(dateStr)) {
                 return false;
             }

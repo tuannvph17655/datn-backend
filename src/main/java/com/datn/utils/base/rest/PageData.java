@@ -70,7 +70,7 @@ public class PageData<T> {
     }
 
     public static PageData<Object> setResult(List<Object> data, Integer page, Integer pageSize, Long totalElements, PuddyCode puddyCode) {
-        var pageData = new PageData<>();
+        PageData<Object> pageData = new PageData<>();
         pageData.setData(data)
                 .setPage(page)
                 .setPageSize(pageSize)
@@ -91,7 +91,7 @@ public class PageData<T> {
     }
 
     public static PageData<?> setEmpty(PageReq pageReq) {
-        var pageData = new PageData<>();
+        PageData<Object> pageData = new PageData<>();
         pageData.setData(Collections.emptyList());
         pageData.setPage(pageReq.getPage());
         pageData.setPageSize(pageReq.getPageSize());

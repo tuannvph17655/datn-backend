@@ -12,7 +12,7 @@ public enum ApplyTypeEnums {
     }
 
     public static ApplyTypeEnums from(String text) {
-        for (var item : ApplyTypeEnums.values()) {
+        for (ApplyTypeEnums item : ApplyTypeEnums.values()) {
             if (item.name().equals(text)) {
                 return item;
             }

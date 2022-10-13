@@ -17,7 +17,7 @@ public enum RoleEnum {
     }
 
     public static RoleEnum from(String text) {
-        for (var item : RoleEnum.values()) {
+        for (RoleEnum item : RoleEnum.values()) {
             if (item.name().equals(text)) {
                 return item;
             }

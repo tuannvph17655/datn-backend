@@ -1,7 +1,10 @@
 package com.datn.config.security.filter;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.datn.utils.constants.PuddyCode;
 import com.datn.utils.constants.PuddyConst;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,19 +37,19 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         if (checkNoAuth4EndPoints(request)) {
             filterChain.doFilter(request, response);
         } else {
-            var authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+            String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (authorizationHeader != null && authorizationHeader.startsWith(PuddyConst.Values.BEARER_SPACE)) {
                 try {
-                    final var token = authorizationHeader.substring(PuddyConst.Values.BEARER_SPACE.length());
-                    final var algorithm = Algorithm.HMAC256(PuddyConst.Values.JWT_SECRET.getBytes());
-                    final var jwtVerifier = JWT.require(algorithm).build();
-                    final var decodedJWT = jwtVerifier.verify(token);
+                    final String token = authorizationHeader.substring(PuddyConst.Values.BEARER_SPACE.length());
+                    final Algorithm algorithm = Algorithm.HMAC256(PuddyConst.Values.JWT_SECRET.getBytes());
+                    final JWTVerifier jwtVerifier = JWT.require(algorithm).build();
+                    final DecodedJWT decodedJWT = jwtVerifier.verify(token);
 
-                    final var id = decodedJWT.getClaim("id");
+                    final Claim id = decodedJWT.getClaim("id");
                     final Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     authorities.add(new SimpleGrantedAuthority(decodedJWT.getClaim("role").asString()));
 
-                    final var authenticationToken = new UsernamePasswordAuthenticationToken(
+                    final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             id, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request, response);
@@ -71,7 +75,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     private boolean checkNoAuth4EndPoints(HttpServletRequest request) {
         //log.info("checkNoAuth4EndPoints() req: {}", JsonUtils.toJson(request));
         System.out.println();
-        List<String> noAuthEndPoints = List.of(
+        List<String> noAuthEndPoints = Arrays.asList(
                 "/api/v1/login",
                 "/api/v1/token/refresh",
                 "/api/v1/auth/forgot-password/send-mail",
