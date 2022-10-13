@@ -1,5 +1,6 @@
 package com.datn.utils.base;
 
+import com.datn.repository.CartRepository;
 import com.datn.repository.CategoryRepository;
 import com.datn.repository.ColorRepository;
 import com.datn.repository.MaterialRepository;
@@ -23,4 +24,5 @@ public class PuddyRepository {
     public final SizeRepository sizeRepository;
     public final ColorRepository colorRepository;
     public final MaterialRepository materialRepository;
+    public final CartRepository cartRepository;
 }

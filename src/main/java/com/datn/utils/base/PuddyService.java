@@ -1,6 +1,13 @@
 package com.datn.utils.base;
 
-import com.datn.service.*;
+import com.datn.service.CategoryService;
+import com.datn.service.ColorService;
+import com.datn.service.CustomerDetailService;
+import com.datn.service.ProductInfoService;
+import com.datn.service.ProductOptionService;
+import com.datn.service.ProductService;
+import com.datn.service.SizeService;
+import com.datn.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -9,8 +16,8 @@ import org.springframework.stereotype.Component;
 public class PuddyService {
     //    public final AddressService addressService;
     public final CategoryService categoryService;
-        public final ColorService colorService;
-//    public final LocationService locationService;
+    public final ColorService colorService;
+    //    public final LocationService locationService;
 //    public final MaterialService materialService;
 //    public final EmailLogService emailLogService;
 //    public final OrderService orderService;
@@ -22,7 +29,7 @@ public class PuddyService {
     public final UserService userService;
     //    public final CartService cartService;
     public final SizeService sizeService;
-//    public final SuggestService suggestService;
+    //    public final SuggestService suggestService;
 //    public final DashboardService dashboardService;
 //    public final AdminProductService adminProductService;
 //    public final MailService mailService;
