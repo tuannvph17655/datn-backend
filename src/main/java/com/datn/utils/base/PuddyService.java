@@ -1,21 +1,13 @@
 package com.datn.utils.base;
 
-import com.datn.service.CartService;
-import com.datn.service.CategoryService;
-import com.datn.service.ColorService;
-import com.datn.service.CustomerDetailService;
-import com.datn.service.ProductInfoService;
-import com.datn.service.ProductOptionService;
-import com.datn.service.ProductService;
-import com.datn.service.SizeService;
-import com.datn.service.UserService;
+import com.datn.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class PuddyService {
-    //    public final AddressService addressService;
+        public final AddressService addressService;
     public final CategoryService categoryService;
     public final ColorService colorService;
     //    public final LocationService locationService;
