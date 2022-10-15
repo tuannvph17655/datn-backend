@@ -7,9 +7,12 @@ import com.datn.utils.base.PuddyException;
 import com.datn.utils.base.PuddyRepository;
 import com.datn.utils.base.rest.CurrentUser;
 import com.datn.utils.base.rest.ResData;
+import com.datn.utils.common.BeanUtils;
 import com.datn.utils.common.JsonUtils;
+import com.datn.utils.common.StringUtils;
 import com.datn.utils.constants.PuddyCode;
 import com.datn.utils.validator.auth.AuthValidator;
+import com.datn.utils.validator.user.ProfileValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
@@ -52,6 +55,13 @@ public class UserInfoServiceImpl implements UserInfoService {
 		}
 		if (!currentUser.getId().equals(dto.getId())) {
 			throw new PuddyException(PuddyCode.FORBIDDEN);
+		}
+
+		ProfileValidator.validDto(dto);
+		var passwordEncoder = BeanUtils.getBean(PasswordEncoder.class);
+		var password = user.getPassword();
+		if (!StringUtils.isNullOrEmpty(dto.getNewPassword())) {
+			password = passwordEncoder.encode(dto.getNewPassword());
 		}
 
 		return ResData.ok(user.getId());
