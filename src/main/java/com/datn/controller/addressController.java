@@ -25,7 +25,6 @@ public class AddressController extends PuddyController {
         return ResponseEntity.ok(service.addressService.getListAddress(getCurrentUser()));
     }
 
-
     @GetMapping("/{id}")
     @ApiOperation(value = "API get address detail")
     public ResponseEntity<?> getAddressById(@PathVariable("id") String id){
