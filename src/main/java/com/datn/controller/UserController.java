@@ -20,7 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UserController extends PuddyController {
 
-
+    @Operation(summary = "API thông tin cá nhân")
+    @GetMapping("/personal")
+    public ResponseEntity<Object> personal() {
+        log.info("start api /api/v1/user/personal");
+        return ResponseEntity.ok(service.userInfoService.personal(getCurrentUser()));
+    }
     @PostMapping("/customer/register")
     public ResponseEntity<Object> register(@RequestBody RegisterDto payload) {
         log.info("start api /api/v1/user/customer/register with payload: {}", JsonUtils.toJson(payload));
