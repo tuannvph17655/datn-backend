@@ -1,5 +1,6 @@
 package com.datn.controller;
 
+import com.datn.dto.customer.user.ProfileDto;
 import com.datn.dto.customer.user.register.RegisterDto;
 import com.datn.utils.base.PuddyController;
 import com.datn.utils.common.JsonUtils;
@@ -32,7 +33,12 @@ public class UserController extends PuddyController {
         return ResponseEntity.ok(service.customerDetailService.register(payload));
     }
 
-
+    @Operation(summary = "API update thông tin cá nhân")
+    @PostMapping("/update-profile")
+    public ResponseEntity<Object> updateProfile(@RequestBody ProfileDto dto) {
+        log.info("start api /api/v1/user/update-profile with dto: {}", JsonUtils.toJson(dto));
+        return ResponseEntity.ok(service.userInfoService.updateProfile(getCurrentUser(), dto));
+    }
 
     @GetMapping("/my-profile")
     public ResponseEntity<?> getMyProfile() {
