@@ -41,26 +41,27 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public PageData<CategoryRes> search(CurrentUser currentUser, CategoryReq req) throws PuddyException {
-        AuthValidator.checkAdmin(currentUser);
-        if (StringUtils.isNullOrEmpty(req.getTextSearch())) {
-            req.setTextSearch("");
-        }
-        String textSearch = req.getTextSearch().trim().toUpperCase(Locale.ROOT);
-        Pageable pageable = PageableUtils.getPageable(req.getPageReq());
-        Page<CategoryEntity> categoryPage = repository.categoryRepository.search(textSearch, req.getActive(), pageable);
-
-        return PageData.setResult(categoryPage.getContent().stream().map(o -> CategoryRes.builder()
-                        .id(o.getId())
-                        .name(o.getName())
-                        .des(o.getDes())
-                        .active(o.getActive())
-                        .createdDate(o.getCreatedDate())
-                        .createdDateValue(o.getCreatedDate() == null ? null : DateUtils.toStr(o.getCreatedDate(), DateUtils.F_DDMMYYYY))
-                        .productNumber(repository.productRepository.countByCategoryId(o.getId()))
-                        .build()).collect(Collectors.toList()),
-                categoryPage.getNumber(),
-                categoryPage.getSize(),
-                categoryPage.getTotalElements());
+//        AuthValidator.checkAdmin(currentUser);
+//        if (StringUtils.isNullOrEmpty(req.getTextSearch())) {
+//            req.setTextSearch("");
+//        }
+//        String textSearch = req.getTextSearch().trim().toUpperCase(Locale.ROOT);
+//        Pageable pageable = PageableUtils.getPageable(req.getPageReq());
+//        Page<CategoryEntity> categoryPage = repository.categoryRepository.search(textSearch, req.getActive(), pageable);
+//
+//        return PageData.setResult(categoryPage.getContent().stream().map(o -> CategoryRes.builder()
+//                        .id(o.getId())
+//                        .name(o.getName())
+//                        .des(o.getDes())
+//                        .active(o.getActive())
+//                        .createdDate(o.getCreatedDate())
+//                        .createdDateValue(o.getCreatedDate() == null ? null : DateUtils.toStr(o.getCreatedDate(), DateUtils.F_DDMMYYYY))
+//                        .productNumber(repository.productRepository.countByCategoryId(o.getId()))
+//                        .build()).collect(Collectors.toList()),
+//                categoryPage.getNumber(),
+//                categoryPage.getSize(),
+//                categoryPage.getTotalElements());
+        return null;
     }
 
     @Override
