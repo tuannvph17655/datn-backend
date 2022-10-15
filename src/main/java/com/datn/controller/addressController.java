@@ -20,46 +20,44 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AddressController extends PuddyController {
     @GetMapping("/list-address")
-    public ResponseEntity<?> getListAddress(){
+    public ResponseEntity<?> getListAddress() {
         log.info("------ start api get list address -----");
         return ResponseEntity.ok(service.addressService.getListAddress(getCurrentUser()));
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "API get address detail")
-    public ResponseEntity<?> getAddressById(@PathVariable("id") String id){
+    public ResponseEntity<?> getAddressById(@PathVariable("id") String id) {
         log.info("------ start api get address byId -----");
-        return ResponseEntity.ok(service.addressService.getAddressById(getCurrentUser(),id));
+        return ResponseEntity.ok(service.addressService.getAddressById(getCurrentUser(), id));
     }
 
     @PostMapping("/create")
     @ApiOperation(value = "API create address")
-    public ResponseEntity<?> createNewAddress(@RequestBody AddressReq req){
+    public ResponseEntity<?> createNewAddress(@RequestBody AddressReq req) {
         log.info("------ start api create address -----");
-        return ResponseEntity.ok(service.addressService.createAddress(getCurrentUser(),req));
+        return ResponseEntity.ok(service.addressService.createAddress(getCurrentUser(), req));
     }
 
     @PostMapping("/update")
     @ApiOperation(value = "API update address")
-    public ResponseEntity<?> updateAddress(@RequestBody AddressReq req){
+    public ResponseEntity<?> updateAddress(@RequestBody AddressReq req) {
         log.info("------ start api update address -----");
-        return ResponseEntity.ok(service.addressService.updateAddress(getCurrentUser(),req));
+        return ResponseEntity.ok(service.addressService.updateAddress(getCurrentUser(), req));
     }
 
     @DeleteMapping("/delete/{id}")
     @ApiOperation(value = "API delete address")
-    public ResponseEntity<?> deleteAddress(@PathVariable("id") String id){
+    public ResponseEntity<?> deleteAddress(@PathVariable("id") String id) {
         log.info("------ start api delete address -----");
-        service.addressService.deleteAddress(getCurrentUser(),id);
+        service.addressService.deleteAddress(getCurrentUser(), id);
         return ResponseEntity.ok("Delete address successfully !!");
     }
 
     @GetMapping("/default/{id}")
     @ApiOperation(value = "API setDefault address")
     public ResponseEntity<?> setAddressDefault(@PathVariable("id") String id) {
-        service.addressService.setAddressDefault(getCurrentUser(),id);
+        service.addressService.setAddressDefault(getCurrentUser(), id);
         return ResponseEntity.ok("Set default address successfully !");
     }
-
-
 }
