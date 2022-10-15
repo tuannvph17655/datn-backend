@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface AddressRepository extends JpaRepository<AddressEntity, String> {
-    @Query("select new com.ws.masterserver.dto.customer.address.AddressRes(" +
+    @Query("select new com.datn.dto.customer.address.AddressRes(" +
             "a.id,\n" +
             "a.nameOfRecipient,\n" +
             "a.addressDetail,\n" +
