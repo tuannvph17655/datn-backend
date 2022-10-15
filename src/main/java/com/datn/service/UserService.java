@@ -4,6 +4,5 @@ import com.datn.dto.customer.user.RegisterDto;
 
 public interface UserService {
 
-    Object registerCustomer(RegisterDto body);
     Object getCurrentUserProfile();
 }

@@ -1,6 +1,5 @@
 package com.datn.service.impl;
 
-import com.datn.dto.customer.user.RegisterDto;
 import com.datn.dto.customer.user.UserDto;
 import com.datn.service.UserService;
 import com.datn.utils.base.PuddyException;
@@ -9,7 +8,6 @@ import com.datn.utils.common.BeanUtils;
 import com.datn.utils.common.StringUtils;
 import com.datn.utils.constants.PuddyCode;
 import com.datn.utils.constants.PuddyConst;
-import com.datn.utils.validator.user.RegisterValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
@@ -43,15 +41,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .password(userDto.getPassword())
                 .authorities(Collections.singletonList(new SimpleGrantedAuthority(userDto.getRole().name())))
                 .build();
-    }
-
-    /**
-     * Khách hàng tự đăng ký tài khoản cho mình
-     */
-    @Override
-    public Object registerCustomer(RegisterDto body) {
-        RegisterValidator.validateRegisterDto(body);
-        return null;
     }
 
     @Override
