@@ -63,7 +63,15 @@ public class UserInfoServiceImpl implements UserInfoService {
 		if (!StringUtils.isNullOrEmpty(dto.getNewPassword())) {
 			password = passwordEncoder.encode(dto.getNewPassword());
 		}
-
+		user.setFirstName(dto.getFirstName().trim())
+				.setLastName(dto.getLastName().trim())
+				.setPhone(dto.getPhone().trim())
+				.setGender(dto.getGender())
+				.setDob(dto.getDob())
+				.setPassword(password);
+		log.info("updateProfile before save: {}", JsonUtils.toJson(user));
+		repository.userRepository.save(user);
+		log.info("updateProfile after save: {}", JsonUtils.toJson(user));
 		return ResData.ok(user.getId());
 	}
 
