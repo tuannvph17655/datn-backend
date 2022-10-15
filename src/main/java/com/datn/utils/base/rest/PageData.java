@@ -90,19 +90,6 @@ public class PageData<T> {
         }
     }
 
-    public static PageData<?> setEmpty(PageReq pageReq) {
-        PageData<Object> pageData = new PageData<>();
-        pageData.setData(Collections.emptyList());
-        pageData.setPage(pageReq.getPage());
-        pageData.setPageSize(pageReq.getPageSize());
-        pageData.setTotalPages(0);
-        pageData.setTotalElements(0L);
-        pageData.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        pageData.setMessage(HttpStatus.NO_CONTENT.getReasonPhrase());
-        pageData.setTimeStamp(new Date());
-        return pageData;
-    }
-
     public static <T> PageData setResult(List<T> data, Integer page, Integer pageSize, Long totalElements) {
         return new PageData(data, page, pageSize, totalElements, PuddyCode.OK);
     }
