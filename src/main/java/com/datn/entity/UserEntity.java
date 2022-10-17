@@ -58,12 +58,6 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-//    private String avatar;
-
-    //loại khách hàng
-//    @Column(name = "customer_type_id")
-//    private String customerTypeId;
-
     private Boolean active;
 
     @CreatedDate

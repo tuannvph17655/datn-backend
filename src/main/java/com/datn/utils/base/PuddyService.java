@@ -13,7 +13,7 @@ public class PuddyService {
     //    public final LocationService locationService;
 //    public final MaterialService materialService;
 //    public final EmailLogService emailLogService;
-//    public final OrderService orderService;
+    public final OrderService orderService;
 //    public final OrderDetailService orderDetailService;
 //    public final OrderStatusService orderStatusService;
     public final ProductOptionService productOptionService;

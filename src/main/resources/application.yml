@@ -11,7 +11,7 @@ spring:
         format_sql: ${SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT-SQL:true}
         driverClassName: com.mysql.cj.jdbc.Driver
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: false
   main:
     allow-bean-definition-overriding: true
@@ -19,3 +19,5 @@ logging:
   level:
     org:
       hibernate: ERROR
+server:
+  port: 8080

@@ -77,6 +77,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         System.out.println();
         List<String> noAuthEndPoints = Arrays.asList(
                 "/api/v1/login",
+                "/api/v1/no-auth/order",
                 "/api/v1/token/refresh",
                 "/api/v1/auth/forgot-password/send-mail",
                 "/api/v1/auth/reset-password",

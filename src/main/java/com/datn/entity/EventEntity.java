@@ -6,33 +6,33 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.sql.Date;
 
-
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
-@Entity
-@Table(name = "location")
-public class LocationEntity {
+@Accessors(chain = true)
+@Table(name = "events")
+public class EventEntity {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "address_name")
-    private String addressName;
+    private String name;
 
-    @Column(name = "hotline")
-    private String hotline;
+    private String status;
 
-    @Column(name = "address_link")
-    private String addressLink;
+    private Date startDate;
+
+    private String endDate;
 
 }

@@ -49,13 +49,6 @@ public class OrderEntity {
     //tiền ship
     @Column(name = "ship_price")
     private Long shipPrice;
-
-
-    @Column(name = "ship_type_id")
-    private String shipTypeId;
-
-    private String shipMethod;
-
     /**
      * mã đơn hàng: DH0001(dùng seq)
      */

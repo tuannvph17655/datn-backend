@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class PuddyRepository {
-        public final AddressRepository addressRepository;
+    public final AddressRepository addressRepository;
     public final CategoryRepository categoryRepository;
     public final ProductRepository productRepository;
     public final UserRepository userRepository;
@@ -18,4 +18,10 @@ public class PuddyRepository {
     public final ColorRepository colorRepository;
     public final MaterialRepository materialRepository;
     public final CartRepository cartRepository;
+    public final OrderRepository orderRepository;
+
+    public final DiscountRepository discountRepository;
+
+    public final OrderDetailRepository orderDetailRepository;
+    public final OrderStatusRepository orderStatusRepository;
 }
