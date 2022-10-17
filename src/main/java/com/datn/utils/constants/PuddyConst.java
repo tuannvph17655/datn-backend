@@ -10,8 +10,8 @@ public class PuddyConst {
         private Values() {
         }
 
-        public static final Long ACCESS_TOKEN_EXPIRED = 3600000L;
-        public static final Long REFRESH_TOKEN_EXPIRED = 7200000L;
+        public static final Long ACCESS_TOKEN_EXPIRED = 86400000L;
+        public static final Long REFRESH_TOKEN_EXPIRED = 172800000L;
         public static final Integer CUSTOMER_AGE_MIN = 16;
         public static final Integer CUSTOMER_AGE_MAX = 120;
 
