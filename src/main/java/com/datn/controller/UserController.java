@@ -4,6 +4,7 @@ import com.datn.dto.customer.user.ProfileDto;
 import com.datn.dto.customer.user.register.RegisterDto;
 import com.datn.utils.base.PuddyController;
 import com.datn.utils.common.JsonUtils;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UserController extends PuddyController {
 
-    @Operation(summary = "API thông tin cá nhân")
+    @ApiOperation("API thông tin cá nhân")
     @GetMapping("/personal")
     public ResponseEntity<Object> personal() {
         log.info("start api /api/v1/user/personal");
@@ -33,7 +34,7 @@ public class UserController extends PuddyController {
         return ResponseEntity.ok(service.customerDetailService.register(payload));
     }
 
-    @Operation(summary = "API update thông tin cá nhân")
+    @ApiOperation("API update thông tin cá nhân")
     @PostMapping("/update-profile")
     public ResponseEntity<Object> updateProfile(@RequestBody ProfileDto dto) {
         log.info("start api /api/v1/user/update-profile with dto: {}", JsonUtils.toJson(dto));

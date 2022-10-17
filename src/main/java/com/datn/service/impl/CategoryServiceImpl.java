@@ -128,7 +128,6 @@ public class CategoryServiceImpl implements CategoryService {
                 .id(category.getId())
                 .name(category.getName())
                 .des(category.getDes())
-                .image(category.getImage())
                 .active(category.getActive())
                 .createdDate(category.getCreatedDate())
                 .createdDateValue(category.getCreatedDate() == null ? null : DateUtils.toStr(category.getCreatedDate(), DateUtils.F_DDMMYYYY))

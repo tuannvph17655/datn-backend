@@ -16,7 +16,6 @@ public class CheckoutValidator {
     public static void validCheckout(OrderRequest req){
         ValidatorUtils.validNullOrEmpty(ADDRESS_ID,req.getAddressId());
 //        ValidatorUtils.validNullOrEmpty(NOTE,req.getNote());
-        ValidatorUtils.validNullOrEmpty(SHIPPING_METHOD,req.getShipMethod());
         if (!StringUtils.isNullOrEmpty(req.getNote())) {
             ValidatorUtils.validLength(NOTE, req.getNote(), 255, true);
         }

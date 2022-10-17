@@ -1,5 +1,7 @@
 package com.datn.utils.constants.enums;
 
+import com.datn.utils.common.StringUtils;
+
 public enum PaymentEnums {
     COD("COD", "Thanh toán khi giao hàng"),
     VNPAY("VNPAY", "Thanh toán qua VN-Pay"),
@@ -19,5 +21,17 @@ public enum PaymentEnums {
 
     public String getName() {
         return name;
+    }
+
+    public static PaymentEnums from(String text) {
+        if (StringUtils.isNullOrEmpty(text)) {
+            return null;
+        }
+        for (PaymentEnums item : PaymentEnums.values()) {
+            if (item.name().equals(text)) {
+                return item;
+            }
+        }
+        return null;
     }
 }

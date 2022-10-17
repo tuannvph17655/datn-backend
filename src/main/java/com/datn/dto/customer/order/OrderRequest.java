@@ -16,6 +16,5 @@ public class OrderRequest {
     private String shipPrice;
     private String shipMethod;
     private Long total;//cart + ship
-    //private String coupon;
     private String discountCode;
 }

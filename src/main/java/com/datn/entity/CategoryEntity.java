@@ -39,12 +39,7 @@ public class CategoryEntity {
 
     private String des;
 
-    @Column(name = "type_id")
-    private String typeId;
-
     private Boolean active;
-
-    private String image;
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)

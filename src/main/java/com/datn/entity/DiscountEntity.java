@@ -36,51 +36,6 @@ public class DiscountEntity {
     private String code;
 
     private String type;
-
-    @Column(name = "type_value")
-    private String typeValue;
-
-    /**
-     * Áp dụng cho
-     */
-    //Loại áp dụng: loại sản phẩm / sản phẩm
-    @Column(name = "apply_type")
-    private String applyType;
-
-    /**
-     * Mã giảm giá sẽ được tính 1 lần trên mỗi đơn hàng hay không:(khong tinh th giam gia van chuyen)
-     * true: tính theo cả đơn hàng
-     * false: Tính theo từng sản phẩm trong đơn hàng
-     */
-//    private Boolean isApplyAcross;
-
-    /**
-     * Loại khách hàng áp dụng
-     */
-
-    //mã loại khách hàng áp dụng KM
-    @Column(name = "customer_type")
-    private String customerType;
-
-    /**
-     * giới hạn số lần mã giảm giá được áp dụng hay không?
-     */
-//    @Column(name = "has_usage_limit")
-//    private Boolean hasUsageLimit;
-
-    /**
-     * Nếu giới hạn số lần mã giảm giá được áp dụng
-     * => Số lần mã giám giá được áp dụng
-     */
-    @Column(name = "usage_limit")
-    private Long usageLimit;
-
-    /**
-     * Giói hạn mỗi khách hàng chỉ được sử dụng mã này 1 lần hay không(Kiểm tra bằng email) ?
-     */
-    @Column(name = "once_per_customer")
-    private Boolean oncePerCustomer;
-
     /**
      * Ngày bắt đầu
      */
@@ -92,20 +47,12 @@ public class DiscountEntity {
      */
     @Column(name = "end_date")
     private Date endDate;
-
-    //Điều kiện áp dụng khuyến mãi
-    /**
-     * loại điều kiện áp dụng khuyết mãi
-     */
-    @Column(name = "prerequisite_type")
-    private String prerequisiteType;
-
     /**
      * Giá trị để thỏa màn đièu kiện áp dụng khuyến mãi
      * Tổng giá trị đơn hàng tối thiệu / Số lượng sản phẩm tối thiểu
      */
     @Column(name = "prerequisite_value")
-    private String prerequisiteValue;
+    private Long prerequisiteValue;
 
     /**
      * trạng thái
@@ -113,10 +60,9 @@ public class DiscountEntity {
      */
     private String status;
 
-    @Column(name = "discount_type_id")
-    private String discountTypeId;
-
     private Boolean deleted;
+
+    private Long eventId;
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
