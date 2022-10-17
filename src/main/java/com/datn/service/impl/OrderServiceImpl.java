@@ -59,9 +59,9 @@ public class OrderServiceImpl implements OrderService {
 //        AuthValidator.checkCustomer(currentUser);
 //        CheckoutValidator.validCheckout(req);
 
-        AddressEntity address = repository.addressRepository.findById(req.getAddressId()).orElseThrow(() -> {
-            throw new PuddyException(PuddyCode.ADDRESS_NOT_FOUND);
-        });
+        AddressEntity address = repository.addressRepository.findById(req.getAddressId()).orElseThrow(() ->
+            new PuddyException(PuddyCode.ADDRESS_NOT_FOUND)
+        );
 
         List<CartResponse> cart = repository.cartRepository.getListCart(currentUser.getId());
 
@@ -111,9 +111,8 @@ public class OrderServiceImpl implements OrderService {
 
         //update số lượng sản phảm sau khi đã update
         cart.stream().map(item -> {
-            ProductOptionEntity productOption = repository.productOptionRepository.findById(item.getProductOptionId()).orElseThrow(() -> {
-                throw new PuddyException(PuddyCode.PRODUCT_OPTION_NOT_FOUND);
-            });
+            ProductOptionEntity productOption = repository.productOptionRepository.findById(item.getProductOptionId()).orElseThrow(() ->
+                 new PuddyException(PuddyCode.PRODUCT_OPTION_NOT_FOUND));
 
             productOption.setQty(productOption.getQty() - item.getQuantity());
 
