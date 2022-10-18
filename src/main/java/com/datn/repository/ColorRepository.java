@@ -25,4 +25,7 @@ public interface ColorRepository extends JpaRepository<ColorEntity, String> {
             "c.name)\n" +
             "from ColorEntity c")
     List<ColorResponse> findAllColor();
+    ColorEntity findByIdAndActive(String id, Boolean active);
+
+    Boolean existsByIdAndActive(String id, Boolean active);
 }
