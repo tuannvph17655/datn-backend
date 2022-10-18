@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SizeDto {
+    private String id;
     private String code;
     private String name;
 }

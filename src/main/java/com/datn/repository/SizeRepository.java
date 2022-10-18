@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SizeRepository extends JpaRepository<SizeEntity, String> {
@@ -22,6 +23,12 @@ public interface SizeRepository extends JpaRepository<SizeEntity, String> {
             "from SizeEntity s")
     List<SizeResponse> getAllSize();
 
+    @Query("select distinct s.name\n" +
+            "from SizeEntity s\n" +
+            "left join ProductOptionEntity po on po.sizeId = s.id\n" +
+            "where po.productId = ?1")
+    List<String> findByProductId(String productId);
 
+    String findNameById(String sizeId);
 
 }
