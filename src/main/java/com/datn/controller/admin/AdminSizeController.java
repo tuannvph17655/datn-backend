@@ -26,17 +26,17 @@ public class AdminSizeController extends PuddyController {
         return ResponseEntity.status(HttpStatus.OK).body(service.sizeService.create(getCurrentUser(), dto));
     }
 
-    @PostMapping("/update")
-    @Operation(summary = "API cập nhật size sp")
-    public ResponseEntity<ResData<String>> update(@RequestBody SizeDto dto){
-        log.info("start api update with dto: {}", JsonUtils.toJson(dto));
-        return ResponseEntity.status(HttpStatus.OK).body(service.sizeService.update(getCurrentUser(), dto));
-    }
-
-    @PostMapping("/delete")
-    @Operation(summary = "API xóa size sp")
-    public ResponseEntity<ResData<String>> delete(@RequestBody SizeDto dto){
-        log.info("start api delete with dto: {}", JsonUtils.toJson(dto));
-        return ResponseEntity.status(HttpStatus.OK).body(service.sizeService.delete(getCurrentUser(), dto));
-    }
+//    @PostMapping("/update")
+//    @Operation(summary = "API cập nhật size sp")
+//    public ResponseEntity<ResData<String>> update(@RequestBody SizeDto dto){
+//        log.info("start api update with dto: {}", JsonUtils.toJson(dto));
+//        return ResponseEntity.status(HttpStatus.OK).body(service.sizeService.update(getCurrentUser(), dto));
+//    }
+//
+//    @PostMapping("/delete")
+//    @Operation(summary = "API xóa size sp")
+//    public ResponseEntity<ResData<String>> delete(@RequestBody SizeDto dto){
+//        log.info("start api delete with dto: {}", JsonUtils.toJson(dto));
+//        return ResponseEntity.status(HttpStatus.OK).body(service.sizeService.delete(getCurrentUser(), dto));
+//    }
 }
