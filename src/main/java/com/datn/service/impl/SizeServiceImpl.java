@@ -1,7 +1,6 @@
 package com.datn.service.impl;
 
 import com.datn.dto.customer.size.response.SizeResponse;
-import com.datn.entity.ColorEntity;
 import com.datn.entity.ProductEntity;
 import com.datn.entity.SizeEntity;
 import com.datn.service.SizeService;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,15 +51,15 @@ public class SizeServiceImpl implements SizeService {
         return new ResData<>(size.getId(), PuddyCode.OK);
     }
 
-    @Override
-    @Transactional
-    public ResData<String> delete(CurrentUser currentUser, SizeDto dto) {
-        return null;
-    }
-
-    @Override
-    @Transactional
-    public ResData<String> update(CurrentUser currentUser, SizeDto dto) {
-        return null;
-    }
+//    @Override
+//    @Transactional
+//    public ResData<String> delete(CurrentUser currentUser, SizeDto dto) {
+//        return null;
+//    }
+//
+//    @Override
+//    @Transactional
+//    public ResData<String> update(CurrentUser currentUser, SizeDto dto) {
+//        return null;
+//    }
 }

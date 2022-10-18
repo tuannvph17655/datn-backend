@@ -7,12 +7,13 @@ import com.datn.utils.base.rest.ResData;
 
 import java.util.List;
 
+
 public interface SizeService {
     ResData<List<SizeResponse>> getAllSize();
     ResData<String> create(CurrentUser currentUser, SizeDto dto);
 
-    ResData<String> delete(CurrentUser currentUser, SizeDto dto);
-
-    ResData<String> update(CurrentUser currentUser, SizeDto dto);
+//    ResData<String> delete(CurrentUser currentUser, SizeDto dto);
+//
+//    ResData<String> update(CurrentUser currentUser, SizeDto dto);
 
 }
