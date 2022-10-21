@@ -78,10 +78,14 @@ public class CartServiceImpl implements CartService {
             List<CartResponse> cartList = repository.cartRepository.getListCart(currentUser.getId());
 
             Long totalPrice = cartList.stream().mapToLong(i -> i.getPrice() * i.getQuantity()).sum();
-
+            Integer totalQuality = 0;
+            for(int i =0 ; i < cartList.size(); i ++) {
+                totalQuality += cartList.get(i).getQuantity().intValue();
+            }
             ListCartResponse cartResponse = ListCartResponse.builder()
                     .carts(cartList)
                     .totalPrice(totalPrice)
+                    .totalQuality(totalQuality)
                     .build();
 
             return new ResData<>(cartResponse, PuddyCode.OK);
@@ -143,6 +147,15 @@ public class CartServiceImpl implements CartService {
                     .build();
 
             return new ResData<>(item, PuddyCode.OK);
+        }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, PuddyConst.Messages.FORBIDDEN);
+    }
+
+    @Override
+    public ResData<String> deleteAllCart(CurrentUser currentUser) {
+        if (currentUser.getRole().equals(RoleEnum.ROLE_CUSTOMER)) {
+            repository.cartRepository.clearCart(currentUser.getId());
+            return new ResData<>("Đã xóa thành công !!!", PuddyCode.OK);
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, PuddyConst.Messages.FORBIDDEN);
     }

@@ -3,6 +3,7 @@ package com.datn.controller;
 import com.datn.dto.customer.cart.request.CartRequest;
 import com.datn.utils.base.PuddyController;
 import com.datn.utils.base.rest.ResData;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,12 @@ public class CartController extends PuddyController {
     @GetMapping("/countCartItem")
     public ResponseEntity<?> countCartItem() {
         return ResponseEntity.ok(service.cartService.countCartItem(getCurrentUser()));
+    }
+
+    @ApiOperation(value =  "Xóa tất cả sản phẩm trong cửa hàng")
+    @DeleteMapping("/clearAllCart")
+    public ResponseEntity<?> deleteAllItem() {
+        return ResponseEntity.ok(service.cartService.deleteAllCart(getCurrentUser()));
     }
 
 
