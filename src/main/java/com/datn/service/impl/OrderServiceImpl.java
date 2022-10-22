@@ -1,10 +1,12 @@
 package com.datn.service.impl;
 
-import com.datn.dto.admin.discount.type.ShipTypeDto;
 import com.datn.dto.customer.cart.response.CartResponse;
+import com.datn.dto.customer.order.CancelOrder;
 import com.datn.dto.customer.order.OrderRequest;
+import com.datn.dto.customer.order.order_detail.ListOrderRes;
+import com.datn.dto.customer.order.order_detail.OrderResponse;
+import com.datn.dto.customer.order.order_detail.ProductOrderDetail;
 import com.datn.entity.AddressEntity;
-import com.datn.entity.DiscountEntity;
 import com.datn.entity.OrderDetailEntity;
 import com.datn.entity.OrderEntity;
 import com.datn.entity.OrderStatusEntity;
@@ -13,36 +15,33 @@ import com.datn.service.OrderService;
 import com.datn.utils.base.PuddyRepository;
 import com.datn.utils.base.rest.CurrentUser;
 import com.datn.utils.base.rest.ResData;
+import com.datn.utils.common.DateUtils;
 import com.datn.utils.common.JsonUtils;
+import com.datn.utils.common.MoneyUtils;
 import com.datn.utils.common.StringUtils;
 import com.datn.utils.common.UidUtils;
 import com.datn.utils.constants.PuddyCode;
+import com.datn.utils.constants.PuddyConst;
 import com.datn.utils.constants.PuddyException;
-import com.datn.utils.constants.enums.DiscountTypeEnums;
 import com.datn.utils.constants.enums.PaymentEnums;
+import com.datn.utils.constants.enums.RoleEnum;
 import com.datn.utils.constants.enums.StatusEnum;
-import com.datn.utils.validator.auth.AuthValidator;
-import com.datn.utils.validator.customer.order.CheckoutValidator;
+import com.datn.utils.validator.customer.order.CancelOrderValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -146,5 +145,91 @@ public class OrderServiceImpl implements OrderService {
         Long shopPrice = req.getTotal();
         Long shipPrice = StringUtils.isNullOrEmpty(req.getShipPrice()) ? 0L : Long.valueOf(req.getShipPrice());
         return Math.max(shopPrice, 0L) + Math.max(shipPrice, 0L);
+    }
+
+    @Override
+    public Object getMyOrders(CurrentUser currentUser) {
+        List<OrderEntity> orders = repository.orderRepository.getMyOrder(currentUser.getId());
+
+        ListOrderRes res = new ListOrderRes();
+
+        res.setOrderRes(
+                orders.stream().map(item -> {
+                    AddressEntity address = repository.addressRepository.findById(item.getAddressId())
+                            .orElseThrow(() -> new PuddyException(PuddyCode.ADDRESS_NOT_FOUND));
+                    String s5 = ", ";
+                    String addressOrder = address.getAddressDetail().concat(s5).concat(address.getWardName()).concat(s5).concat(address.getDistrictName()).concat(s5).concat(address.getProvinceName());
+
+                    OrderResponse orderRes = OrderResponse.builder()
+                            .orderCode(item.getCode())
+                            .orderId(item.getId())
+                            .status(StatusEnum.from(item.getStatus()))
+                            .createDate(DateUtils.parseDateToStr(DateUtils.F_DDMMYYYYHHMMSS, item.getCreatedDate()))
+                            .totalPrice(MoneyUtils.format(item.getTotal()))
+                            .payed(item.getPayed())
+                            .address(addressOrder)
+                            .statusValue(StatusEnum.from(item.getStatus()).getName())
+                            .build();
+
+                    return orderRes;
+
+                }).collect(Collectors.toList())
+        );
+
+        return new ResData<>(res, PuddyCode.OK);
+    }
+
+    @Override
+    public ResData<String> cancelOrder(CurrentUser currentUser, CancelOrder dto) {
+        log.info("----- OrderService cancel order start -----");
+        if (currentUser.getRole().equals(RoleEnum.ROLE_CUSTOMER)) {
+            CancelOrderValidator.validCancelOrder(dto);
+            OrderEntity order = repository.orderRepository.findById(dto.getOrderId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy hóa đơn! "));
+
+            List<ProductOrderDetail> orderDetail = repository.orderDetailRepository.getProductOrder(order.getId());
+
+            if (order.getStatus().equals(StatusEnum.PENDING.name())) {
+
+                Set<String> productOptionIds = orderDetail
+                        .stream()
+                        .map(ProductOrderDetail::getProductOptionId)
+                        .collect(Collectors.toSet());
+
+                Map<String, ProductOptionEntity> productOptionEntityMap = repository.productOptionRepository.findAllById(productOptionIds)
+                        .stream()
+                        .collect(Collectors.toMap(ProductOptionEntity::getId, Function.identity(), (a, b) -> a));
+
+                List<ProductOptionEntity> productOption = new ArrayList<>();
+
+                orderDetail.stream().map(item -> {
+                    ProductOptionEntity productOptionEntity = Optional.ofNullable(productOptionEntityMap.get(item.getProductOptionId()))
+                            .orElseThrow(() -> new PuddyException(PuddyCode.PRODUCT_OPTION_NOT_FOUND));
+
+                    productOptionEntity.setQty(productOptionEntity.getQty() + item.getQuantity());
+                    return productOption.add(productOptionEntity);
+                }).collect(Collectors.toList());
+
+                repository.productOptionRepository.saveAll(productOption);
+
+                OrderStatusEntity orderStatus = OrderStatusEntity.builder()
+                        .id(UidUtils.generateUid())
+                        .status(StatusEnum.CANCEL)
+                        .note(dto.getNote())
+                        .createdDate(new Date())
+                        .orderId(order.getId())
+                        .createdBy(order.getUserId())
+                        .build();
+                repository.orderStatusRepository.save(orderStatus);
+
+                order.setStatus(StatusEnum.CANCEL.name());
+                order.setUpdatedBy(currentUser.getId());
+                order.setUpdatedDate(new Date());
+                repository.orderRepository.save(order);
+
+                return ResData.ok(order.getId(), "Hủy đơn hàng thành công !");
+            }
+        }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, PuddyConst.Messages.FORBIDDEN);
     }
 }
