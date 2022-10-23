@@ -86,7 +86,6 @@ public class OrderServiceImpl implements OrderService {
 
         String orderCode = "#".concat(UUID.randomUUID().toString());
         PaymentEnums payment = PaymentEnums.from(req.getPaymentMethod());
-
         OrderEntity order = OrderEntity.builder()
                 .id(UidUtils.generateUid())
                 .addressId(address.getId())
@@ -216,9 +215,8 @@ public class OrderServiceImpl implements OrderService {
                 orderPage.getContent()
                         .stream()
                         .map(o -> {
-                            AddressEntity address = repository.addressRepository.findById(o.getAddressId()).orElseThrow(() -> {
-                                throw new com.datn.utils.base.PuddyException(PuddyCode.ADDRESS_NOT_FOUND);
-                            });
+                            AddressEntity address = repository.addressRepository.findById(o.getAddressId())
+                                    .orElseThrow(() -> new PuddyException(PuddyCode.ADDRESS_NOT_FOUND));
                             String s5 = ", ";
                             String addressOrder = address.getAddressDetail().concat(s5).concat(address.getWardName()).concat(s5).concat(address.getDistrictName()).concat(s5).concat(address.getProvinceName());
 
