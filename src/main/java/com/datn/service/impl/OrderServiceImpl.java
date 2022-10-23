@@ -3,6 +3,7 @@ package com.datn.service.impl;
 import com.datn.dto.customer.cart.response.CartResponse;
 import com.datn.dto.customer.order.CancelOrder;
 import com.datn.dto.customer.order.OrderRequest;
+import com.datn.dto.customer.order.OrderSearch;
 import com.datn.dto.customer.order.order_detail.ListOrderRes;
 import com.datn.dto.customer.order.order_detail.OrderResponse;
 import com.datn.dto.customer.order.order_detail.ProductOrderDetail;
@@ -14,10 +15,12 @@ import com.datn.entity.ProductOptionEntity;
 import com.datn.service.OrderService;
 import com.datn.utils.base.PuddyRepository;
 import com.datn.utils.base.rest.CurrentUser;
+import com.datn.utils.base.rest.PageData;
 import com.datn.utils.base.rest.ResData;
 import com.datn.utils.common.DateUtils;
 import com.datn.utils.common.JsonUtils;
 import com.datn.utils.common.MoneyUtils;
+import com.datn.utils.common.PageableUtils;
 import com.datn.utils.common.StringUtils;
 import com.datn.utils.common.UidUtils;
 import com.datn.utils.constants.PuddyCode;
@@ -26,9 +29,13 @@ import com.datn.utils.constants.PuddyException;
 import com.datn.utils.constants.enums.PaymentEnums;
 import com.datn.utils.constants.enums.RoleEnum;
 import com.datn.utils.constants.enums.StatusEnum;
+import com.datn.utils.validator.auth.AuthValidator;
 import com.datn.utils.validator.customer.order.CancelOrderValidator;
+import com.datn.utils.validator.customer.order.CheckoutValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -37,6 +44,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -55,8 +63,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Object checkout(CurrentUser currentUser, OrderRequest req) {
         log.info("----- OrderService create order start with payload: {}", JsonUtils.toJson(req));
-//        AuthValidator.checkCustomer(currentUser);
-//        CheckoutValidator.validCheckout(req);
+        AuthValidator.checkCustomer(currentUser);
+        CheckoutValidator.validCheckout(req);
 
         AddressEntity address = repository.addressRepository.findById(req.getAddressId()).orElseThrow(() ->
             new PuddyException(PuddyCode.ADDRESS_NOT_FOUND)
@@ -142,7 +150,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private Long getTotal(List<CartResponse> cart, OrderRequest req) {
+        Long discountPrice = 0L;
         Long shopPrice = req.getTotal();
+//        if(StringUtils.isNullOrEmpty(req.getDiscountCode())) {
+//            DiscountEntity discountEntity = repository.discountRepository.findByCode(req.getDiscountCode());
+//            discountPrice = (discountEntity.getPercentDiscount()*shopPrice)/100;
+//        }
         Long shipPrice = StringUtils.isNullOrEmpty(req.getShipPrice()) ? 0L : Long.valueOf(req.getShipPrice());
         return Math.max(shopPrice, 0L) + Math.max(shipPrice, 0L);
     }
@@ -177,6 +190,55 @@ public class OrderServiceImpl implements OrderService {
         );
 
         return new ResData<>(res, PuddyCode.OK);
+    }
+
+    @Override
+    public Object search(CurrentUser currentUser, OrderSearch req) {
+        log.info("----- My order search ----- ");
+        AuthValidator.checkCustomer(currentUser);
+        Pageable pageable = PageableUtils.getPageable(req.getPageReq());
+        if (StringUtils.isNullOrEmpty(req.getTextSearch())) {
+            req.setTextSearch("");
+        }
+
+        req.setTextSearch("%" + req.getTextSearch()
+                .toUpperCase(Locale.ROOT)
+                .trim() + "%");
+        StatusEnum status = StatusEnum.from(req.getStatus());
+        String statusStr = status == null ? null : status.name();
+        Page<OrderEntity> orderPage = repository.orderRepository.search(req.getTextSearch(), statusStr, pageable);
+
+        if (orderPage.isEmpty()) {
+            return PageData.setEmpty(req.getPageReq());
+        }
+
+        return PageData.setResult(
+                orderPage.getContent()
+                        .stream()
+                        .map(o -> {
+                            AddressEntity address = repository.addressRepository.findById(o.getAddressId()).orElseThrow(() -> {
+                                throw new com.datn.utils.base.PuddyException(PuddyCode.ADDRESS_NOT_FOUND);
+                            });
+                            String s5 = ", ";
+                            String addressOrder = address.getAddressDetail().concat(s5).concat(address.getWardName()).concat(s5).concat(address.getDistrictName()).concat(s5).concat(address.getProvinceName());
+
+                            OrderResponse response = OrderResponse.builder()
+                                    .orderId(o.getId())
+                                    .orderCode(o.getCode())
+                                    .status(StatusEnum.from(o.getStatus()))
+                                    .statusValue(StatusEnum.from(o.getStatus()).getName())
+                                    .address(addressOrder)
+                                    .createDate(DateUtils.toStr(o.getCreatedDate(), DateUtils.F_DDMMYYYYHHMM))
+                                    .totalPrice(MoneyUtils.format(o.getTotal()))
+                                    .payed(o.getPayed())
+                                    .build();
+
+                            return response;
+                        }).collect(Collectors.toList()),
+                orderPage.getNumber(),
+                orderPage.getSize(),
+                orderPage.getTotalElements()
+        );
     }
 
     @Override
