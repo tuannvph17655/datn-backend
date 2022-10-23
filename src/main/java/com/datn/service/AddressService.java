@@ -10,4 +10,5 @@ public interface AddressService {
     void deleteAddress(CurrentUser currentUser,String id);
     void setAddressDefault(CurrentUser currentUser,String id);
     Object getAddressById(CurrentUser currentUser,String id);
+    Object getAddressDefault(CurrentUser currentUser);
 }

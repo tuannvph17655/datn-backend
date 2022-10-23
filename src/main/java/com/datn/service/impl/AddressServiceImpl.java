@@ -8,6 +8,7 @@ import com.datn.utils.base.PuddyException;
 import com.datn.utils.base.PuddyRepository;
 import com.datn.utils.base.rest.CurrentUser;
 import com.datn.utils.base.rest.ResData;
+import com.datn.utils.common.JsonUtils;
 import com.datn.utils.common.UidUtils;
 import com.datn.utils.constants.PuddyCode;
 import com.datn.utils.validator.address.AddressValidator;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.mail.Address;
 import java.util.Date;
 import java.util.List;
 
@@ -168,6 +170,32 @@ public class AddressServiceImpl implements AddressService {
                 .active(address.getActive())
                 .userId(address.getUserId())
                 .combination(combination)
+                .build();
+        return new ResData<>(res, PuddyCode.OK);
+    }
+
+    @Override
+    public Object getAddressDefault(CurrentUser currentUser) {
+        log.info("----- Address get default start ------");
+        AuthValidator.checkCustomer(currentUser);
+        AddressEntity address = repository.addressRepository
+                .getAddressDefaultByUserId(currentUser.getId());
+        log.info("address default : {}" , JsonUtils.toJson(address));
+        AddressRes res = AddressRes.builder()
+                .id(address.getId())
+                .nameOfRecipient(address.getNameOfRecipient())
+                .addressDetail(address.getAddressDetail())
+                .phoneNumber(address.getPhoneNumber())
+                .provinceId(address.getProvinceId())
+                .provinceName(address.getProvinceName())
+                .districtId(address.getDistrictId())
+                .districtName(address.getDistrictName())
+                .wardCode(address.getWardCode())
+                .wardName(address.getWardName())
+                .isDefault(address.getIsDefault())
+                .active(address.getActive())
+                .userId(address.getUserId())
+                .combination(null)
                 .build();
         return new ResData<>(res, PuddyCode.OK);
     }

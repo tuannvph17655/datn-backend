@@ -8,6 +8,7 @@ import com.datn.utils.base.PuddyRepository;
 import com.datn.utils.base.rest.CurrentUser;
 import com.datn.utils.base.rest.ResData;
 import com.datn.utils.common.DateUtils;
+import com.datn.utils.common.JsonUtils;
 import com.datn.utils.common.MoneyUtils;
 import com.datn.utils.constants.PuddyCode;
 import com.datn.utils.constants.enums.PaymentEnums;
@@ -32,6 +33,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         }
 
         OrderDetailRes orderDetail = repository.orderDetailRepository.getOrderDetail(orderId);
+        log.info("before ordetail {} " , JsonUtils.toJson(orderDetail));
         PaymentEnums payment = PaymentEnums.from(orderDetail.getPaymentMethod());
 
         OrderDetailResponse orderDetailResponse = OrderDetailResponse.builder()
@@ -51,7 +53,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         List<ProductInOrderDetail> productOrder = repository.orderDetailRepository.getProductList(orderId);
 
         orderDetailResponse.setProduct(productOrder);
-
+//        log.info("order detail : ", JsonUtils.toJson(orderDetailResponse));
         return new ResData<>(orderDetailResponse, PuddyCode.OK);
     }
 }

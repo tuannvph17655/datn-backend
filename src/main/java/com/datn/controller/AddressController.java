@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.xml.ws.Response;
+
 @RestController
 @RequestMapping("/api/v1/address")
 @RequiredArgsConstructor
@@ -23,6 +25,12 @@ public class AddressController extends PuddyController {
     public ResponseEntity<?> getListAddress() {
         log.info("------ start api get list address -----");
         return ResponseEntity.ok(service.addressService.getListAddress(getCurrentUser()));
+    }
+
+    @GetMapping("/get-default")
+    public ResponseEntity<?> getAddressDefault(){
+        log.info("------ start api get address default -----");
+        return ResponseEntity.ok(service.addressService.getAddressDefault(getCurrentUser()));
     }
 
     @GetMapping("/{id}")
@@ -60,4 +68,6 @@ public class AddressController extends PuddyController {
         service.addressService.setAddressDefault(getCurrentUser(), id);
         return ResponseEntity.ok("Set default address successfully !");
     }
+
+
 }
