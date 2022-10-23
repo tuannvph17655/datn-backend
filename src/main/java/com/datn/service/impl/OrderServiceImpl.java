@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
         String orderCode = "#".concat(UUID.randomUUID().toString());
         PaymentEnums payment = PaymentEnums.from(req.getPaymentMethod());
         OrderEntity order = OrderEntity.builder()
-                .id(UidUtils.generateUid())
+                .id(req.getId())
                 .addressId(address.getId())
                 .userId(currentUser.getId())
                 .note(req.getNote())
@@ -156,7 +156,8 @@ public class OrderServiceImpl implements OrderService {
 //            discountPrice = (discountEntity.getPercentDiscount()*shopPrice)/100;
 //        }
         Long shipPrice = StringUtils.isNullOrEmpty(req.getShipPrice()) ? 0L : Long.valueOf(req.getShipPrice());
-        return Math.max(shopPrice, 0L) + Math.max(shipPrice, 0L);
+        return Math.max(shopPrice, 0L) ;
+//        + Math.max(shipPrice, 0L)
     }
 
     @Override

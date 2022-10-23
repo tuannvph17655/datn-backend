@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AddressRepository extends JpaRepository<AddressEntity, String> {
@@ -33,4 +34,7 @@ public interface AddressRepository extends JpaRepository<AddressEntity, String> 
     List<AddressRes> getListAddressByUserId(@Param("userId") String userId);
     @Query(value = "SELECT * FROM address a WHERE a.user_id = ?1",nativeQuery = true)
     List<AddressEntity> getAddressByUserId(String userId);
+
+    @Query("SELECT o FROM AddressEntity o WHERE o.userId = ?1 and o.isDefault = true ")
+     AddressEntity getAddressDefaultByUserId(String userId);
 }

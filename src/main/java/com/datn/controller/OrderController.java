@@ -53,7 +53,6 @@ public class OrderController extends PuddyController {
     @Operation(summary = "API getDetail Order")
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrderDetail(@PathVariable("id") String id) {
-        log.info("START API /api/v1/order/id");
         return ResponseEntity.ok(service.orderDetailService.getOrderDetail(getCurrentUser(),id));
     }
 }

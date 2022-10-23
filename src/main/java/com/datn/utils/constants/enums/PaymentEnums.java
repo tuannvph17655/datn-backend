@@ -6,6 +6,7 @@ public enum PaymentEnums {
     COD("COD", "Thanh toán khi giao hàng"),
     VNPAY("VNPAY", "Thanh toán qua VN-Pay"),
     ZALOPAY("ZALOPAY", "Thanh toán qua Zalo-Pay"),
+    ATM("ATM","Chuyển khoản qua ngân hàng")
     ;
     private final String code;
     private final String name;

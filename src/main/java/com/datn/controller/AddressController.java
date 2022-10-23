@@ -25,6 +25,12 @@ public class AddressController extends PuddyController {
         return ResponseEntity.ok(service.addressService.getListAddress(getCurrentUser()));
     }
 
+    @GetMapping("/get-default")
+    public ResponseEntity<?> getAddressDefault(){
+        log.info("------ start api get address default -----");
+        return ResponseEntity.ok(service.addressService.getAddressDefault(getCurrentUser()));
+    }
+
     @GetMapping("/{id}")
     @ApiOperation(value = "API get address detail")
     public ResponseEntity<?> getAddressById(@PathVariable("id") String id) {
@@ -50,7 +56,7 @@ public class AddressController extends PuddyController {
     @ApiOperation(value = "API delete address")
     public ResponseEntity<?> deleteAddress(@PathVariable("id") String id) {
         log.info("------ start api delete address -----");
-        service.addressService.deleteAddress(getCurrentUser(), id);
+        service.addressService.deActiveAddress(getCurrentUser(), id);
         return ResponseEntity.ok("Delete address successfully !!");
     }
 
@@ -60,4 +66,6 @@ public class AddressController extends PuddyController {
         service.addressService.setAddressDefault(getCurrentUser(), id);
         return ResponseEntity.ok("Set default address successfully !");
     }
+
+
 }
