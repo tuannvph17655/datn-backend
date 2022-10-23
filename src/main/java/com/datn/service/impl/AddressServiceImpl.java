@@ -119,12 +119,12 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void deleteAddress(CurrentUser currentUser, String id) {
+    public void deActiveAddress(CurrentUser currentUser, String id) {
         log.info("----- Address delete start ------");
         AuthValidator.checkCustomer(currentUser);
         AddressEntity address = repository.addressRepository.findById(id).orElseThrow(() -> new PuddyException(PuddyCode.ADDRESS_NOT_FOUND));
-
-        repository.addressRepository.deleteById(id);
+        address.setActive(false);
+        repository.addressRepository.save(address);
     }
 
     @Override

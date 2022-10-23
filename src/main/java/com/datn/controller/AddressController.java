@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.ws.Response;
-
 @RestController
 @RequestMapping("/api/v1/address")
 @RequiredArgsConstructor
@@ -58,7 +56,7 @@ public class AddressController extends PuddyController {
     @ApiOperation(value = "API delete address")
     public ResponseEntity<?> deleteAddress(@PathVariable("id") String id) {
         log.info("------ start api delete address -----");
-        service.addressService.deleteAddress(getCurrentUser(), id);
+        service.addressService.deActiveAddress(getCurrentUser(), id);
         return ResponseEntity.ok("Delete address successfully !!");
     }
 
