@@ -14,4 +14,6 @@ import java.util.List;
 public class ListCartResponse {
     private List<CartResponse> carts;
     private Long totalPrice;
+    private Integer totalQuality;
+
 }

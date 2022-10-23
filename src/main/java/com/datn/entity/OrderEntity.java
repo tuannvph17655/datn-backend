@@ -80,4 +80,5 @@ public class OrderEntity {
     @LastModifiedBy
     @Column(name = "updated_by")
     private String updatedBy;
+
 }

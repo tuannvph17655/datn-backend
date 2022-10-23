@@ -17,4 +17,6 @@ public interface CartService {
     ResData<String> deleteItemInCart(CurrentUser currentUser,String productOptionId);
 
     ResData<CountCartItem> countCartItem(CurrentUser currentUser);
+
+    ResData<String> deleteAllCart(CurrentUser currentUser);
 }

@@ -35,7 +35,6 @@ public class DiscountEntity {
 
     private String code;
 
-    private String type;
     /**
      * Ngày bắt đầu
      */
@@ -58,6 +57,11 @@ public class DiscountEntity {
      * trạng thái
      * Ngung áp dụng/ đang áp dụng / chua ap dung
      */
+
+    /*
+    * phần trăm giảm giá*/
+    private Long percentDiscount;
+
     private String status;
 
     private Boolean deleted;
