@@ -57,6 +57,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class OrderServiceImpl implements OrderService {
 
+    private static final String COMMA = ", ";
     private final PuddyRepository repository;
 
     @Override
@@ -292,5 +293,44 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, PuddyConst.Messages.FORBIDDEN);
+    }
+
+    @Override
+    public Object getMyOrder4Admin(CurrentUser currentUser) {
+        AuthValidator.checkAdmin(currentUser);
+        List<OrderEntity> orders = repository.orderRepository.findAll();
+
+        ListOrderRes res = new ListOrderRes();
+
+        Set<String> addressIds = orders.stream().map(OrderEntity::getAddressId).collect(Collectors.toSet());
+
+        Map<String, AddressEntity> addressEntityMap = repository.addressRepository.findAllById(addressIds)
+                .stream()
+                .collect(Collectors.toMap(AddressEntity::getId, Function.identity(), (a, b) -> a));
+
+        res.setOrderRes(
+                orders.stream().map(item -> {
+                    AddressEntity address = Optional.ofNullable(addressEntityMap.get(item.getAddressId()))
+                            .orElseThrow(() -> new PuddyException(PuddyCode.ADDRESS_NOT_FOUND));
+
+                    String addressOrder = address.getAddressDetail().concat(COMMA).concat(address.getWardName()).concat(COMMA).concat(address.getDistrictName()).concat(COMMA).concat(address.getProvinceName());
+
+                    OrderResponse orderRes = OrderResponse.builder()
+                            .orderCode(item.getCode())
+                            .orderId(item.getId())
+                            .status(StatusEnum.from(item.getStatus()))
+                            .createDate(DateUtils.parseDateToStr(DateUtils.F_DDMMYYYYHHMMSS, item.getCreatedDate()))
+                            .totalPrice(MoneyUtils.format(item.getTotal()))
+                            .payed(item.getPayed())
+                            .address(addressOrder)
+                            .statusValue(StatusEnum.from(item.getStatus()).getName())
+                            .build();
+
+                    return orderRes;
+
+                }).collect(Collectors.toList())
+        );
+
+        return new ResData<>(res, PuddyCode.OK);
     }
 }

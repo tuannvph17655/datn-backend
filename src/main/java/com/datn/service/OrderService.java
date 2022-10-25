@@ -10,5 +10,6 @@ public interface OrderService {
     Object checkout(CurrentUser currentUser, OrderRequest req);
     ResData<String> cancelOrder(CurrentUser currentUser, CancelOrder dto);
     Object getMyOrders(CurrentUser currentUser);
+    Object getMyOrder4Admin(CurrentUser currentUser);
     Object search(CurrentUser currentUser, OrderSearch req);
 }
