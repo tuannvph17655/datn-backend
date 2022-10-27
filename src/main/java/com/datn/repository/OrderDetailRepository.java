@@ -1,5 +1,6 @@
 package com.datn.repository;
 
+import com.datn.dto.admin.detail.ItemDto;
 import com.datn.dto.customer.order.OrderDetailRes;
 import com.datn.dto.customer.order.ProductInOrderDetail;
 import com.datn.dto.customer.order.order_detail.ProductOrderDetail;
@@ -57,4 +58,24 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetailEntity ,
             "where od.orderId = :orderId")
     List<ProductInOrderDetail> getProductList(@Param("orderId") String orderId);
 
+    @Query("select new com.datn.dto.admin.detail.ItemDto(\n" +
+            "p1.id,\n" +
+            "p1.name,\n" +
+            "c1.name,\n" +
+            "s1.name,\n" +
+            "po1.image,\n" +
+            "m1.name,\n" +
+            "po1.price,\n" +
+            "po1.qty,\n" +
+            "ct1.name,\n" +
+            "po1.qty * po1.price)\n" +
+            "from OrderDetailEntity od1\n" +
+            "left join ProductOptionEntity po1 on po1.id = od1.productOptionId\n" +
+            "left join ProductEntity p1 on p1.id = po1.productId\n" +
+            "left join ColorEntity c1 on c1.id = po1.colorId\n" +
+            "left join SizeEntity s1 on s1.id = po1.sizeId\n" +
+            "left join CategoryEntity ct1 on ct1.id = p1.categoryId\n" +
+            "left join MaterialEntity m1 on m1.id = p1.materialId\n" +
+            "where od1.orderId = :orderId")
+    List<ItemDto> getItemList(@Param("orderId") String orderId);
 }
