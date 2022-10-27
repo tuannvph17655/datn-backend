@@ -1,5 +1,6 @@
 package com.datn.service;
 
+import com.datn.dto.admin.order.change_status.ChangeStatusDto;
 import com.datn.dto.customer.order.CancelOrder;
 import com.datn.dto.customer.order.OrderRequest;
 import com.datn.dto.customer.order.OrderSearch;
@@ -12,4 +13,7 @@ public interface OrderService {
     Object getMyOrders(CurrentUser currentUser);
     Object getMyOrder4Admin(CurrentUser currentUser);
     Object search(CurrentUser currentUser, OrderSearch req);
+
+    Object detail(CurrentUser currentUser, String id);
+    Object changeStatus(CurrentUser currentUser, ChangeStatusDto dto);
 }

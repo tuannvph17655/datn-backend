@@ -1,5 +1,6 @@
 package com.datn.service.impl;
 
+import com.datn.dto.admin.order.change_status.ChangeStatusDto;
 import com.datn.dto.customer.cart.response.CartResponse;
 import com.datn.dto.customer.order.CancelOrder;
 import com.datn.dto.customer.order.OrderRequest;
@@ -332,5 +333,41 @@ public class OrderServiceImpl implements OrderService {
         );
 
         return new ResData<>(res, PuddyCode.OK);
+    }
+
+    @Override
+    public Object detail(CurrentUser currentUser, String id) {
+        if (!repository.orderRepository.existsById(id)) {
+            return new ResData<>(true);
+        }
+
+        AuthValidator.checkRole(currentUser, RoleEnum.ROLE_ADMIN, RoleEnum.ROLE_ADMIN);
+        return repository.orderRepository.detail4Admin(currentUser, id);
+    }
+
+    @Override
+    @Transactional
+    public Object changeStatus(CurrentUser currentUser, ChangeStatusDto dto) {
+        AuthValidator.checkRole(currentUser, RoleEnum.ROLE_ADMIN, RoleEnum.ROLE_CUSTOMER);
+        OrderEntity order = repository.orderRepository.findByIdV1(dto.getId());
+        StatusEnum status = StatusEnum.from(dto.getStatus().toUpperCase(Locale.ROOT));
+        if (status == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Trạng thái không hợp lệ!");
+        }
+
+        order.setStatus(status.name());
+        order.setUpdatedBy(currentUser.getId());
+        order.setUpdatedDate(new Date());
+        repository.orderRepository.save(order);
+        OrderStatusEntity orderStatus = OrderStatusEntity.builder()
+                .id(UidUtils.generateUid())
+                .status(status)
+                .createdBy(currentUser.getId())
+                .createdDate(new Date())
+                .orderId(dto.getId())
+                .note(dto.getNote())
+                .build();
+        repository.orderStatusRepository.save(orderStatus);
+        return ResData.ok(order.getId(), "Chuyển trạng thái thành công");
     }
 }
