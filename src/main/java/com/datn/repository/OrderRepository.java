@@ -22,6 +22,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, String>, Ord
             "and (:status is null or o.status = :status)")
     Page<OrderEntity> search(@Param("textSearch") String textSearch, @Param("status") String status, Pageable pageReq);
 
-    @Query("select o from OrderEntity o where id = ?1")
+    @Query("select o from OrderEntity o where o.id = ?1")
     OrderEntity findByIdV1(String id);
 }
