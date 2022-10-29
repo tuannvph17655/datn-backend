@@ -2,7 +2,7 @@ package com.datn.utils.common;
 
 import com.datn.dto.admin.detail.PriceDto;
 import com.datn.dto.admin.detail.PromotionDto;
-import com.datn.dto.admin.detail.ResultDto;
+import com.datn.dto.admin.detail.PriceResult;
 import com.datn.dto.admin.detail.StatusDto;
 import com.datn.dto.admin.order.search.OptionDto;
 import com.datn.entity.UserEntity;
@@ -100,45 +100,45 @@ public class OrderUtils {
         return shopPrice + shipPrice;
     }
 
-    public static ResultDto getResultDto(long shopPrice, Long shipPrice, PromotionDto promotion) {
-        long shipDiscount = 0L;
-        long shopDiscount = 0l;
-
-        if (Objects.nonNull(promotion)) {
-                PromotionTypeEnum type = PromotionTypeEnum.valueOf(promotion.getTypeCode());
-                switch (type) {
-                    case TYPE1:
-                        shipDiscount += shipPrice * promotion.getPercentDiscount().longValue() / 100;
-                        break;
-                    case TYPE2:
-                        shopDiscount += shopPrice * promotion.getPercentDiscount().longValue() / 100;
-                        break;
-                    default:
-                        throw new PuddyException(PuddyCode.INTERNAL_SERVER);
-                }
-        }
-
-        long shipTotal = shipPrice - shipDiscount;
-        long shopTotal = shopPrice - shopDiscount;
-
-        long total = shipTotal + shopTotal;
-
-        return ResultDto.builder()
-                .ship(PriceDto.builder()
-                        .name("Vận chuyển")
-                        .price(MoneyUtils.format(shipPrice))
-                        .discount(MoneyUtils.format(shipDiscount))
-                        .total(MoneyUtils.format(shipTotal))
-                        .build())
-                .shop(PriceDto.builder()
-                        .name("Mua sắm")
-                        .price(MoneyUtils.format(shopPrice))
-                        .discount(MoneyUtils.format(shopDiscount))
-                        .total(MoneyUtils.format(shopTotal))
-                        .build())
-                .total(MoneyUtils.format(total))
-                .build();
-    }
+//    public static PriceResult getResultDto(long shopPrice, Long shipPrice, PromotionDto promotion) {
+//        long shipDiscount = 0L;
+//        long shopDiscount = 0l;
+//
+//        if (Objects.nonNull(promotion)) {
+//                PromotionTypeEnum type = PromotionTypeEnum.valueOf(promotion.getTypeCode());
+//                switch (type) {
+//                    case TYPE1:
+//                        shipDiscount += shipPrice * promotion.getPercentDiscount().longValue() / 100;
+//                        break;
+//                    case TYPE2:
+//                        shopDiscount += shopPrice * promotion.getPercentDiscount().longValue() / 100;
+//                        break;
+//                    default:
+//                        throw new PuddyException(PuddyCode.INTERNAL_SERVER);
+//                }
+//        }
+//
+//        long shipTotal = shipPrice - shipDiscount;
+//        long shopTotal = shopPrice - shopDiscount;
+//
+//        long total = shipTotal + shopTotal;
+//
+//        return PriceResult.builder()
+//                .ship(PriceDto.builder()
+//                        .name("Vận chuyển")
+//                        .price(MoneyUtils.format(shipPrice))
+//                        .discount(MoneyUtils.format(shipDiscount))
+//                        .total(MoneyUtils.format(shipTotal))
+//                        .build())
+//                .shop(PriceDto.builder()
+//                        .name("Mua sắm")
+//                        .price(MoneyUtils.format(shopPrice))
+//                        .discount(MoneyUtils.format(shopDiscount))
+//                        .total(MoneyUtils.format(shopTotal))
+//                        .build())
+//                .total(MoneyUtils.format(total))
+//                .build();
+//    }
 
     public static List<OptionDto> getOptions4Admin(String statusNow) {
         ArrayList<OptionDto> result = new ArrayList<>();
