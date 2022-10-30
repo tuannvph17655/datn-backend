@@ -44,6 +44,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 .note(orderDetail.getNote())
                 .payed(orderDetail.isPayed())
                 .shipAddress(orderDetail.getShipAddress())
+                .shopPrice(orderDetail.getShopTotal().toString())
                 .paymentMethod(payment == null ? null : payment.getName())
                 .orderCode(orderDetail.getOrderCode())
                 .createDate(DateUtils.parseDateToStr(DateUtils.F_DDMMYYYYHHMMSS,orderDetail.getCreateDate()))

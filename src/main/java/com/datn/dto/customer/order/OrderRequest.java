@@ -18,4 +18,5 @@ public class OrderRequest {
     private String shipMethod;
     private Long total;//cart + ship
     private String discountCode;
+    private Long shopTotal;
 }

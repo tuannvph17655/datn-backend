@@ -55,6 +55,7 @@ public class OrderEntity {
     private String code;
 
     private String status;
+    private Long shopTotal;
 
     /**
      * tổng tiền

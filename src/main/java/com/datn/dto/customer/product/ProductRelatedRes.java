@@ -1,9 +1,19 @@
 package com.datn.dto.customer.product;
 
-public interface ProductRelatedRes {
-    String getProductId();
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    Long getPrice();
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProductRelatedRes {
 
-    String getImage();
+    private String productId;
+    private String productName;
+    private String minPrice;
+    private String maxPrice;
+    private String image;
 }
