@@ -11,7 +11,7 @@ public class PuddyService {
     public final CategoryService categoryService;
     public final ColorService colorService;
     //    public final LocationService locationService;
-//    public final MaterialService materialService;
+    public final MaterialService materialService;
 //    public final EmailLogService emailLogService;
     public final OrderService orderService;
     public final OrderDetailService orderDetailService;
