@@ -12,17 +12,19 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<ProductEntity, String> {
     List<ProductEntity> findByCategoryIdAndActive(String productId, Boolean active);
 
-    @Query(value = "select distinct on (p.id) p.id AS productId,p.name AS productName,po.price AS price,po.image AS image \n" +
-            "from product p \n" +
-            "join category c on p.category_id = c.id \n" +
-            "join product_option po on p.id = po.product_id \n" +
-            "where p.category_id = :categoryId",nativeQuery = true)
-    List<ProductRelatedRes> getProductRelated(String categoryId);
+//    @Query(value = "select distinct on (p.id) p.id AS productId,p.name AS productName,po.price AS price,po.image AS image \n" +
+//            "from product p \n" +
+//            "join category c on p.category_id = c.id \n" +
+//            "join product_option po on p.id = po.product_id \n" +
+//            "where p.category_id = :categoryId",nativeQuery = true)
+//    List<ProductRelatedRes> getProductRelated(String categoryId);
 
     @Query("select p from ProductEntity p where p.active = true order by p.name")
     List<ProductEntity> findAllOrderByName();
 
     @Query("select count(p) from ProductEntity p where p.categoryId = ?1")
     Long countByCategoryId(String categoryId);
+
+    List<ProductEntity> findAllByCategoryId(String categoryId);
 
 }

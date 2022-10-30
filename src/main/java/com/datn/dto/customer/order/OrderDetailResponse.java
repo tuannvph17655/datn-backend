@@ -19,12 +19,12 @@ public class OrderDetailResponse {
     private String orderCode;
     private String createDate;
     private String totalPrice;
+    private String shopPrice;
     private String shipPrice;
     private String shipAddress;
     private String paymentMethod;
     private boolean payed;
     private String statusOrder;
-
     private List<ProductInOrderDetail> product;
 
 }

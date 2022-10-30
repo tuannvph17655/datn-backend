@@ -29,7 +29,7 @@ public interface ProductOptionRepository extends JpaRepository<ProductOptionEnti
             "where po.sizeId = :sizeId and po.productId = :productId")
     List<ColorResponse> getListColorNameBySize(@Param("sizeId") String sizeId, @Param("productId") String productId);
 
-    @Query(value = "SELECT  distinct  image from product_option where product_id = 1 limit 1", nativeQuery = true)
+    @Query(value = "SELECT  distinct  image from product_option where product_id = :productId limit 1", nativeQuery = true)
     List<String> findImageByProductId(String productId);
 
     @Query("select DISTINCT new com.datn.dto.customer.size.response.SizeResponse(" +
