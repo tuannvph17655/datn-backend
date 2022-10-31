@@ -38,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -45,10 +46,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -313,7 +316,9 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toMap(AddressEntity::getId, Function.identity(), (a, b) -> a));
 
         res.setOrderRes(
-                orders.stream().map(item -> {
+                orders.stream()
+                        .sorted(Comparator.comparing(OrderEntity::getUpdatedDate).reversed())
+                        .map(item -> {
                     AddressEntity address = Optional.ofNullable(addressEntityMap.get(item.getAddressId()))
                             .orElseThrow(() -> new PuddyException(PuddyCode.ADDRESS_NOT_FOUND));
 
@@ -354,22 +359,25 @@ public class OrderServiceImpl implements OrderService {
                     .collect(Collectors.toList());
         }
 
-//        if (ObjectUtils.allNotNull(request.getPayed())) {
-//            finalList = res.getOrderRes().stream()
-//                    .filter(orderResponse -> Optional.ofNullable(orderResponse.getPayed())
-//                            .filter(i -> i.equals(request.getPayed()))
-//                            .orElse(false))
-//                    .collect(Collectors.toList());
-//        }
-
-        if(!StringUtils.isNullOrEmpty(request.getStatusValue())) {
+        if (ObjectUtils.allNotNull(request.getPayed())) {
             finalList = res.getOrderRes().stream()
-                    .filter(orderResponse -> orderResponse.getStatusValue().equals(request.getStatusValue()))
+                    .filter(orderResponse -> orderResponse.getPayed().equals(request.getPayed()))
                     .collect(Collectors.toList());
         }
 
+        if(!StringUtils.isNullOrEmpty(request.getStatusValue())) {
+            finalList = res.getOrderRes().stream()
+                    .filter(orderResponse -> Objects.equals(orderResponse.getStatus().name(), request.getStatusValue()))
+                    .collect(Collectors.toList());
+        }
+        PageRequest page = PageRequest.of(request.getPage(), request.getSize());
+        long size = finalList.size();
+
+        finalList = finalList.stream().skip(page.getPageNumber()).limit(page.getPageSize()).collect(Collectors.toList());
+
         res.getOrderRes().clear();
         res.setOrderRes(finalList);
+        res.setTotalRecords(size);
 
         return new ResData<>(res, PuddyCode.OK);
     }
