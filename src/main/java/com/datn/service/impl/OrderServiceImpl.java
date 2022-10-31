@@ -1,6 +1,7 @@
 package com.datn.service.impl;
 
 import com.datn.dto.admin.order.change_status.ChangeStatusDto;
+import com.datn.dto.admin.order.search.ListOrderRequest;
 import com.datn.dto.customer.cart.response.CartResponse;
 import com.datn.dto.customer.order.CancelOrder;
 import com.datn.dto.customer.order.OrderRequest;
@@ -35,6 +36,7 @@ import com.datn.utils.validator.customer.order.CancelOrderValidator;
 import com.datn.utils.validator.customer.order.CheckoutValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -298,7 +300,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Object getMyOrder4Admin(CurrentUser currentUser) {
+    public Object getMyOrder4Admin(CurrentUser currentUser, ListOrderRequest request) {
         AuthValidator.checkAdmin(currentUser);
         List<OrderEntity> orders = repository.orderRepository.findAll();
 
@@ -332,6 +334,35 @@ public class OrderServiceImpl implements OrderService {
 
                 }).collect(Collectors.toList())
         );
+
+        if (!StringUtils.isNullOrEmpty(request.getTextSearch())) {
+            res = (ListOrderRes) res.getOrderRes().stream()
+                    .filter(orderResponse -> orderResponse.getAddress().matches(request.getTextSearch())
+                            || orderResponse.getOrderCode().matches(request.getTextSearch()))
+                    .collect(Collectors.toList());
+
+        }
+
+        if (!StringUtils.isNullOrEmpty(request.getStartDate()) && StringUtils.isNullOrEmpty(request.getEndDate())) {
+            Date startDate = DateUtils.toDate(request.getStartDate(), DateUtils.F_DDMMYYYYHHMMSS);
+            Date endDate = DateUtils.toDate(request.getEndDate(), DateUtils.F_DDMMYYYYHHMMSS);
+            res = (ListOrderRes) res.getOrderRes().stream()
+                    .filter(orderResponse -> DateUtils.toDate(request.getStartDate(), DateUtils.F_DDMMYYYYHHMMSS).after(startDate)
+                            && DateUtils.toDate(request.getEndDate(), DateUtils.F_DDMMYYYYHHMMSS).before(endDate))
+                    .collect(Collectors.toList());
+        }
+
+        if (ObjectUtils.allNotNull(request.getPayed())) {
+            res = (ListOrderRes) res.getOrderRes().stream()
+                    .filter(orderResponse -> orderResponse.getPayed().equals(request.getPayed()))
+                    .collect(Collectors.toList());
+        }
+
+        if(!StringUtils.isNullOrEmpty(request.getStatusValue())) {
+            res = (ListOrderRes) res.getOrderRes().stream()
+                    .filter(orderResponse -> orderResponse.getStatusValue().equals(request.getStatusValue()))
+                    .collect(Collectors.toList());
+        }
 
         return new ResData<>(res, PuddyCode.OK);
     }
