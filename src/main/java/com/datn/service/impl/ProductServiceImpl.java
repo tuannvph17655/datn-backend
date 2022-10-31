@@ -103,9 +103,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResData<List<ProductRelatedRes>> getRelatedProduct(String productId) {
-        ProductEntity product = repository.productRepository.findById(productId)
+        ProductEntity productRes = repository.productRepository.findById(productId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(PuddyConst.Messages.NOT_FOUND, PuddyConst.Nouns.CATEGORY_VI)));
-        List<ProductRelatedRes> productRelated = repository.productRepository.getProductRelated(product.getCategoryId());
+
+        List<ProductRelatedRes> productRelated = repository.productRepository.findAllByCategoryId(productRes.getCategoryId())
+                .stream().map(this::getListProductRelated).collect(Collectors.toList());
         return new ResData<>(productRelated, PuddyCode.OK);
+    }
+
+    private ProductRelatedRes getListProductRelated(ProductEntity product) {
+        List<ProductOptionEntity> productOptions = repository.productOptionRepository.findByProductId(product.getId());
+        String minPrice = productOptions.stream().min((o1, o2) -> o1.getPrice().compareTo(o2.getPrice())
+        ).get().getPrice().toString();
+        String maxPrice = productOptions.stream().max((o1, o2) -> o1.getPrice().compareTo(o2.getPrice())
+        ).get().getPrice().toString();
+        return ProductRelatedRes.builder()
+                .productId(product.getId())
+                .productName(product.getName())
+                .image(productOptions.get(0).getImage())// chỉ dùng 1 link ảnh thôi . Trả về list ảnh ko biết cách show ra trong font-end :v
+                .minPrice(minPrice)
+                .maxPrice(maxPrice).build();
     }
 }

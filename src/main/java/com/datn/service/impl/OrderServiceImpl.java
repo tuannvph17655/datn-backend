@@ -102,6 +102,7 @@ public class OrderServiceImpl implements OrderService {
                 .status(StatusEnum.PENDING.name())
                 .createdDate(new Date())
                 .createdBy(currentUser.getCombinationName())
+                .shopTotal(req.getShopTotal())
                 .total(total)
                 .discountId(1 + "")
                 .build();

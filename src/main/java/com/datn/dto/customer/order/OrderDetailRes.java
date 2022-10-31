@@ -23,5 +23,6 @@ public class OrderDetailRes {
     private String paymentMethod;
     private boolean payed;
     private String statusOrder;
+    private Long shopTotal;
 
 }

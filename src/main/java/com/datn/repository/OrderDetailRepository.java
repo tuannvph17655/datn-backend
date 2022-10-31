@@ -33,7 +33,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetailEntity ,
             "trim(concat(coalesce(a.addressDetail, ''), ', ', coalesce(a.wardName, ''),', ', coalesce(a.districtName, ''),', ', coalesce(a.provinceName, ''))),\n" +
             "o.payment,\n" +
             "o.payed,\n" +
-            "o.status)\n" +
+            "o.status,\n" +
+            "o.shopTotal)\n" +
             "from OrderDetailEntity od\n" +
             "LEFT JOIN OrderEntity o on od.orderId = o.id\n" +
             "LEFT JOIN AddressEntity a on o.addressId = a.id\n" +

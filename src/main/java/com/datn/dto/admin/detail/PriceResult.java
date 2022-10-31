@@ -13,11 +13,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResultDto {
-    private PriceDto shop;
+public class PriceResult {
+    private Long shop;
 
-    private PriceDto ship;
+    private Long ship;
+    private Long discount;
 
     //tổng
-    private String total;
+    private Long total;
 }
