@@ -1,6 +1,7 @@
 package com.datn.utils.base.rest;
 
 import com.datn.utils.constants.PuddyCode;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
@@ -11,6 +12,7 @@ public class ResData<T> {
     private T data;
     private Integer statusCode;
     private String message;
+    @JsonFormat(pattern = "yyyy/MM/dd")
     private Date timeStamp;
 
     public ResData(T data, PuddyCode puddyCode) {

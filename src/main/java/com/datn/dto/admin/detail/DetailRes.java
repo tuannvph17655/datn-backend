@@ -32,5 +32,6 @@ public class DetailRes {
         private String statusOrder;
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
         private Date createDate;
+        private String statusOrderValue;
     }
 }
