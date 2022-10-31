@@ -9,7 +9,7 @@ public class ListOrderRequest {
     private String startDate = "";
     private String endDate = "";
     private String totalPrice = "";
-    private Boolean payed;
+    private Boolean payed = false;
     private String statusValue = "";
     private String textSearch = "";
 }
