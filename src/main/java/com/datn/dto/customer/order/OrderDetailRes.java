@@ -24,5 +24,4 @@ public class OrderDetailRes {
     private boolean payed;
     private String statusOrder;
     private Long shopTotal;
-
 }

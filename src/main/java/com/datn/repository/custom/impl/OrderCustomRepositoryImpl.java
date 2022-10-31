@@ -16,6 +16,7 @@ import com.datn.utils.common.MoneyUtils;
 import com.datn.utils.common.OrderUtils;
 import com.datn.utils.constants.PuddyCode;
 import com.datn.utils.constants.PuddyException;
+import com.datn.utils.constants.enums.StatusEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -56,8 +57,10 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository {
         }
 
         OrderDetailRes orderDetailRes = repository.orderDetailRepository.getOrderDetail(id);
+        String statusOrderValue =  StatusEnum.from(orderDetailRes.getStatusOrder()).getName();
         DetailRes.OrderInfoRes orderInfoRes = DetailRes.OrderInfoRes.builder().build();
         ApiUtils.copy(orderDetailRes, orderInfoRes);
+        orderInfoRes.setStatusOrderValue(statusOrderValue);
         res.orderInfo(orderInfoRes);
         return new ResData<>(res.build(), PuddyCode.OK);
     }
