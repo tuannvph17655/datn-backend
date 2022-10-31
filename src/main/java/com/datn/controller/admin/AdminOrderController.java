@@ -24,7 +24,7 @@ public class AdminOrderController extends PuddyController {
 
     @Operation(summary = "My Orders")
     @GetMapping("/listOrder")
-    public ResponseEntity<?> getMyOrder(@RequestParam(required = false) ListOrderRequest request) {
+    public ResponseEntity<?> getMyOrder(ListOrderRequest request) {
         log.info("START API /api/v1/admin/order/listOrder");
         return ResponseEntity.ok(service.orderService.getMyOrder4Admin(getCurrentUser(), request));
     }

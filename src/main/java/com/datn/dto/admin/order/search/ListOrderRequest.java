@@ -4,13 +4,12 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 public class ListOrderRequest {
 
-    private String startDate;
-    private String endDate;
-    private String totalPrice;
+    private String startDate = "";
+    private String endDate = "";
+    private String totalPrice = "";
     private Boolean payed;
-    private String statusValue;
-    private String textSearch;
+    private String statusValue = "";
+    private String textSearch = "";
 }
