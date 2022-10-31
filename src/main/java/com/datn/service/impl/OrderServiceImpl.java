@@ -354,13 +354,13 @@ public class OrderServiceImpl implements OrderService {
                     .collect(Collectors.toList());
         }
 
-        if (ObjectUtils.allNotNull(request.getPayed())) {
-            finalList = res.getOrderRes().stream()
-                    .filter(orderResponse -> Optional.ofNullable(orderResponse.getPayed())
-                            .filter(i -> i.equals(request.getPayed()))
-                            .orElse(false))
-                    .collect(Collectors.toList());
-        }
+//        if (ObjectUtils.allNotNull(request.getPayed())) {
+//            finalList = res.getOrderRes().stream()
+//                    .filter(orderResponse -> Optional.ofNullable(orderResponse.getPayed())
+//                            .filter(i -> i.equals(request.getPayed()))
+//                            .orElse(false))
+//                    .collect(Collectors.toList());
+//        }
 
         if(!StringUtils.isNullOrEmpty(request.getStatusValue())) {
             finalList = res.getOrderRes().stream()
