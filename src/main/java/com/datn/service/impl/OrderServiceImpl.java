@@ -335,8 +335,10 @@ public class OrderServiceImpl implements OrderService {
                 }).collect(Collectors.toList())
         );
 
+        List<OrderResponse> finalList = new ArrayList<>(res.getOrderRes());
+
         if (!StringUtils.isNullOrEmpty(request.getTextSearch())) {
-            res = (ListOrderRes) res.getOrderRes().stream()
+            finalList = res.getOrderRes().stream()
                     .filter(orderResponse -> orderResponse.getAddress().matches(request.getTextSearch())
                             || orderResponse.getOrderCode().matches(request.getTextSearch()))
                     .collect(Collectors.toList());
@@ -346,23 +348,28 @@ public class OrderServiceImpl implements OrderService {
         if (!StringUtils.isNullOrEmpty(request.getStartDate()) && StringUtils.isNullOrEmpty(request.getEndDate())) {
             Date startDate = DateUtils.toDate(request.getStartDate(), DateUtils.F_DDMMYYYYHHMMSS);
             Date endDate = DateUtils.toDate(request.getEndDate(), DateUtils.F_DDMMYYYYHHMMSS);
-            res = (ListOrderRes) res.getOrderRes().stream()
+            finalList = res.getOrderRes().stream()
                     .filter(orderResponse -> DateUtils.toDate(request.getStartDate(), DateUtils.F_DDMMYYYYHHMMSS).after(startDate)
                             && DateUtils.toDate(request.getEndDate(), DateUtils.F_DDMMYYYYHHMMSS).before(endDate))
                     .collect(Collectors.toList());
         }
 
         if (ObjectUtils.allNotNull(request.getPayed())) {
-            res = (ListOrderRes) res.getOrderRes().stream()
-                    .filter(orderResponse -> orderResponse.getPayed().equals(request.getPayed()))
+            finalList = res.getOrderRes().stream()
+                    .filter(orderResponse -> Optional.ofNullable(orderResponse.getPayed())
+                            .filter(i -> i.equals(request.getPayed()))
+                            .orElse(false))
                     .collect(Collectors.toList());
         }
 
         if(!StringUtils.isNullOrEmpty(request.getStatusValue())) {
-            res = (ListOrderRes) res.getOrderRes().stream()
+            finalList = res.getOrderRes().stream()
                     .filter(orderResponse -> orderResponse.getStatusValue().equals(request.getStatusValue()))
                     .collect(Collectors.toList());
         }
+
+        res.getOrderRes().clear();
+        res.setOrderRes(finalList);
 
         return new ResData<>(res, PuddyCode.OK);
     }
