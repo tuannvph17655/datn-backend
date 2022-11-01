@@ -343,9 +343,10 @@ public class OrderServiceImpl implements OrderService {
         List<OrderResponse> finalList = new ArrayList<>(res.getOrderRes());
 
         if (!StringUtils.isNullOrEmpty(request.getTextSearch())) {
+            String regex = "^.*" + request.getTextSearch() +".*$";
             finalList = res.getOrderRes().stream()
-                    .filter(orderResponse -> orderResponse.getAddress().matches(request.getTextSearch())
-                            || orderResponse.getOrderCode().matches(request.getTextSearch()))
+                    .filter(orderResponse -> orderResponse.getAddress().matches(regex)
+                            || orderResponse.getOrderCode().matches(regex))
                     .collect(Collectors.toList());
 
         }
