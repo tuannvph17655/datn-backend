@@ -251,7 +251,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ResData<String> cancelOrder(CurrentUser currentUser, CancelOrder dto) {
         log.info("----- OrderService cancel order start -----");
-        if (currentUser.getRole().equals(RoleEnum.ROLE_CUSTOMER)) {
+        if (currentUser.getRole().equals(RoleEnum.ROLE_CUSTOMER) || currentUser.getRole().equals(RoleEnum.ROLE_ADMIN)) {
             CancelOrderValidator.validCancelOrder(dto);
             OrderEntity order = repository.orderRepository.findById(dto.getOrderId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy hóa đơn! "));

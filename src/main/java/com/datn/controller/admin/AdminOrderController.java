@@ -2,6 +2,7 @@ package com.datn.controller.admin;
 
 import com.datn.dto.admin.order.change_status.ChangeStatusDto;
 import com.datn.dto.admin.order.search.ListOrderRequest;
+import com.datn.dto.customer.order.CancelOrder;
 import com.datn.utils.base.PuddyController;
 import com.datn.utils.common.JsonUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +41,11 @@ public class AdminOrderController extends PuddyController {
     public ResponseEntity<Object> changeStatus4Admin(@RequestBody ChangeStatusDto dto) {
         log.info("START API /api/v1/order//admin/change-status with dto: {}", JsonUtils.toJson(dto));
         return ResponseEntity.ok(service.orderService.changeStatus(getCurrentUser(), dto));
+    }
+
+    @PostMapping("/cancel-order")
+    public ResponseEntity<Object> cancelOrder4Admin(@RequestBody CancelOrder cancelOrder) {
+        return ResponseEntity.ok(service.orderService.cancelOrder(getCurrentUser(),cancelOrder));
     }
 
 }
