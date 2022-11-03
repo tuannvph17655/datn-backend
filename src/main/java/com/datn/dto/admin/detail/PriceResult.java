@@ -15,10 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PriceResult {
     private Long shop;
-
     private Long ship;
     private Long discount;
-
-    //tổng
     private Long total;
 }
