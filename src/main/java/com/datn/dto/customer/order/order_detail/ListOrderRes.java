@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class ListOrderRes {
     private List<OrderResponse> orderRes;
-    private long totalRecords;
+    private int totalRecords;
 }

@@ -12,6 +12,6 @@ public class ListOrderRequest {
     private Boolean payed = false;
     private String statusValue = "";
     private String textSearch = "";
-    private int page = 0;
+    private int page = 1;
     private int size = 30;
 }
