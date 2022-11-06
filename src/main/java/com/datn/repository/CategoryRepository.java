@@ -21,12 +21,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, String
 
     CategoryEntity findByNameIgnoreCaseAndActive(String categoryName, Boolean aTrue);
 
-    @Query("select new com.datn.dto.customer.suggest.CategoryDto(\n" +
-            "c.id,\n" +
-            "c.name,\n" +
-            "c.image) from CategoryEntity c\n" +
-            "where c.active = true\n" +
-            "order by c.name")
+    @Query("select new com.datn.dto.customer.suggest.CategoryDto(o.id, o.name) from CategoryEntity o where o.active = true order by o.name")
     List<CategoryDto> findSuggestCategories();
 
     @Query("select c from CategoryEntity c where c.active = true order by c.name")

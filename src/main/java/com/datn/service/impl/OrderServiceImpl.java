@@ -215,7 +215,7 @@ public class OrderServiceImpl implements OrderService {
                 .trim() + "%");
         StatusEnum status = StatusEnum.from(req.getStatus());
         String statusStr = status == null ? null : status.name();
-        Page<OrderEntity> orderPage = repository.orderRepository.search(req.getTextSearch(), statusStr, pageable);
+        Page<OrderEntity> orderPage = repository.orderRepository.search(req.getTextSearch(), statusStr, pageable,currentUser.getId());
 
         if (orderPage.isEmpty()) {
             return PageData.setEmpty(req.getPageReq());
