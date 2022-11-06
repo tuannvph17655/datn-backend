@@ -62,9 +62,9 @@ public class SuggestServiceImpl implements SuggestService {
         if (suggest == null) {
             throw new PuddyException(PuddyCode.SIZE_SUGGEST_NOT_FOUND);
         }
-        SizeEntity size = repository.sizeRepository.findById(suggest.getSizeId()).orElseThrow(() -> {
-            throw new PuddyException(PuddyCode.SIZE_SUGGEST_NOT_FOUND);
-        });
+        SizeEntity size = repository.sizeRepository.findById(suggest.getSizeId()).orElseThrow(() ->
+            new PuddyException(PuddyCode.SIZE_SUGGEST_NOT_FOUND)
+        );
         log.info("SuggestServiceImpl getSizeAvailable finish with res: {}", JsonUtils.toJson(size));
         return ResData.ok(size);
     }
