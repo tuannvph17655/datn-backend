@@ -347,17 +347,11 @@ public class OrderServiceImpl implements OrderService {
         if (!Strings.isBlank(request.getStartDate()) && !Strings.isBlank(request.getEndDate())) {
             Date startDate = DateUtils.toDate(request.getStartDate(), DateUtils.F_DDMMYYYY);
             Date endDate = DateUtils.toDate(request.getEndDate(), DateUtils.F_DDMMYYYY);
-            log.info("startDate {}",startDate);
-            log.info("endDate {}",endDate);
+            log.info("startDate {}", startDate);
+            log.info("endDate {}", endDate);
             finalList = finalList.stream()
                     .filter(orderResponse -> DateUtils.toDate(orderResponse.getCreateDate(), DateUtils.F_DDMMYYYY).after(startDate)
                             && DateUtils.toDate(orderResponse.getCreateDate(), DateUtils.F_DDMMYYYY).before(endDate))
-                    .collect(Collectors.toList());
-        }
-
-        if (ObjectUtils.allNotNull(request.getPayed())) {
-            finalList = finalList.stream()
-                    .filter(orderResponse -> orderResponse.getPayed().equals(request.getPayed()))
                     .collect(Collectors.toList());
         }
 
@@ -384,7 +378,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         AuthValidator.checkRole(currentUser, RoleEnum.ROLE_ADMIN, RoleEnum.ROLE_ADMIN);
-        return repository.orderRepository.detail4Admin(currentUser, id);
+        return repository.orderRepository.  detail4Admin(currentUser, id);
     }
 
     @Override
@@ -411,5 +405,57 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         repository.orderStatusRepository.save(orderStatus);
         return ResData.ok(order.getId(), "Chuyển trạng thái thành công");
+    }
+
+    @Override
+    public ResData<String> rejectOrder(CurrentUser currentUser, CancelOrder dto) {
+        log.info("----- OrderService cancel order start -----");
+        if (currentUser.getRole().equals(RoleEnum.ROLE_CUSTOMER) || currentUser.getRole().equals(RoleEnum.ROLE_ADMIN)) {
+            CancelOrderValidator.validCancelOrder(dto);
+            OrderEntity order = repository.orderRepository.findById(dto.getOrderId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy hóa đơn! "));
+
+            List<ProductOrderDetail> orderDetail = repository.orderDetailRepository.getProductOrder(order.getId());
+
+            if (order.getStatus().equals(StatusEnum.PENDING.name()) || order.getStatus().equals(StatusEnum.ACCEPT.name())) {
+                Set<String> productOptionIds = orderDetail
+                        .stream()
+                        .map(ProductOrderDetail::getProductOptionId)
+                        .collect(Collectors.toSet());
+
+                Map<String, ProductOptionEntity> productOptionEntityMap = repository.productOptionRepository.findAllById(productOptionIds)
+                        .stream()
+                        .collect(Collectors.toMap(ProductOptionEntity::getId, Function.identity(), (a, b) -> a));
+
+                List<ProductOptionEntity> productOption = new ArrayList<>();
+
+                orderDetail.stream().map(item -> {
+                    ProductOptionEntity productOptionEntity = Optional.ofNullable(productOptionEntityMap.get(item.getProductOptionId()))
+                            .orElseThrow(() -> new PuddyException(PuddyCode.PRODUCT_OPTION_NOT_FOUND));
+
+                    productOptionEntity.setQty(productOptionEntity.getQty() + item.getQuantity());
+                    return productOption.add(productOptionEntity);
+                }).collect(Collectors.toList());
+
+                repository.productOptionRepository.saveAll(productOption);
+
+                OrderStatusEntity orderStatus = OrderStatusEntity.builder()
+                        .id(UidUtils.generateUid())
+                        .status(StatusEnum.REJECT)
+                        .note(dto.getNote())
+                        .createdDate(new Date())
+                        .orderId(order.getId())
+                        .createdBy(order.getUserId())
+                        .build();
+                repository.orderStatusRepository.save(orderStatus);
+                    order.setStatus(StatusEnum.REJECT.name());
+                order.setUpdatedBy(currentUser.getId());
+                order.setUpdatedDate(new Date());
+                repository.orderRepository.save(order);
+
+                return ResData.ok(order.getId(), "Hủy đơn hàng thành công !");
+            }
+        }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, PuddyConst.Messages.FORBIDDEN);
     }
 }

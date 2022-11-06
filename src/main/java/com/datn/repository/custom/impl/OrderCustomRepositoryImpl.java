@@ -32,13 +32,12 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository {
     @Override
     public ResData<DetailRes> detail4Admin(CurrentUser currentUser, String id) {
         PuddyRepository repository = BeanUtils.getBean(PuddyRepository.class);
-        if (!repository.orderRepository.existsById(id)) {
-            return new ResData<>(true);
-        }
-        DetailRes.DetailResBuilder res = DetailRes.builder().id(id);
         OrderEntity order = repository.orderRepository.findById(id).orElseThrow(
                 ()-> new PuddyException(PuddyCode.BAD_REQUEST, "Không tìm thấy đơn hàng tương ứng !")
         );
+        log.info("order {}",order);
+
+        DetailRes.DetailResBuilder res = DetailRes.builder().id(id);
 
         List<ItemDto> items = repository.orderDetailRepository.getItemList(id);
         Long shopPrice = items.stream().map(ItemDto::getTotal).collect(Collectors.toList()).stream().reduce(0L, Long::sum);
