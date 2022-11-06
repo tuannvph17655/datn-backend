@@ -15,6 +15,8 @@ public class PuddyRepository {
     public final ProductOptionRepository productOptionRepository;
     public final ProductCustomRepository productCustomRepository;
     public final SizeRepository sizeRepository;
+
+    public final SuggestRepository suggestRepository;
     public final ColorRepository colorRepository;
     public final MaterialRepository materialRepository;
     public final CartRepository cartRepository;
