@@ -39,13 +39,18 @@ public class AdminOrderController extends PuddyController {
     @PostMapping("/change-status")
     @Operation(summary = "API thay đổi trạng thái đơn hàng")
     public ResponseEntity<Object> changeStatus4Admin(@RequestBody ChangeStatusDto dto) {
-        log.info("START API /api/v1/order//admin/change-status with dto: {}", JsonUtils.toJson(dto));
+        log.info("START API /api/v1/order/admin/change-status with dto: {}", JsonUtils.toJson(dto));
         return ResponseEntity.ok(service.orderService.changeStatus(getCurrentUser(), dto));
     }
 
     @PostMapping("/cancel-order")
     public ResponseEntity<Object> cancelOrder4Admin(@RequestBody CancelOrder cancelOrder) {
         return ResponseEntity.ok(service.orderService.cancelOrder(getCurrentUser(),cancelOrder));
+    }
+
+    @PostMapping("/reject-order")
+    public ResponseEntity<Object> rejectlOrder4Admin(@RequestBody CancelOrder cancelOrder) {
+        return ResponseEntity.ok(service.orderService.rejectOrder(getCurrentUser(),cancelOrder));
     }
 
 }
