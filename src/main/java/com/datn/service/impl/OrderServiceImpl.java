@@ -347,8 +347,8 @@ public class OrderServiceImpl implements OrderService {
         if (!Strings.isBlank(request.getStartDate()) && !Strings.isBlank(request.getEndDate())) {
             Date startDate = DateUtils.toDate(request.getStartDate(), DateUtils.F_DDMMYYYY);
             Date endDate = DateUtils.toDate(request.getEndDate(), DateUtils.F_DDMMYYYY);
-            log.info("startDate {}",startDate);
-            log.info("endDate {}",endDate);
+            log.info("startDate {}", startDate);
+            log.info("endDate {}", endDate);
             finalList = finalList.stream()
                     .filter(orderResponse -> DateUtils.toDate(orderResponse.getCreateDate(), DateUtils.F_DDMMYYYY).after(startDate)
                             && DateUtils.toDate(orderResponse.getCreateDate(), DateUtils.F_DDMMYYYY).before(endDate))
@@ -378,7 +378,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         AuthValidator.checkRole(currentUser, RoleEnum.ROLE_ADMIN, RoleEnum.ROLE_ADMIN);
-        return repository.orderRepository.detail4Admin(currentUser, id);
+        return repository.orderRepository.  detail4Admin(currentUser, id);
     }
 
     @Override
@@ -417,8 +417,7 @@ public class OrderServiceImpl implements OrderService {
 
             List<ProductOrderDetail> orderDetail = repository.orderDetailRepository.getProductOrder(order.getId());
 
-            if (order.getStatus().equals(StatusEnum.PENDING.name())) {
-
+            if (order.getStatus().equals(StatusEnum.PENDING.name()) || order.getStatus().equals(StatusEnum.ACCEPT.name())) {
                 Set<String> productOptionIds = orderDetail
                         .stream()
                         .map(ProductOrderDetail::getProductOptionId)
@@ -449,8 +448,7 @@ public class OrderServiceImpl implements OrderService {
                         .createdBy(order.getUserId())
                         .build();
                 repository.orderStatusRepository.save(orderStatus);
-
-                order.setStatus(StatusEnum.REJECT.name());
+                    order.setStatus(StatusEnum.REJECT.name());
                 order.setUpdatedBy(currentUser.getId());
                 order.setUpdatedDate(new Date());
                 repository.orderRepository.save(order);

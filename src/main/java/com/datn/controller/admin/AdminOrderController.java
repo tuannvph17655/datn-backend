@@ -43,11 +43,6 @@ public class AdminOrderController extends PuddyController {
         return ResponseEntity.ok(service.orderService.changeStatus(getCurrentUser(), dto));
     }
 
-    @PostMapping("/cancel-order")
-    public ResponseEntity<Object> cancelOrder4Admin(@RequestBody CancelOrder cancelOrder) {
-        return ResponseEntity.ok(service.orderService.cancelOrder(getCurrentUser(),cancelOrder));
-    }
-
     @PostMapping("/reject-order")
     public ResponseEntity<Object> rejectlOrder4Admin(@RequestBody CancelOrder cancelOrder) {
         return ResponseEntity.ok(service.orderService.rejectOrder(getCurrentUser(),cancelOrder));
