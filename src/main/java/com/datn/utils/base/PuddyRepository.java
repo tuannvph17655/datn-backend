@@ -22,6 +22,12 @@ public class PuddyRepository {
 
     public final DiscountRepository discountRepository;
 
+    public final SuggestRepository suggestRepository;
+
+    public final BodyHeightRepository bodyHeightRepository;
+
+    public final BodyWeightRepository bodyWeightRepository;
+
     public final OrderDetailRepository orderDetailRepository;
     public final OrderStatusRepository orderStatusRepository;
 
