@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -31,22 +32,16 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository {
     @Override
     public ResData<DetailRes> detail4Admin(CurrentUser currentUser, String id) {
         PuddyRepository repository = BeanUtils.getBean(PuddyRepository.class);
-        if (!repository.orderRepository.existsById(id)) {
-            return new ResData<>(true);
-        }
-        DetailRes.DetailResBuilder res = DetailRes.builder().id(id);
         OrderEntity order = repository.orderRepository.findById(id).orElseThrow(
                 ()-> new PuddyException(PuddyCode.BAD_REQUEST, "Không tìm thấy đơn hàng tương ứng !")
         );
-        Long shopPrice = 0L;
+        log.info("order {}",order);
+
+        DetailRes.DetailResBuilder res = DetailRes.builder().id(id);
+
         List<ItemDto> items = repository.orderDetailRepository.getItemList(id);
-        if (!items.isEmpty()) {
-            for (ItemDto obj : items) {
-                obj.setPriceFmt(MoneyUtils.format(obj.getPrice()));
-                obj.setTotalFmt(MoneyUtils.format(obj.getTotal()));
-                shopPrice += obj.getTotal();
-            }
-        }
+        Long shopPrice = items.stream().map(ItemDto::getTotal).collect(Collectors.toList()).stream().reduce(0L, Long::sum);
+
         res.items(items);
         PriceResult priceResult = PriceResult.builder().ship(order.getShipPrice()).shop(shopPrice).total(order.getTotal()).build();
         res.priceResult(priceResult);
@@ -55,7 +50,6 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository {
         if (!orderStatusList.isEmpty()) {
             res.history(OrderUtils.getHistory(orderStatusList));
         }
-
         OrderDetailRes orderDetailRes = repository.orderDetailRepository.getOrderDetail(id);
         String statusOrderValue =  StatusEnum.from(orderDetailRes.getStatusOrder()).getName();
         DetailRes.OrderInfoRes orderInfoRes = DetailRes.OrderInfoRes.builder().build();
@@ -64,5 +58,4 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository {
         res.orderInfo(orderInfoRes);
         return new ResData<>(res.build(), PuddyCode.OK);
     }
-
 }
