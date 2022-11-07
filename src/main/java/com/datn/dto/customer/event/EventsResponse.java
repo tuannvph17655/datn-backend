@@ -1,4 +1,4 @@
-package com.datn.dto.customer;
+package com.datn.dto.customer.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
