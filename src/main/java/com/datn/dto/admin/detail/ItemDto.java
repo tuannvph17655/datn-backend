@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class ItemDto {
     //productId
@@ -25,17 +24,12 @@ public class ItemDto {
 
     private Long price;
 
-    private Long qty;
+    private Integer qty;
 
     private String category;
 
     private Long total;
-
-    private String priceFmt;
-
-    private String totalFmt;
-
-    public ItemDto(String id, String name, String color, String size, String image, String material, Long price, Long qty, String category, Long total) {
+    public ItemDto(String id, String name, String color, String size, String image, String material, Long price, Integer qty, String category, Long total) {
         this.id = id;
         this.name = name;
         this.color = color;

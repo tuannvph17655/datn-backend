@@ -37,6 +37,7 @@ import com.datn.utils.validator.customer.order.CheckoutValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -74,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
         CheckoutValidator.validCheckout(req);
 
         AddressEntity address = repository.addressRepository.findById(req.getAddressId()).orElseThrow(() ->
-            new PuddyException(PuddyCode.ADDRESS_NOT_FOUND)
+                new PuddyException(PuddyCode.ADDRESS_NOT_FOUND)
         );
 
         List<CartResponse> cart = repository.cartRepository.getListCart(currentUser.getId());
@@ -89,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
 //            discount = repository.discountRepository.findByCode(req.getDiscountCode());
 ////            this.validDiscount(discount, cart, currentUser.getId(), req);
 //        }
-        Long total = this.getTotal( cart, req);
+        Long total = this.getTotal(cart, req);
 
         String orderCode = "#".concat(UUID.randomUUID().toString());
         PaymentEnums payment = PaymentEnums.from(req.getPaymentMethod());
@@ -126,7 +127,7 @@ public class OrderServiceImpl implements OrderService {
         //update số lượng sản phảm sau khi đã update
         cart.stream().map(item -> {
             ProductOptionEntity productOption = repository.productOptionRepository.findById(item.getProductOptionId()).orElseThrow(() ->
-                 new PuddyException(PuddyCode.PRODUCT_OPTION_NOT_FOUND));
+                    new PuddyException(PuddyCode.PRODUCT_OPTION_NOT_FOUND));
 
             productOption.setQty(productOption.getQty() - item.getQuantity());
 
@@ -164,7 +165,7 @@ public class OrderServiceImpl implements OrderService {
 //            discountPrice = (discountEntity.getPercentDiscount()*shopPrice)/100;
 //        }
         Long shipPrice = StringUtils.isNullOrEmpty(req.getShipPrice()) ? 0L : Long.valueOf(req.getShipPrice());
-        return Math.max(shopPrice, 0L) ;
+        return Math.max(shopPrice, 0L);
 //        + Math.max(shipPrice, 0L)
     }
 
@@ -251,7 +252,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ResData<String> cancelOrder(CurrentUser currentUser, CancelOrder dto) {
         log.info("----- OrderService cancel order start -----");
-        if (currentUser.getRole().equals(RoleEnum.ROLE_CUSTOMER)) {
+        if (currentUser.getRole().equals(RoleEnum.ROLE_CUSTOMER) || currentUser.getRole().equals(RoleEnum.ROLE_ADMIN)) {
             CancelOrderValidator.validCancelOrder(dto);
             OrderEntity order = repository.orderRepository.findById(dto.getOrderId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy hóa đơn! "));
@@ -315,15 +316,12 @@ public class OrderServiceImpl implements OrderService {
                 .stream()
                 .collect(Collectors.toMap(AddressEntity::getId, Function.identity(), (a, b) -> a));
 
-        res.setOrderRes(
-                orders.stream()
-                        .sorted(Comparator.comparing(OrderEntity::getUpdatedDate).reversed())
-                        .map(item -> {
+        List<OrderResponse> finalList = orders.stream()
+                .sorted(Comparator.comparing(OrderEntity::getUpdatedDate).reversed())
+                .map(item -> {
                     AddressEntity address = Optional.ofNullable(addressEntityMap.get(item.getAddressId()))
                             .orElseThrow(() -> new PuddyException(PuddyCode.ADDRESS_NOT_FOUND));
-
                     String addressOrder = address.getAddressDetail().concat(COMMA).concat(address.getWardName()).concat(COMMA).concat(address.getDistrictName()).concat(COMMA).concat(address.getProvinceName());
-
                     OrderResponse orderRes = OrderResponse.builder()
                             .orderCode(item.getCode())
                             .orderId(item.getId())
@@ -334,49 +332,39 @@ public class OrderServiceImpl implements OrderService {
                             .address(addressOrder)
                             .statusValue(StatusEnum.from(item.getStatus()).getName())
                             .build();
-
                     return orderRes;
+                }).collect(Collectors.toList());
 
-                }).collect(Collectors.toList())
-        );
-
-        List<OrderResponse> finalList = new ArrayList<>(res.getOrderRes());
-
-        if (!StringUtils.isNullOrEmpty(request.getTextSearch())) {
-            String regex = "^.*" + request.getTextSearch() +".*$";
-            finalList = res.getOrderRes().stream()
+        if (!Strings.isBlank(request.getTextSearch())) {
+            String regex = "^.*" + request.getTextSearch() + ".*$";
+            finalList = finalList.stream()
                     .filter(orderResponse -> orderResponse.getAddress().matches(regex)
                             || orderResponse.getOrderCode().matches(regex))
                     .collect(Collectors.toList());
 
         }
 
-        if (!StringUtils.isNullOrEmpty(request.getStartDate()) && StringUtils.isNullOrEmpty(request.getEndDate())) {
-            Date startDate = DateUtils.toDate(request.getStartDate(), DateUtils.F_DDMMYYYYHHMMSS);
-            Date endDate = DateUtils.toDate(request.getEndDate(), DateUtils.F_DDMMYYYYHHMMSS);
-            finalList = res.getOrderRes().stream()
-                    .filter(orderResponse -> DateUtils.toDate(request.getStartDate(), DateUtils.F_DDMMYYYYHHMMSS).after(startDate)
-                            && DateUtils.toDate(request.getEndDate(), DateUtils.F_DDMMYYYYHHMMSS).before(endDate))
+        if (!Strings.isBlank(request.getStartDate()) && !Strings.isBlank(request.getEndDate())) {
+            Date startDate = DateUtils.toDate(request.getStartDate(), DateUtils.F_DDMMYYYY);
+            Date endDate = DateUtils.toDate(request.getEndDate(), DateUtils.F_DDMMYYYY);
+            log.info("startDate {}", startDate);
+            log.info("endDate {}", endDate);
+            finalList = finalList.stream()
+                    .filter(orderResponse -> DateUtils.toDate(orderResponse.getCreateDate(), DateUtils.F_DDMMYYYY).after(startDate)
+                            && DateUtils.toDate(orderResponse.getCreateDate(), DateUtils.F_DDMMYYYY).before(endDate))
                     .collect(Collectors.toList());
         }
 
-        if (ObjectUtils.allNotNull(request.getPayed())) {
-            finalList = res.getOrderRes().stream()
-                    .filter(orderResponse -> orderResponse.getPayed().equals(request.getPayed()))
-                    .collect(Collectors.toList());
-        }
-
-        if(!StringUtils.isNullOrEmpty(request.getStatusValue())) {
-            finalList = res.getOrderRes().stream()
+        if (!StringUtils.isNullOrEmpty(request.getStatusValue())) {
+            finalList = finalList.stream()
                     .filter(orderResponse -> Objects.equals(orderResponse.getStatus().name(), request.getStatusValue()))
                     .collect(Collectors.toList());
         }
         PageRequest page = PageRequest.of(request.getPage(), request.getSize());
-        long size = finalList.size();
+        int size = finalList.size();
 
         finalList = finalList.stream().skip(page.getPageNumber()).limit(page.getPageSize()).collect(Collectors.toList());
 
-        res.getOrderRes().clear();
         res.setOrderRes(finalList);
         res.setTotalRecords(size);
 
@@ -390,7 +378,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         AuthValidator.checkRole(currentUser, RoleEnum.ROLE_ADMIN, RoleEnum.ROLE_ADMIN);
-        return repository.orderRepository.detail4Admin(currentUser, id);
+        return repository.orderRepository.  detail4Admin(currentUser, id);
     }
 
     @Override
@@ -417,5 +405,57 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         repository.orderStatusRepository.save(orderStatus);
         return ResData.ok(order.getId(), "Chuyển trạng thái thành công");
+    }
+
+    @Override
+    public ResData<String> rejectOrder(CurrentUser currentUser, CancelOrder dto) {
+        log.info("----- OrderService cancel order start -----");
+        if (currentUser.getRole().equals(RoleEnum.ROLE_CUSTOMER) || currentUser.getRole().equals(RoleEnum.ROLE_ADMIN)) {
+            CancelOrderValidator.validCancelOrder(dto);
+            OrderEntity order = repository.orderRepository.findById(dto.getOrderId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy hóa đơn! "));
+
+            List<ProductOrderDetail> orderDetail = repository.orderDetailRepository.getProductOrder(order.getId());
+
+            if (order.getStatus().equals(StatusEnum.PENDING.name()) || order.getStatus().equals(StatusEnum.ACCEPT.name())) {
+                Set<String> productOptionIds = orderDetail
+                        .stream()
+                        .map(ProductOrderDetail::getProductOptionId)
+                        .collect(Collectors.toSet());
+
+                Map<String, ProductOptionEntity> productOptionEntityMap = repository.productOptionRepository.findAllById(productOptionIds)
+                        .stream()
+                        .collect(Collectors.toMap(ProductOptionEntity::getId, Function.identity(), (a, b) -> a));
+
+                List<ProductOptionEntity> productOption = new ArrayList<>();
+
+                orderDetail.stream().map(item -> {
+                    ProductOptionEntity productOptionEntity = Optional.ofNullable(productOptionEntityMap.get(item.getProductOptionId()))
+                            .orElseThrow(() -> new PuddyException(PuddyCode.PRODUCT_OPTION_NOT_FOUND));
+
+                    productOptionEntity.setQty(productOptionEntity.getQty() + item.getQuantity());
+                    return productOption.add(productOptionEntity);
+                }).collect(Collectors.toList());
+
+                repository.productOptionRepository.saveAll(productOption);
+
+                OrderStatusEntity orderStatus = OrderStatusEntity.builder()
+                        .id(UidUtils.generateUid())
+                        .status(StatusEnum.REJECT)
+                        .note(dto.getNote())
+                        .createdDate(new Date())
+                        .orderId(order.getId())
+                        .createdBy(order.getUserId())
+                        .build();
+                repository.orderStatusRepository.save(orderStatus);
+                    order.setStatus(StatusEnum.REJECT.name());
+                order.setUpdatedBy(currentUser.getId());
+                order.setUpdatedDate(new Date());
+                repository.orderRepository.save(order);
+
+                return ResData.ok(order.getId(), "Hủy đơn hàng thành công !");
+            }
+        }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, PuddyConst.Messages.FORBIDDEN);
     }
 }

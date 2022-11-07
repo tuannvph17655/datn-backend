@@ -15,6 +15,7 @@ public interface OrderService {
     Object getMyOrder4Admin(CurrentUser currentUser, ListOrderRequest request);
     Object search(CurrentUser currentUser, OrderSearch req);
 
+    ResData<String> rejectOrder(CurrentUser currentUser, CancelOrder dto);
     Object detail(CurrentUser currentUser, String id);
     Object changeStatus(CurrentUser currentUser, ChangeStatusDto dto);
 }

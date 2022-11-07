@@ -66,10 +66,10 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetailEntity ,
             "s1.name,\n" +
             "po1.image,\n" +
             "m1.name,\n" +
-            "po1.price,\n" +
-            "po1.qty,\n" +
+            "od1.price,\n" +
+            "od1.qty,\n" +
             "ct1.name,\n" +
-            "po1.qty * po1.price)\n" +
+            "od1.qty*od1.price)\n" +
             "from OrderDetailEntity od1\n" +
             "left join ProductOptionEntity po1 on po1.id = od1.productOptionId\n" +
             "left join ProductEntity p1 on p1.id = po1.productId\n" +
