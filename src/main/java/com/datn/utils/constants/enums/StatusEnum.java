@@ -17,7 +17,8 @@ public enum StatusEnum {
     SHIPPING("Đang giao hàng"),
     EXCHANGE("Đổi hàng"),
     REFUND("Trả hàng"),
-    RECEIVED("Đã nhận được hàng");
+    RECEIVED("Đã nhận được hàng"),
+    UNRECEIVED("Giao hàng không thành công ");
 
     private String name;
 

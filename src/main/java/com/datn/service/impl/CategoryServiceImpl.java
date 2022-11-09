@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import static com.datn.message.ResponseMessageText.CATEGORY_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -41,48 +43,48 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public PageData<CategoryRes> search(CurrentUser currentUser, CategoryReq req) throws PuddyException {
-//        AuthValidator.checkAdmin(currentUser);
-//        if (StringUtils.isNullOrEmpty(req.getTextSearch())) {
-//            req.setTextSearch("");
-//        }
-//        String textSearch = req.getTextSearch().trim().toUpperCase(Locale.ROOT);
-//        Pageable pageable = PageableUtils.getPageable(req.getPageReq());
-//        Page<CategoryEntity> categoryPage = repository.categoryRepository.search(textSearch, req.getActive(), pageable);
-//
-//        return PageData.setResult(categoryPage.getContent().stream().map(o -> CategoryRes.builder()
-//                        .id(o.getId())
-//                        .name(o.getName())
-//                        .des(o.getDes())
-//                        .active(o.getActive())
-//                        .createdDate(o.getCreatedDate())
-//                        .createdDateValue(o.getCreatedDate() == null ? null : DateUtils.toStr(o.getCreatedDate(), DateUtils.F_DDMMYYYY))
-//                        .productNumber(repository.productRepository.countByCategoryId(o.getId()))
-//                        .build()).collect(Collectors.toList()),
-//                categoryPage.getNumber(),
-//                categoryPage.getSize(),
-//                categoryPage.getTotalElements());
-        return null;
+        AuthValidator.checkAdmin(currentUser);
+        if (StringUtils.isNullOrEmpty(req.getTextSearch())) {
+            req.setTextSearch("");
+        }
+        String textSearch = req.getTextSearch().trim().toUpperCase(Locale.ROOT);
+        Pageable pageable = PageableUtils.getPageable(req.getPageReq());
+        Page<CategoryEntity> categoryPage = repository.categoryRepository.search(textSearch, req.getActive(), pageable);
+
+        return PageData.setResult(categoryPage.getContent().stream().map(o -> CategoryRes.builder()
+                        .id(o.getId())
+                        .name(o.getName())
+                        .des(o.getDes())
+                        .active(o.getActive())
+                        .createdDate(o.getCreatedDate())
+                        .createdDateValue(o.getCreatedDate() == null ? null : DateUtils.toStr(o.getCreatedDate(), DateUtils.F_DDMMYYYY))
+                        .productNumber(repository.productRepository.countByCategoryId(o.getId()))
+                        .build()).collect(Collectors.toList()),
+                categoryPage.getNumber(),
+                categoryPage.getSize(),
+                categoryPage.getTotalElements());
     }
 
     @Override
     public ResData<String> create(CurrentUser currentUser, CategoryDto dto) {
-        return null;
+        AuthValidator.checkAdmin(currentUser);
+        CategoryValidator.validCreate(dto);
+                CategoryEntity categoryEntity = CategoryEntity.builder()
+                        .id(UidUtils.generateUid())
+                        .name(dto.getName())
+                        .des(dto.getDes())
+                        .active(Boolean.TRUE)
+                        .build();
+        repository.categoryRepository.save(categoryEntity);
+        return new ResData<>(categoryEntity.getId(), PuddyCode.OK);
     }
 
     @Override
     @Transactional
     public ResData<String> delete(CurrentUser currentUser, CategoryDto dto) {
         AuthValidator.checkAdmin(currentUser);
-        CategoryValidator.validCreate(dto);
-        if (Boolean.TRUE.equals(repository.categoryRepository.existsByNameIgnoreCaseAndActive(dto.getName().trim(), Boolean.TRUE))) {
-            throw new PuddyException(PuddyCode.CATEGORY_EXISTS_NAME);
-        }
-        CategoryEntity category = CategoryEntity.builder()
-                .id(UidUtils.generateUid())
-                .name(dto.getName().trim())
-                .des(dto.getDes().trim())
-                .active(Boolean.TRUE)
-                .build();
+        CategoryEntity category = repository.categoryRepository.findById(dto.getId()).orElseThrow(()-> new PuddyException(PuddyCode.BAD_REQUEST,CATEGORY_NOT_FOUND));
+                category.setActive(Boolean.FALSE);
         repository.categoryRepository.save(category);
         log.info("create finished at {} with response: {}", new Date(), JsonUtils.toJson(category));
         return new ResData<>(category.getId(), PuddyCode.OK);

@@ -19,8 +19,8 @@ public interface OrderRepository extends JpaRepository<OrderEntity, String>, Ord
     @Query("select o\n" +
             "from OrderEntity o\n" +
             "where (o.code like :textSearch or o.note like :textSearch)\n" +
-            "and (:status is null or o.status = :status)")
-    Page<OrderEntity> search(@Param("textSearch") String textSearch, @Param("status") String status, Pageable pageReq);
+            "and (:status is null or o.status = :status) and o.userId = :userId")
+    Page<OrderEntity> search(@Param("textSearch") String textSearch, @Param("status") String status, Pageable pageReq,String userId);
 
     @Query("select o from OrderEntity o where o.id = ?1")
     OrderEntity findByIdV1(String id);
