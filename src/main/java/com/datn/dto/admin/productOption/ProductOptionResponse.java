@@ -1,4 +1,4 @@
-package com.datn.dto.admin.product_option;
+package com.datn.dto.admin.productOption;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,11 @@
 package com.datn.controller.admin;
 
+import com.datn.dto.admin.size.SizeReq;
+import com.datn.dto.admin.size.SizeRes;
+import com.datn.dto.customer.size.response.SizeResponse;
 import com.datn.utils.base.PuddyController;
 import com.datn.utils.base.enum_dto.SizeDto;
+import com.datn.utils.base.rest.PageData;
 import com.datn.utils.base.rest.ResData;
 import com.datn.utils.common.JsonUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,4 +43,13 @@ public class AdminSizeController extends PuddyController {
 //        log.info("start api delete with dto: {}", JsonUtils.toJson(dto));
 //        return ResponseEntity.status(HttpStatus.OK).body(service.sizeService.delete(getCurrentUser(), dto));
 //    }
+
+    @PostMapping("/search")
+    @Operation(summary = "Lấy danh sách size và filter size")
+    public ResponseEntity<PageData<SizeRes>> getListSize4Admin(@RequestBody  SizeReq sizeReq) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.sizeService.getAllSize4Admin(getCurrentUser(),sizeReq));
+
+    }
+
+
 }

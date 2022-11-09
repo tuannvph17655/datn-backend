@@ -1,7 +1,7 @@
 package com.datn.service.impl;
 
 import com.datn.dto.admin.product.ProductDetailResponse;
-import com.datn.dto.admin.product_option.ProductOptionResponse;
+import com.datn.dto.admin.productOption.ProductOptionResponse;
 import com.datn.dto.customer.product.ProductRelatedRes;
 import com.datn.dto.customer.product.ProductReq;
 import com.datn.dto.customer.product.ProductResponse;
