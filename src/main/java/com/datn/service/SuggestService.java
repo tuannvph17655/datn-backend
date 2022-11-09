@@ -7,7 +7,7 @@ import com.datn.dto.customer.suggest.SuggestDto;
 import java.util.List;
 
 public interface SuggestService {
-    List<CategoryDto> getCategories();
+//    List<CategoryDto> getCategories();
 
     Object getSizeAvailable(SuggestDto dto);
 }

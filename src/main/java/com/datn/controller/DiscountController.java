@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/color")
+@RequestMapping("/api/v1/discount")
 @RequiredArgsConstructor
 @Slf4j
-public class ColorController extends PuddyController {
-//    @GetMapping("")
-//    public ResponseEntity<?> getAllColor() {
-//        log.info("START API /api/v1/color");
-//        return ResponseEntity.status(HttpStatus.OK).body(service.colorService.getListColor());
-//    }
-
+public class DiscountController extends PuddyController {
+	@GetMapping("")
+	public ResponseEntity<?> getAllDiscount(){
+		log.info("START API /api/v1/discount");
+		return ResponseEntity.status(HttpStatus.OK).body(service.discountService.getListDiscount());
+	}
 }

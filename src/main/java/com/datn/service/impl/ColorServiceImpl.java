@@ -27,57 +27,57 @@ import java.util.Optional;
 @Slf4j
 public class ColorServiceImpl implements ColorService {
     private final PuddyRepository repository;
-    @Override
-    public ResData<List<ColorResponse>> getListColor() {
-        List<ColorResponse> color = repository.colorRepository.findAllColor();
-        return new ResData<>(color, PuddyCode.OK);
-    }
-
-    @Override
-    @Transactional
-    public ResData<String> create(CurrentUser currentUser, ColorDto dto) {
-        AuthValidator.checkAdmin(currentUser);
-        ProductEntity products = repository.productRepository.findById(dto.getId()).orElseThrow(
-                ()->  new PuddyException(PuddyCode.PRODUCT_NOT_FOUND)
-        );
-
-        ColorEntity color = ColorEntity.builder()
-                .id(UidUtils.generateUid())
-                .name(dto.getName().trim())
-                .hex(dto.getHex().trim())
-                .active(Boolean.TRUE)
-                .build();
-        repository.colorRepository.save(color);
-        log.info("create finished at {} with response: {}", new Date(), JsonUtils.toJson(color));
-        return new ResData<>(color.getId(), PuddyCode.OK);
-    }
-
-    @Override
-    @Transactional
-    public ResData<String> delete(CurrentUser currentUser, ColorDto dto) {
-        AuthValidator.checkAdmin(currentUser);
-        if (dto.getId() == null || Boolean.FALSE.equals(repository.colorRepository.findByIdAndActive(dto.getId(), Boolean.TRUE))) {
-            throw new PuddyException(PuddyCode.COLOR_NOT_FOUND);
-        }
-        ColorEntity color = repository.colorRepository.findByIdAndActive(dto.getId(), Boolean.TRUE);
-        color.setActive(Boolean.FALSE);
-        repository.colorRepository.save(color);
-        log.info("delete finished at {} with response: {}", new Date(), JsonUtils.toJson(color));
-        return new ResData<>(color.getId(), PuddyCode.OK);
-    }
-
-    @Override
-    @Transactional
-    public ResData<String> update(CurrentUser currentUser, ColorDto dto) {
-        AuthValidator.checkAdmin(currentUser);
-        if (dto.getId() == null || Boolean.FALSE.equals(repository.colorRepository.existsByIdAndActive(dto.getId(), Boolean.TRUE))) {
-            throw new PuddyException(PuddyCode.COLOR_NOT_FOUND);
-        }
-        ColorEntity color = repository.colorRepository.findByIdAndActive(dto.getId(), Boolean.TRUE);
-        color.setName(dto.getName().trim());
-        color.setHex(dto.getHex().trim());
-        repository.colorRepository.save(color);
-        log.info("update finished at {} with response: {}", new Date(), JsonUtils.toJson(color));
-        return new ResData<>(color.getId(), PuddyCode.OK);
-    }
+//    @Override
+//    public ResData<List<ColorResponse>> getListColor() {
+//        List<ColorResponse> color = repository.colorRepository.findAllColor();
+//        return new ResData<>(color, PuddyCode.OK);
+//    }
+//
+//    @Override
+//    @Transactional
+//    public ResData<String> create(CurrentUser currentUser, ColorDto dto) {
+//        AuthValidator.checkAdmin(currentUser);
+//        ProductEntity products = repository.productRepository.findById(dto.getId()).orElseThrow(
+//                ()->  new PuddyException(PuddyCode.PRODUCT_NOT_FOUND)
+//        );
+//
+//        ColorEntity color = ColorEntity.builder()
+//                .id(UidUtils.generateUid())
+//                .name(dto.getName().trim())
+//                .hex(dto.getHex().trim())
+//                .active(Boolean.TRUE)
+//                .build();
+//        repository.colorRepository.save(color);
+//        log.info("create finished at {} with response: {}", new Date(), JsonUtils.toJson(color));
+//        return new ResData<>(color.getId(), PuddyCode.OK);
+//    }
+//
+//    @Override
+//    @Transactional
+//    public ResData<String> delete(CurrentUser currentUser, ColorDto dto) {
+//        AuthValidator.checkAdmin(currentUser);
+//        if (dto.getId() == null || Boolean.FALSE.equals(repository.colorRepository.findByIdAndActive(dto.getId(), Boolean.TRUE))) {
+//            throw new PuddyException(PuddyCode.COLOR_NOT_FOUND);
+//        }
+//        ColorEntity color = repository.colorRepository.findByIdAndActive(dto.getId(), Boolean.TRUE);
+//        color.setActive(Boolean.FALSE);
+//        repository.colorRepository.save(color);
+//        log.info("delete finished at {} with response: {}", new Date(), JsonUtils.toJson(color));
+//        return new ResData<>(color.getId(), PuddyCode.OK);
+//    }
+//
+//    @Override
+//    @Transactional
+//    public ResData<String> update(CurrentUser currentUser, ColorDto dto) {
+//        AuthValidator.checkAdmin(currentUser);
+//        if (dto.getId() == null || Boolean.FALSE.equals(repository.colorRepository.existsByIdAndActive(dto.getId(), Boolean.TRUE))) {
+//            throw new PuddyException(PuddyCode.COLOR_NOT_FOUND);
+//        }
+//        ColorEntity color = repository.colorRepository.findByIdAndActive(dto.getId(), Boolean.TRUE);
+//        color.setName(dto.getName().trim());
+//        color.setHex(dto.getHex().trim());
+//        repository.colorRepository.save(color);
+//        log.info("update finished at {} with response: {}", new Date(), JsonUtils.toJson(color));
+//        return new ResData<>(color.getId(), PuddyCode.OK);
+//    }
 }

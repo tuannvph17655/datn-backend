@@ -9,11 +9,11 @@ import com.datn.utils.base.rest.ResData;
 import java.util.List;
 
 public interface ColorService {
-    ResData<List<ColorResponse>> getListColor();
-    ResData<String> create(CurrentUser currentUser, ColorDto dto);
-
-    ResData<String> delete(CurrentUser currentUser, ColorDto dto);
-
-    ResData<String> update(CurrentUser currentUser, ColorDto dto);
+//    ResData<List<ColorResponse>> getListColor();
+//    ResData<String> create(CurrentUser currentUser, ColorDto dto);
+//
+//    ResData<String> delete(CurrentUser currentUser, ColorDto dto);
+//
+//    ResData<String> update(CurrentUser currentUser, ColorDto dto);
 
 }

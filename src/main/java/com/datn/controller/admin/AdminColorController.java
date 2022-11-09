@@ -19,24 +19,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 public class AdminColorController extends PuddyController {
-    @PostMapping("/create")
-    @Operation(summary = "API thêm mới màu sp")
-    public ResponseEntity<ResData<String>> create(@RequestBody ColorDto dto) {
-        log.info("start api create with dto: {}", JsonUtils.toJson(dto));
-        return ResponseEntity.status(HttpStatus.OK).body(service.colorService.create(getCurrentUser(), dto));
-    }
-
-    @PostMapping("/update")
-    @Operation(summary = "API cập nhật màu sp")
-    public ResponseEntity<ResData<String>> update(@RequestBody ColorDto dto){
-        log.info("start api update with dto: {}", JsonUtils.toJson(dto));
-        return ResponseEntity.status(HttpStatus.OK).body(service.colorService.update(getCurrentUser(), dto));
-    }
-
-    @PostMapping("/delete")
-    @Operation(summary = "API xóa màu sp")
-    public ResponseEntity<ResData<String>> delete(@RequestBody ColorDto dto){
-        log.info("start api delete with dto: {}", JsonUtils.toJson(dto));
-        return ResponseEntity.status(HttpStatus.OK).body(service.colorService.delete(getCurrentUser(), dto));
-    }
+//    @PostMapping("/create")
+//    @Operation(summary = "API thêm mới màu sp")
+//    public ResponseEntity<ResData<String>> create(@RequestBody ColorDto dto) {
+//        log.info("start api create with dto: {}", JsonUtils.toJson(dto));
+//        return ResponseEntity.status(HttpStatus.OK).body(service.colorService.create(getCurrentUser(), dto));
+//    }
+//
+//    @PostMapping("/update")
+//    @Operation(summary = "API cập nhật màu sp")
+//    public ResponseEntity<ResData<String>> update(@RequestBody ColorDto dto){
+//        log.info("start api update with dto: {}", JsonUtils.toJson(dto));
+//        return ResponseEntity.status(HttpStatus.OK).body(service.colorService.update(getCurrentUser(), dto));
+//    }
+//
+//    @PostMapping("/delete")
+//    @Operation(summary = "API xóa màu sp")
+//    public ResponseEntity<ResData<String>> delete(@RequestBody ColorDto dto){
+//        log.info("start api delete with dto: {}", JsonUtils.toJson(dto));
+//        return ResponseEntity.status(HttpStatus.OK).body(service.colorService.delete(getCurrentUser(), dto));
+//    }
 }
