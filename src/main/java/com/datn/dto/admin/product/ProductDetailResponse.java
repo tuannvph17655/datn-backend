@@ -1,6 +1,6 @@
 package com.datn.dto.admin.product;
 
-import com.datn.dto.admin.product_option.ProductOptionResponse;
+import com.datn.dto.admin.productOption.ProductOptionResponse;
 import com.datn.dto.customer.review.response.ReviewResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
