@@ -39,13 +39,13 @@ public class DiscountEntity {
      * Ngày bắt đầu
      */
     @Column(name = "start_date")
-    private Date startDate;
+    private String startDate;
 
     /**
      * Ngày kết thúc
      */
     @Column(name = "end_date")
-    private Date endDate;
+    private String endDate;
     /**
      * Giá trị để thỏa màn đièu kiện áp dụng khuyến mãi
      * Tổng giá trị đơn hàng tối thiệu / Số lượng sản phẩm tối thiểu
