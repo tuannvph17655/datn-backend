@@ -1,6 +1,9 @@
 package com.datn.controller.admin;
+import com.datn.dto.admin.material.MaterialReq;
+import com.datn.dto.admin.material.MaterialRes;
 import com.datn.utils.base.PuddyController;
 import com.datn.utils.base.enum_dto.MaterialDto;
+import com.datn.utils.base.rest.PageData;
 import com.datn.utils.base.rest.ResData;
 import com.datn.utils.common.JsonUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,4 +42,12 @@ public class AdminMaterialController extends PuddyController {
         log.info("start api delele with dto: {}", JsonUtils.toJson(dto));
         return ResponseEntity.status(HttpStatus.OK).body(service.materialService.delete(getCurrentUser(), dto));
     }
+
+    @PostMapping("/search")
+    @Operation(summary = "API lấy ra danh sách chất liệu và filter")
+    public ResponseEntity<PageData<MaterialRes>> search(@RequestBody MaterialReq materialReq) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.materialService.search(getCurrentUser(),materialReq));
+    }
+
+
 }
