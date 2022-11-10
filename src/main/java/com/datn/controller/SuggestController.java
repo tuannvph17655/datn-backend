@@ -17,10 +17,10 @@ public class SuggestController {
 
     private final PuddyService service;
 
-    @GetMapping("/category-list")
-    public ResponseEntity<Object> getCategories() {
-        return ResponseEntity.ok(ResData.ok(service.suggestService.getCategories()));
-    }
+//    @GetMapping("/category-list")
+//    public ResponseEntity<Object> getCategories() {
+//        return ResponseEntity.ok(ResData.ok(service.suggestService.getCategories()));
+//    }
 
     @GetMapping("/search")
     public ResponseEntity<Object> getSizeAvailable(SuggestDto dto) {

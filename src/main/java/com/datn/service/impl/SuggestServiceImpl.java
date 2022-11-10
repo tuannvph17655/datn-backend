@@ -26,10 +26,10 @@ public class SuggestServiceImpl implements SuggestService {
 
     private final PuddyRepository repository;
 
-    @Override
-    public List<CategoryDto> getCategories() {
-        return repository.categoryRepository.findSuggestCategories();
-    }
+//    @Override
+//    public List<CategoryDto> getCategories() {
+//        return repository.categoryRepository.findSuggestCategories();
+//    }
 
     @Override
     public Object getSizeAvailable(SuggestDto dto) {
