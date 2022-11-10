@@ -26,7 +26,7 @@ public class PuddyService {
     public final EventsService eventService;
     public final SuggestService suggestService;
 //    public final DashboardService dashboardService;
-//    public final AdminProductService adminProductService;
+    public final AdminProductService adminProductService;
 //    public final MailService mailService;
 //    public final AdminUserService adminUserService;
 //    public final AdminUserInfoService adminUserInfoService;
