@@ -1,4 +1,4 @@
-package com.datn.controller;
+package com.datn.controller.admin;
 
 import com.datn.utils.base.PuddyController;
 import com.datn.utils.base.enum_dto.EventDto;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/event")
 @RequiredArgsConstructor
 @Slf4j
-public class EventsController extends PuddyController {
+public class EventController extends PuddyController {
 
 
 	@ApiOperation(value = "API get all Event")
