@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author myname
  */
@@ -18,4 +20,7 @@ public interface MaterialRepository extends JpaRepository<MaterialEntity, String
 
     @Query("select new com.datn.dto.admin.material.MaterialRes(o.id, o.name, o.active,o.code) from MaterialEntity o")
     Page<MaterialRes> findAllMaterial(Pageable pageable);
+    @Query("select new com.datn.dto.admin.material.MaterialRes(o.id, o.name, o.active,o.code) from MaterialEntity o")
+    List<MaterialRes> getAll();
+
 }

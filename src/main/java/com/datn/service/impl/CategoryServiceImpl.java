@@ -3,6 +3,7 @@ package com.datn.service.impl;
 import com.datn.dto.admin.category.CategoryDto;
 import com.datn.dto.admin.category.CategoryReq;
 import com.datn.dto.admin.category.CategoryRes;
+import com.datn.dto.admin.category.CategoryRes4Admin;
 import com.datn.entity.CategoryEntity;
 import com.datn.entity.ProductEntity;
 import com.datn.entity.ProductOptionEntity;
@@ -135,5 +136,10 @@ public class CategoryServiceImpl implements CategoryService {
                 .createdDateValue(category.getCreatedDate() == null ? null : DateUtils.toStr(category.getCreatedDate(), DateUtils.F_DDMMYYYY))
                 .productNumber(repository.productRepository.countByCategoryId(category.getId()))
                 .build());
+    }
+
+    @Override
+    public ResData<CategoryRes4Admin> getAllCategory(CurrentUser currentUser) {
+        return ResData.ok(repository.categoryRepository.findAllCategoryActive());
     }
 }

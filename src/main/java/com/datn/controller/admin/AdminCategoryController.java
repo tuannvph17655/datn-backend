@@ -4,6 +4,7 @@ package com.datn.controller.admin;
 import com.datn.dto.admin.category.CategoryDto;
 import com.datn.dto.admin.category.CategoryReq;
 import com.datn.dto.admin.category.CategoryRes;
+import com.datn.dto.admin.category.CategoryRes4Admin;
 import com.datn.utils.base.PuddyController;
 import com.datn.utils.base.rest.PageData;
 import com.datn.utils.base.rest.ResData;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,5 +53,9 @@ public class AdminCategoryController extends PuddyController {
     public ResponseEntity<ResData<CategoryRes>> detail(@RequestBody CategoryDto dto) {
         log.info("start api detail with dto: {}", JsonUtils.toJson(dto));
         return ResponseEntity.status(HttpStatus.OK).body(service.categoryService.detail(getCurrentUser(), dto));
+    }
+    @GetMapping("")
+    public ResponseEntity<ResData<CategoryRes4Admin>> getAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(service.categoryService.getAllCategory(getCurrentUser()));
     }
 }

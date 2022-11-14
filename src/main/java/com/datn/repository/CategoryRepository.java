@@ -1,6 +1,8 @@
 package com.datn.repository;
 
 import com.datn.dto.admin.category.CategoryDto;
+import com.datn.dto.admin.category.CategoryRes;
+import com.datn.dto.admin.category.CategoryRes4Admin;
 import com.datn.entity.CategoryEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,4 +35,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, String
             "AND (:active IS NULL OR c.active = :active)")
     Page<CategoryEntity> search(@Param("textSearch") String textSearch,
                                 @Param("active") Boolean active, Pageable pageable);
+
+    @Query("SELECT new com.datn.dto.admin.category.CategoryRes4Admin(o.id, o.name) from CategoryEntity o where o.active = true")
+    List<CategoryRes4Admin> findAllCategoryActive();
 }

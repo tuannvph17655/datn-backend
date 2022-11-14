@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 public class AdminDiscountController extends PuddyController {
-	@GetMapping("")
-	public ResponseEntity<?> getAllDiscount(){
-		log.info("START API /api/v1/discount");
-		return ResponseEntity.status(HttpStatus.OK).body(service.discountService.getListDiscount());
-	}
+//	@GetMapping("")
+//	public ResponseEntity<?> getAllDiscount(){
+//		log.info("START API /api/v1/discount");
+//		return ResponseEntity.status(HttpStatus.OK).body(service.discountService.getListDiscount());
+//	}
 
 	@PostMapping("/create")
 	public ResponseEntity<ResData<String>> create(@RequestBody DiscountDto dto){
