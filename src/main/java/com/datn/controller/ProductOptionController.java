@@ -1,6 +1,6 @@
 package com.datn.controller;
 
-import com.datn.dto.customer.product.product_option.ProductOptionIdReq;
+import com.datn.dto.customer.product.productOption.ProductOptionIdReq;
 import com.datn.utils.base.PuddyController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

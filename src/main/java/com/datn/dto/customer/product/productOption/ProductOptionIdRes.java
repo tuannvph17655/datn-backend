@@ -1,4 +1,4 @@
-package com.datn.dto.customer.product.product_option;
+package com.datn.dto.customer.product.productOption;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
