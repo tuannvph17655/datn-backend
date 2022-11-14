@@ -164,21 +164,21 @@ public class AdminProductServiceImpl implements AdminProductService {
         repository.productRepository.save(product);
         log.info("product after save: {}", JsonUtils.toJson(product));
 
-        for (OptionDto option : dto.getOptions()) {
-            ProductOptionEntity po = ProductOptionEntity.builder()
-                    .id(UidUtils.generateUid())
-                    .productId(product.getId())
-                    .active(true)
-                    .colorId(option.getColorId())
-                    .sizeId(option.getSizeId())
-                    .qty(Long.valueOf(option.getQty()))
-                    .price(Long.valueOf(option.getPrice()))
-//                    .image(cloudProxy.uploadImage(option.getImage()))
-                    .build();
-            log.info("po before save: {}", JsonUtils.toJson(po));
-            repository.productOptionRepository.save(po);
-            log.info("po after save: {}", JsonUtils.toJson(po));
-        }
+//        for (OptionDto option : dto.getOptions()) {
+//            ProductOptionEntity po = ProductOptionEntity.builder()
+//                    .id(UidUtils.generateUid())
+//                    .productId(product.getId())
+//                    .active(true)
+//                    .colorId(option.getColorId())
+//                    .sizeId(option.getSizeId())
+//                    .qty(Long.valueOf(option.getQty()))
+//                    .price(Long.valueOf(option.getPrice()))
+////                    .image(cloudProxy.uploadImage(option.getImage()))
+//                    .build();
+//            log.info("po before save: {}", JsonUtils.toJson(po));
+//            repository.productOptionRepository.save(po);
+//            log.info("po after save: {}", JsonUtils.toJson(po));
+//        }
         return null;
     }
 }

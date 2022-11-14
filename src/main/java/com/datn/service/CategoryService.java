@@ -3,6 +3,7 @@ package com.datn.service;
 import com.datn.dto.admin.category.CategoryDto;
 import com.datn.dto.admin.category.CategoryReq;
 import com.datn.dto.admin.category.CategoryRes;
+import com.datn.dto.admin.category.CategoryRes4Admin;
 import com.datn.utils.base.PuddyException;
 import com.datn.utils.base.rest.CurrentUser;
 import com.datn.utils.base.rest.PageData;
@@ -18,4 +19,5 @@ public interface CategoryService {
     ResData<String> update(CurrentUser currentUser, CategoryDto dto);
 
     ResData<CategoryRes> detail(CurrentUser currentUser, CategoryDto dto);
+    ResData<CategoryRes4Admin> getAllCategory(CurrentUser currentUser);
 }

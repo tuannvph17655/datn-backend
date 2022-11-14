@@ -7,6 +7,8 @@ import com.datn.utils.base.rest.CurrentUser;
 import com.datn.utils.base.rest.PageData;
 import com.datn.utils.base.rest.ResData;
 
+import java.util.List;
+
 public interface MaterialService {
     ResData<String> create(CurrentUser currentUser, MaterialDto dto);
 
@@ -15,4 +17,5 @@ public interface MaterialService {
     ResData<String> update(CurrentUser currentUser, MaterialDto dto);
 
     PageData<MaterialRes> search(CurrentUser currentUser, MaterialReq materialReq);
+    ResData<List<MaterialRes>> getAll(CurrentUser currentUser);
 }

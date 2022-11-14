@@ -35,8 +35,8 @@ public class AdminProductValidator {
         ValidatorUtils.validNullOrEmpty(DES, dto.getDes());
         ValidatorUtils.validOnlyCharacterAndNumber(DES, dto.getDes());
         ValidatorUtils.validLength(DES, dto.getDes(), 6, 255);
-        ValidatorUtils.validNullOrEmptyList(OPTION, Collections.singletonList(dto.getOptions()));
-        validOptionDto(dto.getOptions(), repository);
+//        ValidatorUtils.validNullOrEmptyList(OPTION, Collections.singletonList(dto.getOptions()));
+//        validOptionDto(dto.getOptions(), repository);
         validExist(dto, repository);
     }
 

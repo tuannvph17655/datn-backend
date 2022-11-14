@@ -11,6 +11,5 @@ public class ProductDto {
     private List<String> des;
     private String categoryId;
     private String materialId;
-    private String typeId;
-    private List<OptionDto> options;
+//    private List<OptionDto> options;
 }

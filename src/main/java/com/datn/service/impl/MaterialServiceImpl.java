@@ -20,10 +20,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -88,5 +90,12 @@ public class MaterialServiceImpl implements MaterialService {
                 materialRes.getNumber(),
                 materialRes.getSize(),
                 materialRes.getTotalElements());
+    }
+
+    @Override
+    public ResData<List<MaterialRes>> getAll(CurrentUser currentUser) {
+        AuthValidator.checkAdmin(currentUser);
+        List<MaterialRes>  materialRes = repository.materialRepository.getAll();
+        return new ResData<>(materialRes, PuddyCode.OK);
     }
 }
