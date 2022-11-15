@@ -1,7 +1,7 @@
 package com.datn.service.impl;
 
 import com.datn.dto.customer.discount.DiscountResponse;
-import com.datn.entity.DiscountEntity;
+import com.datn.entity.VoucherEntity;
 import com.datn.service.DiscountService;
 import com.datn.utils.base.PuddyRepository;
 import com.datn.utils.base.enum_dto.DiscountDto;
@@ -30,7 +30,7 @@ public class DiscountServiceImpl implements DiscountService {
 
 	@Override
 	public ResData<String> create(DiscountDto dto) {
-		DiscountEntity discount = DiscountEntity.builder()
+		VoucherEntity discount = VoucherEntity.builder()
 				.id(UidUtils.generateUid())
 				.des(dto.getDes().trim())
 				.code(dto.getCode().trim())
@@ -49,7 +49,7 @@ public class DiscountServiceImpl implements DiscountService {
 
 	@Override
 	public ResData<String> update(DiscountDto dto) {
-		DiscountEntity discount = DiscountEntity.builder()
+		VoucherEntity discount = VoucherEntity.builder()
 				.id(dto.getId().trim())
 				.des(dto.getDes().trim())
 				.code(dto.getCode().trim())

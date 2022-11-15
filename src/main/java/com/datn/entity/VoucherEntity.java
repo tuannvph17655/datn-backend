@@ -20,13 +20,13 @@ import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Entity
-@Table(name = "discount")
+@Table(name = "voucher")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class DiscountEntity {
+public class VoucherEntity {
     @Id
     private String id;
 

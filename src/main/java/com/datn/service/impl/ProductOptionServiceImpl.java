@@ -6,7 +6,9 @@ import com.datn.dto.customer.product.productOption.ProductOptionIdRes;
 import com.datn.dto.customer.product.productOption.ProductOptionReq;
 import com.datn.dto.customer.product.productOption.ProductOptionRes;
 import com.datn.dto.customer.size.response.SizeResponse;
+import com.datn.entity.ColorEntity;
 import com.datn.entity.ProductOptionEntity;
+import com.datn.entity.SizeEntity;
 import com.datn.service.ProductOptionService;
 import com.datn.utils.base.PuddyException;
 import com.datn.utils.base.PuddyRepository;
@@ -25,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,7 +71,11 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         Pageable pageable = PageableUtils.getPageable(productOptionReq.getPageReq());
         List<ProductOptionRes> productOptionRes = repository.productOptionRepository
                 .findByProductId(productOptionReq.getProductId())
-                .stream().map(s -> ProductOptionRes.of(s))
+                .stream().map(s -> {
+                    SizeEntity sizeEntity = repository.sizeRepository.getById(s.getSizeId());
+                    ColorEntity colorEntity = repository.colorRepository.getById(s.getSizeId());
+                    return ProductOptionRes.of(s).setSizeName(sizeEntity.getName()).setColorName(colorEntity.getName());
+                })
                 .collect(Collectors.toList());
         Page<ProductOptionRes> result = new PageImpl<>(productOptionRes, pageable, productOptionRes.size());
         return PageData.setResult(result.getContent()
