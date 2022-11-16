@@ -15,8 +15,6 @@ public enum StatusEnum {
     REJECT("Bị từ chối"),
     ACCEPT("Được chấp nhận"),
     SHIPPING("Đang giao hàng"),
-    EXCHANGE("Đổi hàng"),
-    REFUND("Trả hàng"),
     RECEIVED("Đã nhận được hàng"),
     UNRECEIVED("Giao hàng không thành công ");
 

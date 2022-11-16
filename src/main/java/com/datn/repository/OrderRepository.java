@@ -24,4 +24,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, String>, Ord
 
     @Query("select o from OrderEntity o where o.id = ?1")
     OrderEntity findByIdV1(String id);
+
+    List<OrderEntity> findAllByCodeStartsWith(String prefix);
 }

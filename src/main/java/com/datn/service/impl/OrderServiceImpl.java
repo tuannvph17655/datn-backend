@@ -1,5 +1,6 @@
 package com.datn.service.impl;
 
+import com.datn.dto.admin.order.CustomerInfoRes;
 import com.datn.dto.admin.order.change_status.ChangeStatusDto;
 import com.datn.dto.admin.order.search.ListOrderRequest;
 import com.datn.dto.customer.cart.response.CartResponse;
@@ -34,10 +35,16 @@ import com.datn.utils.constants.enums.StatusEnum;
 import com.datn.utils.validator.auth.AuthValidator;
 import com.datn.utils.validator.customer.order.CancelOrderValidator;
 import com.datn.utils.validator.customer.order.CheckoutValidator;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.logging.log4j.util.Strings;
+import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -58,6 +65,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -91,9 +99,25 @@ public class OrderServiceImpl implements OrderService {
 ////            this.validDiscount(discount, cart, currentUser.getId(), req);
 //        }
         Long total = this.getTotal(cart, req);
-
-        String orderCode = "#".concat(UUID.randomUUID().toString());
         PaymentEnums payment = PaymentEnums.from(req.getPaymentMethod());
+        String addressOrder = address.getAddressDetail().concat(COMMA).concat(address.getWardName()).concat(COMMA).concat(address.getDistrictName()).concat(COMMA).concat(address.getProvinceName());
+        CustomerInfoRes customerInfoRes = CustomerInfoRes
+                .builder()
+                .phone(address.getPhoneNumber())
+                .name(address.getNameOfRecipient())
+                .address(addressOrder).build();
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String customerInfo = "";
+        try {
+            // convert user object to json string and return it
+            customerInfo = ow.writeValueAsString(customerInfoRes);
+        } catch (JsonGenerationException | JsonMappingException e) {
+            // catch various errors
+            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
         OrderEntity order = OrderEntity.builder()
                 .id(req.getId())
                 .addressId(address.getId())
@@ -102,13 +126,14 @@ public class OrderServiceImpl implements OrderService {
                 .payed(Boolean.FALSE)
                 .payment(req.getPaymentMethod())
                 .shipPrice(Long.valueOf(req.getShipPrice()))
-                .code(orderCode)
+                .code(generateOrderCode())
                 .status(StatusEnum.PENDING.name())
                 .createdDate(new Date())
                 .createdBy(currentUser.getCombinationName())
                 .shopTotal(req.getShopTotal())
                 .total(total)
                 .discountId(1 + "")
+                .customerInfo(customerInfo)
                 .build();
 
         log.info("----- OrderServiceImpl create before save: {}", JsonUtils.toJson(order));
@@ -215,7 +240,7 @@ public class OrderServiceImpl implements OrderService {
                 .trim() + "%");
         StatusEnum status = StatusEnum.from(req.getStatus());
         String statusStr = status == null ? null : status.name();
-        Page<OrderEntity> orderPage = repository.orderRepository.search(req.getTextSearch(), statusStr, pageable,currentUser.getId());
+        Page<OrderEntity> orderPage = repository.orderRepository.search(req.getTextSearch(), statusStr, pageable, currentUser.getId());
 
         if (orderPage.isEmpty()) {
             return PageData.setEmpty(req.getPageReq());
@@ -322,6 +347,8 @@ public class OrderServiceImpl implements OrderService {
                     AddressEntity address = Optional.ofNullable(addressEntityMap.get(item.getAddressId()))
                             .orElseThrow(() -> new PuddyException(PuddyCode.ADDRESS_NOT_FOUND));
                     String addressOrder = address.getAddressDetail().concat(COMMA).concat(address.getWardName()).concat(COMMA).concat(address.getDistrictName()).concat(COMMA).concat(address.getProvinceName());
+                    Gson gson = new Gson();
+                    CustomerInfoRes customerInfoRes = gson.fromJson(item.getCustomerInfo(), CustomerInfoRes.class);
                     OrderResponse orderRes = OrderResponse.builder()
                             .orderCode(item.getCode())
                             .orderId(item.getId())
@@ -331,6 +358,7 @@ public class OrderServiceImpl implements OrderService {
                             .payed(item.getPayed())
                             .address(addressOrder)
                             .statusValue(StatusEnum.from(item.getStatus()).getName())
+                            .customerInfoRes(customerInfoRes)
                             .build();
                     return orderRes;
                 }).collect(Collectors.toList());
@@ -341,7 +369,6 @@ public class OrderServiceImpl implements OrderService {
                     .filter(orderResponse -> orderResponse.getAddress().matches(regex)
                             || orderResponse.getOrderCode().matches(regex))
                     .collect(Collectors.toList());
-
         }
 
         if (!Strings.isBlank(request.getStartDate()) && !Strings.isBlank(request.getEndDate())) {
@@ -378,7 +405,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         AuthValidator.checkRole(currentUser, RoleEnum.ROLE_ADMIN, RoleEnum.ROLE_ADMIN);
-        return repository.orderRepository.  detail4Admin(currentUser, id);
+        return repository.orderRepository.detail4Admin(currentUser, id);
     }
 
     @Override
@@ -448,7 +475,7 @@ public class OrderServiceImpl implements OrderService {
                         .createdBy(order.getUserId())
                         .build();
                 repository.orderStatusRepository.save(orderStatus);
-                    order.setStatus(StatusEnum.REJECT.name());
+                order.setStatus(StatusEnum.REJECT.name());
                 order.setUpdatedBy(currentUser.getId());
                 order.setUpdatedDate(new Date());
                 repository.orderRepository.save(order);
@@ -457,5 +484,28 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, PuddyConst.Messages.FORBIDDEN);
+    }
+
+    private String generateOrderCode() {
+        String datePart = DateTime.now().toString("YYMMdd");
+        String prefix = "HD-" + datePart;
+        List<Integer> availableUuids = getRemainingUuidsStartWith(prefix);
+
+        boolean noUuidAvailable = availableUuids.isEmpty();
+        if (noUuidAvailable) {
+            throw new PuddyException(PuddyCode.BAD_REQUEST, "Uuid trong ngày đã quá số lượng, xin hãy quay lại vào ngày tiếp theo.");
+        }
+        int uniqueId = availableUuids.get(0);
+        return prefix.concat(String.format("%04d", uniqueId));
+    }
+
+    private List<Integer> getRemainingUuidsStartWith(final String prefix) {
+        Set<Integer> existingUuids = repository.orderRepository
+                .findAllByCodeStartsWith(prefix).stream()
+                .map(order -> Integer.valueOf(order.getCode().substring(prefix.length())))
+                .collect(Collectors.toSet());
+        return IntStream.rangeClosed(0, 9999)
+                .boxed()
+                .filter(num -> !existingUuids.contains(num)).collect(Collectors.toList());
     }
 }

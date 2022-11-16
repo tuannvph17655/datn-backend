@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 public class ColorController extends PuddyController {
-//    @GetMapping("")
-//    public ResponseEntity<?> getAllColor() {
-//        log.info("START API /api/v1/color");
-//        return ResponseEntity.status(HttpStatus.OK).body(service.colorService.getListColor());
-//    }
+    @GetMapping("")
+    public ResponseEntity<?> getAllColor() {
+        log.info("START API /api/v1/color");
+        return ResponseEntity.status(HttpStatus.OK).body(service.colorService.getListColor());
+    }
 
 }

@@ -4,6 +4,7 @@ import com.datn.dto.admin.detail.DetailRes;
 import com.datn.dto.admin.detail.ItemDto;
 import com.datn.dto.admin.detail.PriceResult;
 import com.datn.dto.admin.detail.StatusDto;
+import com.datn.dto.admin.order.CustomerInfoRes;
 import com.datn.dto.customer.order.OrderDetailRes;
 import com.datn.entity.OrderEntity;
 import com.datn.repository.custom.OrderCustomRepository;
@@ -17,6 +18,7 @@ import com.datn.utils.common.OrderUtils;
 import com.datn.utils.constants.PuddyCode;
 import com.datn.utils.constants.PuddyException;
 import com.datn.utils.constants.enums.StatusEnum;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -45,7 +47,8 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository {
         res.items(items);
         PriceResult priceResult = PriceResult.builder().ship(order.getShipPrice()).shop(shopPrice).total(order.getTotal()).build();
         res.priceResult(priceResult);
-
+        Gson gson = new Gson();
+        res.customerInfoRes( gson.fromJson(order.getCustomerInfo(), CustomerInfoRes.class));
         List<StatusDto> orderStatusList = repository.orderStatusRepository.findHistory(id);
         if (!orderStatusList.isEmpty()) {
             res.history(OrderUtils.getHistory(orderStatusList));
