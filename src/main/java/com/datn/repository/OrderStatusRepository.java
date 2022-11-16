@@ -10,14 +10,16 @@ import java.util.List;
 
 public interface OrderStatusRepository extends JpaRepository<OrderStatusEntity, String> {
 
-    @Query("select new com.datn.dto.admin.detail.StatusDto(\n" +
-            "os.status,\n" +
-            "os.createdDate,\n" +
-            "u.role,\n" +
-            "concat(u.firstName, ' ', u.lastName))\n" +
-            "from OrderStatusEntity os\n" +
-            "left join UserEntity u on u.id = os.createdBy\n" +
-            "where os.orderId = :orderId\n" +
-            "order by os.createdDate")
+    //    @Query("select new com.datn.dto.admin.detail.StatusDto(\n" +
+//            "os.status,\n" +
+//            "os.createdDate,\n" +
+//            "u.role,\n" +
+//            "concat(u.firstName, ' ', u.lastName))\n" +
+//            "from OrderStatusEntity os\n" +
+//            "left join UserEntity u on u.id = os.createdBy\n" +
+//            "where os.orderId = :orderId\n" +
+//            "order by os.createdDate")
+//    List<StatusDto> findHistory(@Param("orderId") String orderId);
+    @Query("select new com.datn.dto.admin.detail.StatusDto(os.status, os.createdDate, u.role, concat(u.firstName ,' ', u.lastName) ) from OrderStatusEntity os join UserEntity u on u.id = os.createdBy where os.orderId = :orderId order by os.createdDate")
     List<StatusDto> findHistory(@Param("orderId") String orderId);
 }

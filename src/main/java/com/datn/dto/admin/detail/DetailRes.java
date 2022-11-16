@@ -1,5 +1,6 @@
 package com.datn.dto.admin.detail;
 
+import com.datn.dto.admin.order.CustomerInfoRes;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class DetailRes {
     private PriceResult priceResult;
     private List<String> history;
     private OrderInfoRes orderInfo;
-
+    private CustomerInfoRes customerInfoRes;
     @Data
     @Builder
     public static class OrderInfoRes {

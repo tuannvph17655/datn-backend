@@ -1,16 +1,15 @@
 package com.datn.repository;
 
 import com.datn.dto.customer.discount.DiscountResponse;
-import com.datn.entity.DiscountEntity;
+import com.datn.entity.VoucherEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface DiscountRepository extends JpaRepository<DiscountEntity ,String> {
-    @Query("select d from DiscountEntity d where upper(d.code) = upper(?1) and d.deleted = false and d.status = 'ACTIVE'")
-   DiscountEntity findByCode(String discountCode);
+public interface DiscountRepository extends JpaRepository<VoucherEntity,String> {
+    @Query("select d from VoucherEntity d where upper(d.code) = upper(?1) and d.deleted = false and d.status = 'ACTIVE'")
+    VoucherEntity findByCode(String discountCode);
 
     @Query("select DISTINCT new com.datn.dto.customer.discount.DiscountResponse(" +
             "d.id,\n" +
@@ -23,7 +22,7 @@ public interface DiscountRepository extends JpaRepository<DiscountEntity ,String
             "d.status,\n" +
             "d.deleted,\n" +
             "d.eventId)\n" +
-            "from DiscountEntity d")
+            "from VoucherEntity d")
     List<DiscountResponse> findAllDiscount();
 
 }

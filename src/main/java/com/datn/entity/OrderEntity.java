@@ -64,6 +64,8 @@ public class OrderEntity {
 
     private String discountId;
 
+    private String customerInfo;
+
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date")

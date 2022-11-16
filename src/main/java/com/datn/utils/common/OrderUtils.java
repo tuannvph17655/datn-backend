@@ -192,6 +192,14 @@ public class OrderUtils {
                 case CANCEL:
                     item += "Khách hàng hủy đơn hàng";
                     break;
+                case SHIPPING:
+                    item += "Đơn hàng đang được giao !";
+                    break;
+                case RECEIVED :
+                    item += "Đơn hàng được giao thành công !";
+                    break;
+                case UNRECEIVED:
+                    item += "Đơn hàng giao không thành công !";
                 default:
                     throw new PuddyException(PuddyCode.INTERNAL_SERVER);
             }
