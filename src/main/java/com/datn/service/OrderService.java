@@ -18,4 +18,6 @@ public interface OrderService {
     ResData<String> rejectOrder(CurrentUser currentUser, CancelOrder dto);
     Object detail(CurrentUser currentUser, String id);
     Object changeStatus(CurrentUser currentUser, ChangeStatusDto dto);
+
+    Object getListOrderStatus(CurrentUser currentUser);
 }
