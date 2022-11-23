@@ -3,12 +3,13 @@ package com.datn.utils.constants.enums;
 import com.datn.utils.common.StringUtils;
 import com.datn.utils.constants.PuddyCode;
 import com.datn.utils.constants.PuddyException;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+@Getter
 public enum StatusEnum {
     /**
      * Trạng thái đơn hàng
      */
-    PROCESSING("Khách hàng đang mua - chưa checkin"),
     PENDING("Chờ xác nhận"),
     PAYED("Đã thanh toán"),
     CANCEL("Đã hủy"),

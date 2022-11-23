@@ -1,6 +1,7 @@
 package com.datn.service.impl;
 
 import com.datn.dto.admin.order.CustomerInfoRes;
+import com.datn.dto.admin.order.OrderStatusResponse;
 import com.datn.dto.admin.order.change_status.ChangeStatusDto;
 import com.datn.dto.admin.order.search.ListOrderRequest;
 import com.datn.dto.customer.cart.response.CartResponse;
@@ -66,6 +67,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -432,6 +434,17 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         repository.orderStatusRepository.save(orderStatus);
         return ResData.ok(order.getId(), "Chuyển trạng thái thành công");
+    }
+
+    @Override
+    public Object getListOrderStatus(CurrentUser currentUser) {
+        List<OrderStatusResponse> list = Stream.of(StatusEnum.values())
+                .map(statusEnum -> OrderStatusResponse.builder()
+                        .orderStatus(statusEnum.name())
+                        .orderStatusName(statusEnum.getName())
+                        .build())
+                .collect(Collectors.toList());
+        return ResData.ok(list);
     }
 
     @Override

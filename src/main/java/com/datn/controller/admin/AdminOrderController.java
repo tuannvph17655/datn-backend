@@ -48,4 +48,9 @@ public class AdminOrderController extends PuddyController {
         return ResponseEntity.ok(service.orderService.rejectOrder(getCurrentUser(),cancelOrder));
     }
 
+    @GetMapping("/listOrderStatus")
+    public ResponseEntity<Object> getListOrderStatus(){
+        return ResponseEntity.ok(service.orderService.getListOrderStatus(getCurrentUser()));
+    }
+
 }
