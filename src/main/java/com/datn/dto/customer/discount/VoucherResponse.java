@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DiscountResponse {
+public class VoucherResponse {
 	private String id;
 	private String des;
 	private String code;
