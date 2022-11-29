@@ -1,8 +1,8 @@
 package com.datn.service.impl;
 
-import com.datn.dto.customer.discount.DiscountResponse;
+import com.datn.dto.customer.discount.VoucherResponse;
 import com.datn.entity.VoucherEntity;
-import com.datn.service.DiscountService;
+import com.datn.service.VoucherService;
 import com.datn.utils.base.PuddyRepository;
 import com.datn.utils.base.enum_dto.DiscountDto;
 import com.datn.utils.base.rest.ResData;
@@ -19,12 +19,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class DiscountServiceImpl implements DiscountService {
+public class VoucherServiceImpl implements VoucherService {
 	private final PuddyRepository repository;
 
 	@Override
-	public ResData<List<DiscountResponse>> getListDiscount() {
-		List<DiscountResponse> discount = repository.discountRepository.findAllDiscount();
+	public ResData<List<VoucherResponse>> getListVoucher() {
+		List<VoucherResponse> discount = repository.voucherRepository.findAllVoucher();
 		return new ResData<>(discount, PuddyCode.OK);
 	}
 
@@ -42,7 +42,7 @@ public class DiscountServiceImpl implements DiscountService {
 				.deleted(Boolean.TRUE)
 				.eventId(dto.getEventId().longValue())
 				.build();
-		repository.discountRepository.save(discount);
+		repository.voucherRepository.save(discount);
 		log.info("create finished at {} with response: {}", new Date(), JsonUtils.toJson(discount));
 		return new ResData<>(discount.getId(), PuddyCode.OK);
 	}
@@ -61,7 +61,7 @@ public class DiscountServiceImpl implements DiscountService {
 				.deleted(Boolean.TRUE)
 				.eventId(dto.getEventId().longValue())
 				.build();
-		repository.discountRepository.save(discount);
+		repository.voucherRepository.save(discount);
 		log.info("create finished at {} with response: {}", new Date(), JsonUtils.toJson(discount));
 		return new ResData<>(discount.getId(), PuddyCode.OK);
 	}

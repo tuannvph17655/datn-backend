@@ -15,25 +15,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/discount")
+@RequestMapping("/api/v1/voucher")
 @RequiredArgsConstructor
 @Slf4j
-public class AdminDiscountController extends PuddyController {
-//	@GetMapping("")
-//	public ResponseEntity<?> getAllDiscount(){
-//		log.info("START API /api/v1/discount");
-//		return ResponseEntity.status(HttpStatus.OK).body(service.discountService.getListDiscount());
-//	}
+public class AdminVoucherController extends PuddyController {
+	@GetMapping("")
+	public ResponseEntity<?> getAllDiscount(){
+		log.info("START API /api/v1/discount");
+		return ResponseEntity.status(HttpStatus.OK).body(service.voucherService.getListVoucher());
+	}
 
 	@PostMapping("/create")
 	public ResponseEntity<ResData<String>> create(@RequestBody DiscountDto dto){
 		log.info("Start api create with dto: {}", JsonUtils.toJson(dto));
-		return ResponseEntity.status(HttpStatus.OK).body(service.discountService.create(dto));
+		return ResponseEntity.status(HttpStatus.OK).body(service.voucherService.create(dto));
 	}
 
 	@PostMapping("/update")
 	public ResponseEntity<ResData<String>> update(@RequestBody DiscountDto dto){
 		log.info("Start api create with dto: {}", JsonUtils.toJson(dto));
-		return ResponseEntity.status(HttpStatus.OK).body(service.discountService.update(dto));
+		return ResponseEntity.status(HttpStatus.OK).body(service.voucherService.update(dto));
 	}
 }
