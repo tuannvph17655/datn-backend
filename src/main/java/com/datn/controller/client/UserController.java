@@ -1,4 +1,4 @@
-package com.datn.controller;
+package com.datn.controller.client;
 
 import com.datn.dto.customer.user.ProfileDto;
 import com.datn.dto.customer.user.register.RegisterDto;
@@ -45,4 +45,6 @@ public class UserController extends PuddyController {
     public ResponseEntity<?> getMyProfile() {
         return ResponseEntity.ok(service.userService.getCurrentUserProfile());
     }
+
+
 }

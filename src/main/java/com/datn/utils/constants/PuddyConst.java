@@ -57,7 +57,8 @@ public class PuddyConst {
          * hệ thống
          */
         public static final String FORBIDDEN = "Không có quyền!";
-        public static final String TOKEN_EXPIRED = "Hết phiên sử dụng! Vui lòng đăng nhập lại!";
+        public static final String
+                TOKEN_EXPIRED = "Hết phiên sử dụng! Vui lòng đăng nhập lại!";
         public static final String UN_KNOW_EXCEPTION = "Lỗi không xác định!";
         public static final String SERVER_RETRY = "Vui lòng thử lại sau ít phút!";
 

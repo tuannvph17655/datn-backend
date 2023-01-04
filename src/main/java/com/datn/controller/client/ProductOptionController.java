@@ -1,4 +1,4 @@
-package com.datn.controller;
+package com.datn.controller.client;
 
 import com.datn.dto.customer.product.productOption.ProductOptionIdReq;
 import com.datn.utils.base.PuddyController;

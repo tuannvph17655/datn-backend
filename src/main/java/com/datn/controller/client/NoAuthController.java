@@ -1,4 +1,4 @@
-package com.datn.controller;
+package com.datn.controller.client;
 
 import com.datn.dto.customer.order.OrderRequest;
 import com.datn.dto.customer.user.register.RegisterDto;

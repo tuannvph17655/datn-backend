@@ -1,4 +1,4 @@
-package com.datn.controller;
+package com.datn.controller.client;
 
 import com.datn.utils.base.PuddyController;
 import lombok.RequiredArgsConstructor;

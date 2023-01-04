@@ -1,4 +1,4 @@
-package com.datn.controller;
+package com.datn.controller.client;
 
 import com.datn.dto.customer.address.AddressReq;
 import com.datn.utils.base.PuddyController;
