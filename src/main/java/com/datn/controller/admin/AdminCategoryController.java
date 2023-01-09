@@ -54,8 +54,4 @@ public class AdminCategoryController extends PuddyController {
         log.info("start api detail with dto: {}", JsonUtils.toJson(dto));
         return ResponseEntity.status(HttpStatus.OK).body(service.categoryService.detail(getCurrentUser(), dto));
     }
-    @GetMapping("")
-    public ResponseEntity<ResData<CategoryRes4Admin>> getAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(service.categoryService.getAllCategory(getCurrentUser()));
-    }
 }

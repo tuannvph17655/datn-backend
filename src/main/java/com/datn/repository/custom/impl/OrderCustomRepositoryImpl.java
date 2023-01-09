@@ -13,11 +13,10 @@ import com.datn.utils.base.rest.CurrentUser;
 import com.datn.utils.base.rest.ResData;
 import com.datn.utils.common.ApiUtils;
 import com.datn.utils.common.BeanUtils;
-import com.datn.utils.common.MoneyUtils;
 import com.datn.utils.common.OrderUtils;
 import com.datn.utils.constants.PuddyCode;
 import com.datn.utils.constants.PuddyException;
-import com.datn.utils.constants.enums.StatusEnum;
+import com.datn.utils.constants.enums.OrderStatus;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +53,7 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository {
             res.history(OrderUtils.getHistory(orderStatusList));
         }
         OrderDetailRes orderDetailRes = repository.orderDetailRepository.getOrderDetail(id);
-        String statusOrderValue =  StatusEnum.from(orderDetailRes.getStatusOrder()).getName();
+        String statusOrderValue =  OrderStatus.from(orderDetailRes.getStatusOrder()).getName();
         DetailRes.OrderInfoRes orderInfoRes = DetailRes.OrderInfoRes.builder().build();
         ApiUtils.copy(orderDetailRes, orderInfoRes);
         orderInfoRes.setStatusOrderValue(statusOrderValue);

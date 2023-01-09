@@ -12,7 +12,7 @@ import com.datn.utils.common.JsonUtils;
 import com.datn.utils.common.MoneyUtils;
 import com.datn.utils.constants.PuddyCode;
 import com.datn.utils.constants.enums.PaymentEnums;
-import com.datn.utils.constants.enums.StatusEnum;
+import com.datn.utils.constants.enums.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 .paymentMethod(payment == null ? null : payment.getName())
                 .orderCode(orderDetail.getOrderCode())
                 .createDate(DateUtils.parseDateToStr(DateUtils.F_DDMMYYYYHHMMSS,orderDetail.getCreateDate()))
-                .statusOrder(StatusEnum.from(orderDetail.getStatusOrder()) == null ? null : StatusEnum.from(orderDetail.getStatusOrder()).getName())
+                .statusOrder(OrderStatus.from(orderDetail.getStatusOrder()) == null ? null : OrderStatus.from(orderDetail.getStatusOrder()).getName())
                 .build();
 
         List<ProductInOrderDetail> productOrder = repository.orderDetailRepository.getProductList(orderId);

@@ -32,7 +32,7 @@ public class SizeEntity {
 
     private String code;
 
-    private Boolean status ;
+    private Boolean active;
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date")

@@ -1,7 +1,7 @@
 package com.datn.dto.admin.detail;
 
 import com.datn.utils.constants.enums.RoleEnum;
-import com.datn.utils.constants.enums.StatusEnum;
+import com.datn.utils.constants.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class StatusDto {
     @Enumerated(EnumType.STRING)
-    private StatusEnum status;
+    private OrderStatus status;
     private Date createdDate;
     @Enumerated(EnumType.STRING)
     private RoleEnum role;

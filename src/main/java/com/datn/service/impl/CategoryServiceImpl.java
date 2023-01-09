@@ -57,6 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
                         .name(o.getName())
                         .des(o.getDes())
                         .active(o.getActive())
+                        .image(o.getImage())
                         .createdDate(o.getCreatedDate())
                         .createdDateValue(o.getCreatedDate() == null ? null : DateUtils.toStr(o.getCreatedDate(), DateUtils.F_DDMMYYYY))
                         .productNumber(repository.productRepository.countByCategoryId(o.getId()))
@@ -74,6 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
                         .id(UidUtils.generateUid())
                         .name(dto.getName())
                         .des(dto.getDes())
+                        .image(dto.getImage())
                         .active(Boolean.TRUE)
                         .build();
         repository.categoryRepository.save(categoryEntity);

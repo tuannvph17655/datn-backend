@@ -23,12 +23,9 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class VoucherEntity {
     @Id
-
     private String id;
-
     @Column(length = 500)
     private String des;
-
     private String code;
 
     /**
@@ -52,13 +49,14 @@ public class VoucherEntity {
      * trạng thái
      * Ngung áp dụng/ đang áp dụng / chua ap dung
      */
+    @Enumerated(EnumType.STRING)
     private VoucherStatus status;
 
     /*
-    * phần trăm giảm giá*/
+     * phần trăm giảm giá*/
     private Long percent;
 
-    private Boolean deleted;
+    private Boolean active;
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)

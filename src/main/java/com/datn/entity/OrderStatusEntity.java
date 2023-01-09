@@ -1,6 +1,6 @@
 package com.datn.entity;
 
-import com.datn.utils.constants.enums.StatusEnum;
+import com.datn.utils.constants.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +32,7 @@ public class OrderStatusEntity {
     private String id;
 
     @Enumerated(EnumType.STRING)
-    private StatusEnum status;
+    private OrderStatus status;
 
     @Column(name = "order_id")
     private String orderId;

@@ -70,7 +70,7 @@ public class SizeServiceImpl implements SizeService {
                                 .id(o.getId())
                                 .name(o.getName())
                                 .code(o.getCode())
-                                .status(o.getStatus()).build()).collect(Collectors.toList()),
+                                .status(o.getActive()).build()).collect(Collectors.toList()),
                 sizeResponse.getNumber(),
                 sizeResponse.getSize(),
                 sizeResponse.getTotalElements());

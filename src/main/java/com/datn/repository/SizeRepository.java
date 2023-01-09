@@ -29,7 +29,7 @@ public interface SizeRepository extends JpaRepository<SizeEntity, String> {
     @Query("select DISTINCT new com.datn.dto.admin.size.SizeRes(" +
             "s.id,\n" +
             "s.name,\n " +
-            "s.code, s.status)\n" +
+            "s.code, s.active)\n" +
             "from SizeEntity s")
     Page<SizeRes> getAllSize(Pageable pageable);
 
