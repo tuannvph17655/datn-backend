@@ -41,7 +41,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         final User user = (User) authResult.getPrincipal();
         final PuddyRepository repository = BeanUtils.getBean(PuddyRepository.class);
         final UserEntity userEntity = repository.userRepository.findByEmailAndActive(user.getUsername(), Boolean.TRUE);

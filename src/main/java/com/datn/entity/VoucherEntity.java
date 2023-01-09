@@ -1,5 +1,6 @@
 package com.datn.entity;
 
+import com.datn.utils.constants.enums.VoucherStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,13 +11,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -28,6 +23,7 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class VoucherEntity {
     @Id
+
     private String id;
 
     @Column(length = 500)
@@ -48,25 +44,21 @@ public class VoucherEntity {
     private String endDate;
     /**
      * Giá trị để thỏa màn đièu kiện áp dụng khuyến mãi
-     * Tổng giá trị đơn hàng tối thiệu / Số lượng sản phẩm tối thiểu
+     * Tổng giá trị đơn hàng tối thiểu
      */
-    @Column(name = "prerequisite_value")
     private Long prerequisiteValue;
 
     /**
      * trạng thái
      * Ngung áp dụng/ đang áp dụng / chua ap dung
      */
+    private VoucherStatus status;
 
     /*
     * phần trăm giảm giá*/
-    private Long percentDiscount;
-
-    private String status;
+    private Long percent;
 
     private Boolean deleted;
-
-    private Long eventId;
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)

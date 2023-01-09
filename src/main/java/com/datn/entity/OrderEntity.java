@@ -62,7 +62,8 @@ public class OrderEntity {
      */
     private Long total;
 
-    private String discountId;
+    private String voucherCode;
+
 
     private String customerInfo;
 

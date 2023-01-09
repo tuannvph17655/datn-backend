@@ -16,6 +16,7 @@ import com.datn.utils.common.JsonUtils;
 import com.datn.utils.common.PageableUtils;
 import com.datn.utils.common.UidUtils;
 import com.datn.utils.constants.PuddyCode;
+import com.datn.utils.validator.admin.category.ColorValidator;
 import com.datn.utils.validator.auth.AuthValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,12 +43,13 @@ public class ColorServiceImpl implements ColorService {
 
     @Override
     @Transactional
-    public ResData<String> create(CurrentUser currentUser, ColorDto dto) {
+    public ResData<String> create(CurrentUser currentUser, ColorDto colorDto) {
         AuthValidator.checkAdmin(currentUser);
+        ColorValidator.validateColor(colorDto);
         ColorEntity color = ColorEntity.builder()
                 .id(UidUtils.generateUid())
-                .name(dto.getName().trim())
-                .hex(dto.getHex().trim())
+                .name(colorDto.getName().trim())
+                .hex(colorDto.getHex().trim())
                 .active(Boolean.TRUE)
                 .build();
         repository.colorRepository.save(color);

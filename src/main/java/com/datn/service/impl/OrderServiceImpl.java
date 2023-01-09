@@ -134,7 +134,6 @@ public class OrderServiceImpl implements OrderService {
                 .createdBy(currentUser.getCombinationName())
                 .shopTotal(req.getShopTotal())
                 .total(total)
-                .discountId(1 + "")
                 .customerInfo(customerInfo)
                 .build();
 
