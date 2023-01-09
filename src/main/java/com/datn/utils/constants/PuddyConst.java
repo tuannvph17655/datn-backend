@@ -133,6 +133,8 @@ public class PuddyConst {
 
         public static final String NAME_VAL = "tên loại sản phẩm";
         public static final String DES_VAL = "miêu tả loại sản phẩm";
+
+        public static final String IMAGE_VAL = "ảnh danh mục";
     }
 
     public static class UserFields {

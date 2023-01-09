@@ -30,6 +30,5 @@ public class PuddyRepository {
     public final OrderDetailRepository orderDetailRepository;
     public final OrderStatusRepository orderStatusRepository;
 
-    public final EventsRepository eventsRepository;
 
 }

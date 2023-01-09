@@ -3,10 +3,9 @@ package com.datn.utils.constants.enums;
 import com.datn.utils.common.StringUtils;
 import com.datn.utils.constants.PuddyCode;
 import com.datn.utils.constants.PuddyException;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 @Getter
-public enum StatusEnum {
+public enum OrderStatus {
     /**
      * Trạng thái đơn hàng
      */
@@ -21,15 +20,15 @@ public enum StatusEnum {
 
     private String name;
 
-    StatusEnum(String name) {
+    OrderStatus(String name) {
         this.name = name;
     }
 
-    public static StatusEnum from(String text) {
+    public static OrderStatus from(String text) {
         if (StringUtils.isNullOrEmpty(text)) {
             return null;
         }
-        for (StatusEnum item : StatusEnum.values()) {
+        for (OrderStatus item : OrderStatus.values()) {
             if (item.name().equals(text)) {
                 return item;
             }

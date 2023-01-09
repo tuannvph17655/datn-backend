@@ -39,6 +39,8 @@ public class CategoryEntity {
 
     private String des;
 
+    private String image;
+
     private Boolean active;
 
     @CreatedDate

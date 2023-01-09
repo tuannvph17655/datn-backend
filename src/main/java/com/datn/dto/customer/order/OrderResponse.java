@@ -1,6 +1,6 @@
 package com.datn.dto.customer.order;
 
-import com.datn.utils.constants.enums.StatusEnum;
+import com.datn.utils.constants.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +17,6 @@ public class OrderResponse {
     private String address;
     private String totalPrice;
     private Boolean payed;
-    private StatusEnum status;//trang thai van chuyen
+    private OrderStatus status;//trang thai van chuyen
     private String statusValue;
 }

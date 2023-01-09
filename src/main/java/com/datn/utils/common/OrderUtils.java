@@ -1,8 +1,6 @@
 package com.datn.utils.common;
 
-import com.datn.dto.admin.detail.PriceDto;
 import com.datn.dto.admin.detail.PromotionDto;
-import com.datn.dto.admin.detail.PriceResult;
 import com.datn.dto.admin.detail.StatusDto;
 import com.datn.dto.admin.order.search.OptionDto;
 import com.datn.entity.UserEntity;
@@ -10,7 +8,7 @@ import com.datn.utils.constants.PuddyCode;
 import com.datn.utils.constants.PuddyException;
 import com.datn.utils.constants.enums.PromotionTypeEnum;
 import com.datn.utils.constants.enums.RoleEnum;
-import com.datn.utils.constants.enums.StatusEnum;
+import com.datn.utils.constants.enums.OrderStatus;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -35,7 +33,7 @@ public class OrderUtils {
      */
     public static String getStatusCombination(String statusStr, Date createdDate, String roleStr, String combinationName) {
         String result = "";
-        StatusEnum status = StatusEnum.from(statusStr);
+        OrderStatus status = OrderStatus.from(statusStr);
         String dateFmt = DateUtils.toStr(createdDate, DateUtils.F_DDMMYYYYHHMM);
         RoleEnum role = RoleEnum.valueOf(roleStr);
 
@@ -143,24 +141,24 @@ public class OrderUtils {
     public static List<OptionDto> getOptions4Admin(String statusNow) {
         ArrayList<OptionDto> result = new ArrayList<>();
         try {
-            StatusEnum status = StatusEnum.valueOf(statusNow);
+            OrderStatus status = OrderStatus.valueOf(statusNow);
             switch (status) {
                 case PENDING:
                     result.add(OptionDto.builder()
                             .name("Chấp nhận đơn hàng")
-                            .status(StatusEnum.ACCEPT.name().toLowerCase(Locale.ROOT))
+                            .status(OrderStatus.ACCEPT.name().toLowerCase(Locale.ROOT))
                             .clazz("success")
                             .build());
                     result.add(OptionDto.builder()
                             .name("Hủy đơn hàng")
-                            .status(StatusEnum.REJECT.name().toLowerCase(Locale.ROOT))
+                            .status(OrderStatus.REJECT.name().toLowerCase(Locale.ROOT))
                             .clazz("danger")
                             .build());
                     break;
                 case ACCEPT:
                     result.add(OptionDto.builder()
                             .name("Hủy đơn hàng")
-                            .status(StatusEnum.REJECT.name().toLowerCase(Locale.ROOT))
+                            .status(OrderStatus.REJECT.name().toLowerCase(Locale.ROOT))
                             .clazz("danger")
                             .build());
                     break;
@@ -209,11 +207,11 @@ public class OrderUtils {
     }
 
     public static String getStatusCombination(String status, Date updatedDate, UserEntity lastModifiedUser) {
-        StatusEnum statusEnum = StatusEnum.from(status);
+        OrderStatus orderStatus = OrderStatus.from(status);
         RoleEnum roleEnum = lastModifiedUser.getRole();
         String dateFmt = DateUtils.toStr(updatedDate, DateUtils.F_DDMMYYYYHHMM);
         String combinationName = lastModifiedUser.getFirstName() + " " + lastModifiedUser.getLastName();
-        switch (statusEnum) {
+        switch (orderStatus) {
             case PENDING:
                 return "Đang chờ xứ lý";
             case CANCEL:

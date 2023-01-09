@@ -13,5 +13,6 @@ public class CategoryValidator {
         ValidateUtils.validBlank(PuddyConst.CategoryFields.DES_VAL, dto.getDes());
         ValidateUtils.isValidRangeLength(PuddyConst.CategoryFields.NAME_VAL, dto.getName(), 4, 250);
         ValidateUtils.isValidRangeLength(PuddyConst.CategoryFields.DES_VAL, dto.getDes(), 10, 250);
+        ValidateUtils.validBlank(PuddyConst.CategoryFields.IMAGE_VAL, dto.getImage());
     }
 }

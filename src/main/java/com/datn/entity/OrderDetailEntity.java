@@ -33,6 +33,8 @@ public class OrderDetailEntity {
     @Column(name = "product_option_id")
     private String productOptionId;
 
+    private String productOptionName;
+
     @Column(name = "order_id")
     private String orderId;
 

@@ -7,6 +7,6 @@ import lombok.Data;
 public class CategoryReq {
     private String id;
     private Boolean active;
-    private String textSearch;
+    private String textSearch = "";
     private PageReq pageReq;
 }

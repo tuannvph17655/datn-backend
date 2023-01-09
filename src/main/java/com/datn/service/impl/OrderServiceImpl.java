@@ -32,7 +32,7 @@ import com.datn.utils.constants.PuddyConst;
 import com.datn.utils.constants.PuddyException;
 import com.datn.utils.constants.enums.PaymentEnums;
 import com.datn.utils.constants.enums.RoleEnum;
-import com.datn.utils.constants.enums.StatusEnum;
+import com.datn.utils.constants.enums.OrderStatus;
 import com.datn.utils.validator.auth.AuthValidator;
 import com.datn.utils.validator.customer.order.CancelOrderValidator;
 import com.datn.utils.validator.customer.order.CheckoutValidator;
@@ -129,7 +129,7 @@ public class OrderServiceImpl implements OrderService {
                 .payment(req.getPaymentMethod())
                 .shipPrice(Long.valueOf(req.getShipPrice()))
                 .code(generateOrderCode())
-                .status(StatusEnum.PENDING.name())
+                .status(OrderStatus.PENDING.name())
                 .createdDate(new Date())
                 .createdBy(currentUser.getCombinationName())
                 .shopTotal(req.getShopTotal())
@@ -144,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
         OrderStatusEntity orderStatus = OrderStatusEntity.builder()
                 .id(UUID.randomUUID().toString())
                 .orderId(order.getId())
-                .status(StatusEnum.PENDING)
+                .status(OrderStatus.PENDING)
                 .createdDate(new Date())
                 .createdBy(currentUser.getId())
                 .build();
@@ -211,12 +211,12 @@ public class OrderServiceImpl implements OrderService {
                     OrderResponse orderRes = OrderResponse.builder()
                             .orderCode(item.getCode())
                             .orderId(item.getId())
-                            .status(StatusEnum.from(item.getStatus()))
+                            .status(OrderStatus.from(item.getStatus()))
                             .createDate(DateUtils.parseDateToStr(DateUtils.F_DDMMYYYYHHMMSS, item.getCreatedDate()))
                             .totalPrice(MoneyUtils.format(item.getTotal()))
                             .payed(item.getPayed())
                             .address(addressOrder)
-                            .statusValue(StatusEnum.from(item.getStatus()).getName())
+                            .statusValue(OrderStatus.from(item.getStatus()).getName())
                             .build();
 
                     return orderRes;
@@ -239,7 +239,7 @@ public class OrderServiceImpl implements OrderService {
         req.setTextSearch("%" + req.getTextSearch()
                 .toUpperCase(Locale.ROOT)
                 .trim() + "%");
-        StatusEnum status = StatusEnum.from(req.getStatus());
+        OrderStatus status = OrderStatus.from(req.getStatus());
         String statusStr = status == null ? null : status.name();
         Page<OrderEntity> orderPage = repository.orderRepository.search(req.getTextSearch(), statusStr, pageable, currentUser.getId());
 
@@ -259,8 +259,8 @@ public class OrderServiceImpl implements OrderService {
                             OrderResponse response = OrderResponse.builder()
                                     .orderId(o.getId())
                                     .orderCode(o.getCode())
-                                    .status(StatusEnum.from(o.getStatus()))
-                                    .statusValue(StatusEnum.from(o.getStatus()).getName())
+                                    .status(OrderStatus.from(o.getStatus()))
+                                    .statusValue(OrderStatus.from(o.getStatus()).getName())
                                     .address(addressOrder)
                                     .createDate(DateUtils.toStr(o.getCreatedDate(), DateUtils.F_DDMMYYYYHHMM))
                                     .totalPrice(MoneyUtils.format(o.getTotal()))
@@ -285,7 +285,7 @@ public class OrderServiceImpl implements OrderService {
 
             List<ProductOrderDetail> orderDetail = repository.orderDetailRepository.getProductOrder(order.getId());
 
-            if (order.getStatus().equals(StatusEnum.PENDING.name())) {
+            if (order.getStatus().equals(OrderStatus.PENDING.name())) {
 
                 Set<String> productOptionIds = orderDetail
                         .stream()
@@ -310,7 +310,7 @@ public class OrderServiceImpl implements OrderService {
 
                 OrderStatusEntity orderStatus = OrderStatusEntity.builder()
                         .id(UidUtils.generateUid())
-                        .status(StatusEnum.CANCEL)
+                        .status(OrderStatus.CANCEL)
                         .note(dto.getNote())
                         .createdDate(new Date())
                         .orderId(order.getId())
@@ -318,7 +318,7 @@ public class OrderServiceImpl implements OrderService {
                         .build();
                 repository.orderStatusRepository.save(orderStatus);
 
-                order.setStatus(StatusEnum.CANCEL.name());
+                order.setStatus(OrderStatus.CANCEL.name());
                 order.setUpdatedBy(currentUser.getId());
                 order.setUpdatedDate(new Date());
                 repository.orderRepository.save(order);
@@ -353,12 +353,12 @@ public class OrderServiceImpl implements OrderService {
                     OrderResponse orderRes = OrderResponse.builder()
                             .orderCode(item.getCode())
                             .orderId(item.getId())
-                            .status(StatusEnum.from(item.getStatus()))
+                            .status(OrderStatus.from(item.getStatus()))
                             .createDate(DateUtils.parseDateToStr(DateUtils.F_DDMMYYYYHHMMSS, item.getCreatedDate()))
                             .totalPrice(MoneyUtils.format(item.getTotal()))
                             .payed(item.getPayed())
                             .address(addressOrder)
-                            .statusValue(StatusEnum.from(item.getStatus()).getName())
+                            .statusValue(OrderStatus.from(item.getStatus()).getName())
                             .customerInfoRes(customerInfoRes)
                             .build();
                     return orderRes;
@@ -414,7 +414,7 @@ public class OrderServiceImpl implements OrderService {
     public Object changeStatus(CurrentUser currentUser, ChangeStatusDto dto) {
         AuthValidator.checkRole(currentUser, RoleEnum.ROLE_ADMIN, RoleEnum.ROLE_CUSTOMER);
         OrderEntity order = repository.orderRepository.findByIdV1(dto.getId());
-        StatusEnum status = StatusEnum.from(dto.getStatus().toUpperCase(Locale.ROOT));
+        OrderStatus status = OrderStatus.from(dto.getStatus().toUpperCase(Locale.ROOT));
         if (status == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Trạng thái không hợp lệ!");
         }
@@ -437,7 +437,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Object getListOrderStatus(CurrentUser currentUser) {
-        List<OrderStatusResponse> list = Stream.of(StatusEnum.values())
+        List<OrderStatusResponse> list = Stream.of(OrderStatus.values())
                 .map(statusEnum -> OrderStatusResponse.builder()
                         .orderStatus(statusEnum.name())
                         .orderStatusName(statusEnum.getName())
@@ -456,7 +456,7 @@ public class OrderServiceImpl implements OrderService {
 
             List<ProductOrderDetail> orderDetail = repository.orderDetailRepository.getProductOrder(order.getId());
 
-            if (order.getStatus().equals(StatusEnum.PENDING.name()) || order.getStatus().equals(StatusEnum.ACCEPT.name())) {
+            if (order.getStatus().equals(OrderStatus.PENDING.name()) || order.getStatus().equals(OrderStatus.ACCEPT.name())) {
                 Set<String> productOptionIds = orderDetail
                         .stream()
                         .map(ProductOrderDetail::getProductOptionId)
@@ -480,14 +480,14 @@ public class OrderServiceImpl implements OrderService {
 
                 OrderStatusEntity orderStatus = OrderStatusEntity.builder()
                         .id(UidUtils.generateUid())
-                        .status(StatusEnum.REJECT)
+                        .status(OrderStatus.REJECT)
                         .note(dto.getNote())
                         .createdDate(new Date())
                         .orderId(order.getId())
                         .createdBy(order.getUserId())
                         .build();
                 repository.orderStatusRepository.save(orderStatus);
-                order.setStatus(StatusEnum.REJECT.name());
+                order.setStatus(OrderStatus.REJECT.name());
                 order.setUpdatedBy(currentUser.getId());
                 order.setUpdatedDate(new Date());
                 repository.orderRepository.save(order);

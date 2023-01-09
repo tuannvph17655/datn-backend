@@ -23,7 +23,6 @@ public class PuddyService {
     public final CartService cartService;
     public final SizeService sizeService;
 
-    public final EventsService eventService;
     public final SuggestService suggestService;
 
 //    public final DashboardService dashboardService;
