@@ -20,7 +20,6 @@ public class PuddyRepository {
     public final CartRepository cartRepository;
     public final OrderRepository orderRepository;
 
-    public final VoucherRepository voucherRepository;
 
     public final SuggestRepository suggestRepository;
 

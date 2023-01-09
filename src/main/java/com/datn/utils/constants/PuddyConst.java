@@ -240,4 +240,11 @@ public class PuddyConst {
         public static final String WEEK = "week";
         public static final String MONTH = "month";
     }
+
+    public static class ColorFields {
+
+        public static final String NAME = "Tên màu sắc";
+        public static final String HEX = "Mã màu sắc";
+
+    }
 }
