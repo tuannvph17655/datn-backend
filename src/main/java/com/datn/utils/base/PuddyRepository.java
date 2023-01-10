@@ -19,16 +19,11 @@ public class PuddyRepository {
     public final MaterialRepository materialRepository;
     public final CartRepository cartRepository;
     public final OrderRepository orderRepository;
-
-
     public final SuggestRepository suggestRepository;
-
     public final BodyHeightRepository bodyHeightRepository;
-
     public final BodyWeightRepository bodyWeightRepository;
-
     public final OrderDetailRepository orderDetailRepository;
     public final OrderStatusRepository orderStatusRepository;
-
+    public final VoucherRepository voucherRepository;
 
 }

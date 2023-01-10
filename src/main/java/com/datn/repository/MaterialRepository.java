@@ -20,7 +20,7 @@ public interface MaterialRepository extends JpaRepository<MaterialEntity, String
 
     @Query("select new com.datn.dto.admin.material.MaterialRes(o.id, o.name, o.active,o.code) from MaterialEntity o")
     Page<MaterialRes> findAllMaterial(Pageable pageable);
-    @Query("select new com.datn.dto.admin.material.MaterialRes(o.id, o.name, o.active,o.code) from MaterialEntity o")
+    @Query("select new com.datn.dto.admin.material.MaterialRes(o.id, o.name, o.active,o.code) from MaterialEntity o ")
     List<MaterialRes> getAll();
 
 }

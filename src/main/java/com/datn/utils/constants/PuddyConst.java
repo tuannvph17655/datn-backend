@@ -244,9 +244,27 @@ public class PuddyConst {
     }
 
     public static class ColorFields {
-
         public static final String NAME = "Tên màu sắc";
         public static final String HEX = "Mã màu sắc";
+    }
 
+    public static class MaterialFields {
+        public static final String NAME = "tên chất liệu";
+        public static final String CODE = "mã chất liệu";
+
+    }
+
+    public static class SizeFields {
+        public static final String NAME = "tên kích cỡ";
+        public static final String CODE = "mã kích cỡ";
+    }
+    public static final class VoucherFields {
+        public static final String CODE = "mã voucher";
+        public static final String DES = "mô tả voucher";
+        public static final String START_DATE = "ngày bắt đầu";
+        public static final String END_DATE = "ngày kết thúc";
+        public static final String PREREQUISITE_VALUE = "giá trị tối thiểu";
+        public static final String STATUS = "trạng thái voucher";
+        private static final String PERCENT = "phần trăm giảm giá";
     }
 }

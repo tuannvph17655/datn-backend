@@ -10,6 +10,6 @@ public class ColorValidator {
     public static void validateColor(ColorDto colorDto) {
         ValidateUtils.validBlank(PuddyConst.ColorFields.NAME, colorDto.getName());
         ValidateUtils.validBlank(PuddyConst.ColorFields.HEX, colorDto.getHex());
-
+        ValidateUtils.isValidMaxLength(PuddyConst.ColorFields.NAME,colorDto.getName(),250);
     }
 }

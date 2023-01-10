@@ -47,7 +47,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 	@Override
 	public Object updateProfile(CurrentUser currentUser, ProfileDto dto) {
 		log.info("start updateProfile with payload: {}", JsonUtils.toJson(dto));
-
 		AuthValidator.checkLogin(currentUser);
 		var user = repository.userRepository.findByIdAndActive(dto.getId(), true);
 		if (null == user) {

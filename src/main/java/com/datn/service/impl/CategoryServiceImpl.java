@@ -43,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public PageData<CategoryRes> search(CurrentUser currentUser, CategoryReq req) throws PuddyException {
+    public PageData<CategoryRes> search(CurrentUser currentUser, CategoryReq req)  {
         AuthValidator.checkAdmin(currentUser);
         if (StringUtils.isNullOrEmpty(req.getTextSearch())) {
             req.setTextSearch("");
@@ -71,13 +71,13 @@ public class CategoryServiceImpl implements CategoryService {
     public ResData<String> create(CurrentUser currentUser, CategoryDto dto) {
         AuthValidator.checkAdmin(currentUser);
         CategoryValidator.validCreate(dto);
-                CategoryEntity categoryEntity = CategoryEntity.builder()
-                        .id(UidUtils.generateUid())
-                        .name(dto.getName())
-                        .des(dto.getDes())
-                        .image(dto.getImage())
-                        .active(Boolean.TRUE)
-                        .build();
+        CategoryEntity categoryEntity = CategoryEntity.builder()
+                .id(UidUtils.generateUid())
+                .name(dto.getName())
+                .des(dto.getDes())
+                .image(dto.getImage())
+                .active(Boolean.TRUE)
+                .build();
         repository.categoryRepository.save(categoryEntity);
         return new ResData<>(categoryEntity.getId(), PuddyCode.OK);
     }
@@ -86,8 +86,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public ResData<String> delete(CurrentUser currentUser, CategoryDto dto) {
         AuthValidator.checkAdmin(currentUser);
-        CategoryEntity category = repository.categoryRepository.findById(dto.getId()).orElseThrow(()-> new PuddyException(PuddyCode.BAD_REQUEST,CATEGORY_NOT_FOUND));
-                category.setActive(Boolean.FALSE);
+        CategoryEntity category = repository.categoryRepository.findById(dto.getId())
+                .orElseThrow(() -> new PuddyException(PuddyCode.BAD_REQUEST, CATEGORY_NOT_FOUND));
+        category.setActive(Boolean.FALSE);
         repository.categoryRepository.save(category);
         log.info("create finished at {} with response: {}", new Date(), JsonUtils.toJson(category));
         return new ResData<>(category.getId(), PuddyCode.OK);
@@ -97,8 +98,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public ResData<String> update(CurrentUser currentUser, CategoryDto dto) {
         AuthValidator.checkAdmin(currentUser);
+        CategoryValidator.validCreate(dto);
         if (Boolean.FALSE.equals(repository.categoryRepository.existsById(dto.getId()))) {
-            throw new PuddyException(PuddyCode.CATEGORY_NOT_FOUND);
+            throw new PuddyException(PuddyCode.CATEGORY_NOT_FOUND, CATEGORY_NOT_FOUND);
         }
         CategoryEntity category = repository.categoryRepository.findByIdAndActive(dto.getId(), Boolean.TRUE);
         category.setActive(Boolean.FALSE);
@@ -138,10 +140,5 @@ public class CategoryServiceImpl implements CategoryService {
                 .createdDateValue(category.getCreatedDate() == null ? null : DateUtils.toStr(category.getCreatedDate(), DateUtils.F_DDMMYYYY))
                 .productNumber(repository.productRepository.countByCategoryId(category.getId()))
                 .build());
-    }
-
-    @Override
-    public ResData<CategoryRes4Admin> getAllCategory(CurrentUser currentUser) {
-        return ResData.ok(repository.categoryRepository.findAllCategoryActive());
     }
 }
