@@ -14,10 +14,8 @@ import java.util.List;
 public interface SizeService {
     ResData<List<SizeResponse>> getAllSize();
     ResData<String> create(CurrentUser currentUser, SizeDto dto);
-
-//    ResData<String> delete(CurrentUser currentUser, SizeDto dto);
-//
-//    ResData<String> update(CurrentUser currentUser, SizeDto dto);
-    PageData<SizeRes> getAllSize4Admin(CurrentUser currentUser, SizeReq sizeReq);
+    ResData<String> delete(CurrentUser currentUser, SizeDto dto);
+    ResData<String> update(CurrentUser currentUser, SizeDto dto);
+    PageData<SizeRes> search4admin(CurrentUser currentUser, SizeReq sizeReq);
 
 }

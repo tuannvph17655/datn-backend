@@ -5,6 +5,7 @@ import com.datn.dto.admin.size.SizeRes;
 import com.datn.dto.customer.size.response.SizeResponse;
 import com.datn.entity.ProductEntity;
 import com.datn.entity.SizeEntity;
+import com.datn.repository.SizeRepository;
 import com.datn.service.SizeService;
 import com.datn.utils.base.PuddyException;
 import com.datn.utils.base.PuddyRepository;
@@ -16,6 +17,7 @@ import com.datn.utils.common.JsonUtils;
 import com.datn.utils.common.PageableUtils;
 import com.datn.utils.common.UidUtils;
 import com.datn.utils.constants.PuddyCode;
+import com.datn.utils.validator.admin.category.SizeValidator;
 import com.datn.utils.validator.auth.AuthValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +34,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class SizeServiceImpl implements SizeService {
+    private final SizeRepository sizeRepository;
     private final PuddyRepository repository;
 
     @Override
     public ResData<List<SizeResponse>> getAllSize() {
         List<SizeResponse> size = repository.sizeRepository.getAllSize();
-
         return new ResData<>(size, PuddyCode.OK);
     }
 
@@ -45,9 +47,7 @@ public class SizeServiceImpl implements SizeService {
     @Transactional
     public ResData<String> create(CurrentUser currentUser, SizeDto dto) {
         AuthValidator.checkAdmin(currentUser);
-        ProductEntity products = repository.productRepository.findById(dto.getId()).orElseThrow(
-                () -> new PuddyException(PuddyCode.PRODUCT_NOT_FOUND)
-        );
+        SizeValidator.validateCreate(dto);
         SizeEntity size = SizeEntity.builder()
                 .id(UidUtils.generateUid())
                 .code(dto.getCode().trim())
@@ -60,7 +60,7 @@ public class SizeServiceImpl implements SizeService {
 
     @Override
     @Transactional
-    public PageData<SizeRes> getAllSize4Admin(CurrentUser currentUser, SizeReq sizeReq) {
+    public PageData<SizeRes> search4admin(CurrentUser currentUser, SizeReq sizeReq) {
         AuthValidator.checkAdmin(currentUser);
         Pageable pageable = PageableUtils.getPageable(sizeReq.getPageReq());
         log.info("paging {}", pageable);
@@ -76,15 +76,25 @@ public class SizeServiceImpl implements SizeService {
                 sizeResponse.getTotalElements());
     }
 
-//    @Override
-//    @Transactional
-//    public ResData<String> delete(CurrentUser currentUser, SizeDto dto) {
-//        return null;
-//    }
-//
-//    @Override
-//    @Transactional
-//    public ResData<String> update(CurrentUser currentUser, SizeDto dto) {
-//        return null;
-//    }
+    @Override
+    @Transactional
+    public ResData<String> delete(CurrentUser currentUser, SizeDto dto) {
+        AuthValidator.checkAdmin(currentUser);
+        SizeEntity size = repository.sizeRepository.findById(dto.getId()).orElseThrow(() -> new PuddyException(PuddyCode.SIZE_NOT_FOUND));
+        size.setActive(false);
+        repository.sizeRepository.save(size);
+        return new ResData<>(size.getId(), PuddyCode.OK);
+    }
+
+    @Override
+    @Transactional
+    public ResData<String> update(CurrentUser currentUser, SizeDto dto) {
+        AuthValidator.checkAdmin(currentUser);
+        SizeValidator.validateCreate(dto);
+        SizeEntity size = repository.sizeRepository.findById(dto.getId()).orElseThrow(() -> new PuddyException(PuddyCode.SIZE_NOT_FOUND));
+        size.setName(dto.getName());
+        size.setCode(dto.getCode());
+        sizeRepository.save(size);
+        return new ResData<>(size.getId(),PuddyCode.OK);
+    }
 }

@@ -15,6 +15,7 @@ import com.datn.utils.common.JsonUtils;
 import com.datn.utils.common.PageableUtils;
 import com.datn.utils.common.UidUtils;
 import com.datn.utils.constants.PuddyCode;
+import com.datn.utils.validator.admin.category.MaterialValidator;
 import com.datn.utils.validator.auth.AuthValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,12 +39,8 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     @Transactional
     public ResData<String> create(CurrentUser currentUser, MaterialDto dto) {
-        //dasdas
         AuthValidator.checkAdmin(currentUser);
-        Optional<ProductEntity> products = Optional.ofNullable(repository.productRepository.findById(dto.getId()).orElseThrow(
-                () -> new PuddyException(PuddyCode.BAD_REQUEST, "Không tìm thấy Sản phầm tương ứng")
-        ));
-
+        MaterialValidator.validCreate(dto);
         MaterialEntity material = MaterialEntity.builder()
                 .id(UidUtils.generateUid())
                 .name(dto.getName().trim())
@@ -57,11 +54,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public ResData<String> delete(CurrentUser currentUser, MaterialDto dto) {
         AuthValidator.checkAdmin(currentUser);
-        if (dto.getId() == null) {
-            throw new PuddyException(PuddyCode.MATERIAL_NOT_FOUND);
-        } else {
-            repository.colorRepository.findByIdAndActive(dto.getId(), Boolean.TRUE);
-        }
+        repository.materialRepository.findById(dto.getId()).orElseThrow(() -> new PuddyException(PuddyCode.MATERIAL_NOT_FOUND));
         MaterialEntity material = repository.materialRepository.findByIdAndActive(dto.getId(),Boolean.TRUE);
         material.setActive(Boolean.FALSE);
         repository.materialRepository.save(material);
@@ -77,6 +70,7 @@ public class MaterialServiceImpl implements MaterialService {
         }
         MaterialEntity material = repository.materialRepository.findByIdAndActive(dto.getId(), Boolean.TRUE);
         material.setName(dto.getName().trim());
+        material.setCode(dto.getCode().trim());
         repository.materialRepository.save(material);
         log.info("update finish at {} with response: {}" ,new Date(), JsonUtils.toJson(material));
         return new ResData<>(material.getId(), PuddyCode.OK);

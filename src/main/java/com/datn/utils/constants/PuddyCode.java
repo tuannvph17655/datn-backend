@@ -19,6 +19,7 @@ public enum PuddyCode {
     BAD_REQUEST("400", "Dữ liệu không hợp lệ!"),
     MUST_LOGIN("400", "Vui lòng đăng nhập"),
     SIZE_SUGGEST_NOT_FOUND("400", "Không tìm thấy size phù hợp"),
+    SIZE_NOT_FOUND("404","Không tìm thấy size"),
     PRODUCT_OPTION_NOT_FOUND("400", "Không tìm thấy loại sản phẩm phù hợp"),
     EMAIL_EXISTS("400", "Email đã tồn tại"),
     PHONE_EXISTS_V2("400", "Số điện thoại đã được đăng ký"),

@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -32,18 +33,18 @@ public class VoucherEntity {
      * Ngày bắt đầu
      */
     @Column(name = "start_date")
-    private String startDate;
+    private Date startDate;
 
     /**
      * Ngày kết thúc
      */
     @Column(name = "end_date")
-    private String endDate;
+    private Date endDate;
     /**
      * Giá trị để thỏa màn đièu kiện áp dụng khuyến mãi
      * Tổng giá trị đơn hàng tối thiểu
      */
-    private Long prerequisiteValue;
+    private BigDecimal prerequisiteValue;
 
     /**
      * trạng thái
@@ -54,7 +55,7 @@ public class VoucherEntity {
 
     /*
      * phần trăm giảm giá*/
-    private Long percent;
+    private BigDecimal percent;
 
     private Boolean active;
 
